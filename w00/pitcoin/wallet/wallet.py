@@ -21,15 +21,28 @@ def read_file_contents(filename):
     return f.read().strip().upper()
 
 
-def convert_private_key_to_wif(filename='privkey'):
-    hex_privkey = read_file_contents(filename)
+def convert_hex_private_key_to_wif(hex_privkey: str):
+    hex_privkey = str(hex_privkey)
     hex_privkey_extended = "80" + hex_privkey
-
     hashed1 = hashlib.sha256(binascii.unhexlify(hex_privkey_extended)).hexdigest()
     hashed2 = hashlib.sha256(binascii.unhexlify(hashed1)).hexdigest()
     final_key = hex_privkey_extended + hashed2[:8]
+    return base58.b58encode(binascii.unhexlify(final_key))
 
-    return base58.b58encode(binascii.unhexlify(final_key)).decode('ascii')
+
+def convert_wif_to_hex_private_key(wif_privkey: str):
+    hex_decoded = binascii.hexlify(base58.b58decode(wif_privkey))[2:-8]
+    return hex_decoded
+
+
+def export_wif_from_file_with_hex_privkey(filename):
+    hex_privkey = read_file_contents(filename)
+    return convert_hex_private_key_to_wif(hex_privkey)
+
+
+def export_hex_from_file_with_wif_privkey(filename):
+    wif_privkey = read_file_contents(filename)
+    return convert_wif_to_hex_private_key(wif_privkey)
 
 
 def get_public_key_from_private_key(privkey):
@@ -75,8 +88,34 @@ def get_address_from_private_key(privkey, use_compressed=True):
     return base58.b58encode(binascii.unhexlify(address)).decode('ascii')
 
 
+def sign_message_with_private_key(privkey, message: bytes):
+    responce = {}
+    privkey_bytes = codecs.decode(privkey, 'hex')
+    key = ecdsa.SigningKey.from_string(privkey_bytes, curve=ecdsa.SECP256k1)
+    verifying_key = key.get_verifying_key()
+    responce['public_key'] = binascii.hexlify(verifying_key.to_string())
+    responce['signature'] = binascii.hexlify(key.sign(message))
+    # print(vk.verify(binascii.unhexlify(responce['signature']), message))
+    return responce
+
+
+def check_message_signature(public_key: bytes, signature: bytes, msg: bytes):
+    vk = ecdsa.VerifyingKey.from_string(binascii.unhexlify(public_key), curve=ecdsa.SECP256k1)
+    return vk.verify(binascii.unhexlify(signature), msg)  # True
+
+
 if __name__ == '__main__':
-    private = read_file_contents("privkey")
-    # print(private)
-    print(get_address_from_private_key(private, use_compressed=False))
+    # private = read_file_contents("privkey")
+    # message = b"hello"
+    # sign_msg = sign_message_with_private_key(private, message)
+    # print(sign_msg)
+    # print(check_message_signature(sign_msg['public_key'], sign_msg['signature'], message))
+    privkey = "c1421c809f270aa475f16adeaf3dab4fb9d28eaccbf2e1e35ff38cf99609c308"
+    wif = convert_hex_private_key_to_wif(privkey)
+    print(wif)
+
+    print(get_address_from_private_key(privkey))
+
+
+
 
