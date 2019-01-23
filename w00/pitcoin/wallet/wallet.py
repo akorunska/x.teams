@@ -45,33 +45,28 @@ def export_hex_from_file_with_wif_privkey(filename):
     return convert_wif_to_hex_private_key(wif_privkey)
 
 
-def get_public_key_from_private_key(privkey):
-    pubkey = {"uncompressed": 0, "compressed": 0}
+def get_public_key_from_private_key(privkey, use_compressed=True):
     privkey_bytes = codecs.decode(privkey, 'hex')
     # Get ECDSA public key
     key = ecdsa.SigningKey.from_string(privkey_bytes, curve=ecdsa.SECP256k1).verifying_key
     key_bytes = key.to_string()
     key_hex = codecs.encode(key_bytes, 'hex')
-    pubkey['uncompressed'] = b"04" + key_hex
-
-    x = key_hex[0:(int(len(key_hex)/2))]
-    y = key_hex[(int(len(key_hex)/2)):]
-    if int(y, 16) % 2 == 0:
-        pubkey["compressed"] = b'02' + x
+    if not use_compressed:
+        pubkey = b"04" + key_hex
     else:
-        pubkey["compressed"] = b'03' + x
+        x = key_hex[0:(int(len(key_hex)/2))]
+        y = key_hex[(int(len(key_hex)/2)):]
+        if int(y, 16) % 2 == 0:
+            pubkey = b'02' + x
+        else:
+            pubkey = b'03' + x
     return pubkey
 
 
 def get_address_from_private_key(privkey, use_compressed=True):
-    pubkeys = get_public_key_from_private_key(privkey)
-
     # using compressed key as default to generate and address as it becoming default option for many bitcoin clients
     # uncompressed key can be used as well by use_compressed=False
-    if use_compressed:
-        pubkey = pubkeys["compressed"]
-    else:
-        pubkey = pubkeys["uncompressed"]
+    pubkey = get_public_key_from_private_key(privkey, use_compressed)
 
     pubkey_sha_encrypted = hashlib.sha256(binascii.unhexlify(pubkey)).hexdigest()
 
@@ -102,20 +97,3 @@ def sign_message_with_private_key(privkey, message: bytes):
 def check_message_signature(public_key: bytes, signature: bytes, msg: bytes):
     vk = ecdsa.VerifyingKey.from_string(binascii.unhexlify(public_key), curve=ecdsa.SECP256k1)
     return vk.verify(binascii.unhexlify(signature), msg)  # True
-
-
-if __name__ == '__main__':
-    # private = read_file_contents("privkey")
-    # message = b"hello"
-    # sign_msg = sign_message_with_private_key(private, message)
-    # print(sign_msg)
-    # print(check_message_signature(sign_msg['public_key'], sign_msg['signature'], message))
-    privkey = "c1421c809f270aa475f16adeaf3dab4fb9d28eaccbf2e1e35ff38cf99609c308"
-    wif = convert_hex_private_key_to_wif(privkey)
-    print(wif)
-
-    print(get_address_from_private_key(privkey))
-
-
-
-
