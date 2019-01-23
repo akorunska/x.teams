@@ -18,7 +18,7 @@ def generate_private_key():
 
 def read_file_contents(filename):
     f = open(filename)
-    return f.read().strip().upper()
+    return f.read().strip()
 
 
 def convert_hex_private_key_to_wif(hex_privkey: str):
