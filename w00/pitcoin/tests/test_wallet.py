@@ -1,5 +1,25 @@
 import unittest
-from ..wallet import *
+import numpy as np
+from pitcoin.wallet import *
+
+
+class TestGeneratePrivateKey(unittest.TestCase):
+    def test_generated_key_length(self):
+        for x in range(100):
+            privkey = generate_private_key()
+            self.assertEqual(64, len(privkey.encode("utf-8")))
+
+    def test_generated_keys_are_unique(self):
+        keys = []
+        for x in range(100):
+            keys.append(generate_private_key())
+        self.assertEqual(len(keys), np.unique(keys).size)
+
+    def test_generated_keys_value_does_not_exseed_order_of_elliptic_curve(self):
+        order_of_elliptic_curve = 1.158 * 10 ** 77
+        for x in range(100):
+            privkey = generate_private_key()
+            self.assertTrue(float(int(privkey, 16)) < order_of_elliptic_curve)
 
 
 class TestConvertHexPrivateKeyToWif(unittest.TestCase):
