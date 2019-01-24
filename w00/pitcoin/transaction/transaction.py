@@ -30,6 +30,9 @@ class Transaction:
         }
         return json.dumps(data)
 
+    def __eq__(self, other):
+        return str(self) == str(other)
+
 
 class CoinbaseTransaction(Transaction):
     def __init__(self, recipient: str):
