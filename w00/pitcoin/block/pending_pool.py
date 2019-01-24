@@ -10,18 +10,24 @@ class Storage:
     def __init__(self, filepath='../storage/mempool.txt'):
         self.storage_filepath = filepath
 
-    def get_validated_deserialized_transaction(data):
+    def get_validated_deserialized_transaction(self, data):
         tx = Deserializer.deserialize_transaction(data)
-        if check_tx_validity(tx):
-            return tx
-        else:
+        try:
+            if check_tx_validity(tx):
+                return tx
+            else:
+                return None
+        except Exception as e:
             return None
+
+    def add_serialized_transaction_to_mempool(self, data):
+        tx = self.get_validated_deserialized_transaction(data)
+        self.add_transaction_to_mempool(tx)
 
     def add_transaction_to_mempool(self, tx):
         tx_list = []
         if not Path(self.storage_filepath).is_file():
             Path(self.storage_filepath).touch()
-            tx_list = []
         else:
             with open(self.storage_filepath, 'rb') as fp:
                 tx_list = pickle.load(fp)
@@ -33,7 +39,7 @@ class Storage:
     def delete_last_transaction_from_mempool(self):
         tx_list = []
         if not Path(self.storage_filepath).is_file():
-            return
+            Path(self.storage_filepath).touch()
         else:
             with open(self.storage_filepath, 'rb') as fp:
                 tx_list = pickle.load(fp)
@@ -51,7 +57,7 @@ class Storage:
     def get_all_transactions(self):
         tx_list = []
         if not Path(self.storage_filepath).is_file():
-            return
+            Path(self.storage_filepath).touch()
         else:
             with open(self.storage_filepath, 'rb') as fp:
                 tx_list = pickle.load(fp)
@@ -59,17 +65,22 @@ class Storage:
         return tx_list
 
     def get_three_last_transactions(self):
-        tx_list = []
-        if not Path(self.storage_filepath).is_file():
-            return
-        else:
-            with open(self.storage_filepath, 'rb') as fp:
-                tx_list = pickle.load(fp)
+        tx_list = self.get_all_transactions()
 
         if len(tx_list) >= 4:
             return tx_list[len(tx_list) - 3: len(tx_list)]
         else:
             return tx_list
+
+    def get_transactions_count(self):
+        tx_list = []
+        if not Path(self.storage_filepath).is_file():
+            Path(self.storage_filepath).touch()
+        else:
+            with open(self.storage_filepath, 'rb') as fp:
+                tx_list = pickle.load(fp)
+
+        return len(tx_list)
 
 
 # 00221CAEuYPgEYnyepAF51AiKdCvPfTgjoMieU1GMRXMjXGVxC43GtonDHJ5YY8jQp2RKHEA50e829ca678c60031a11b990fea865e03ba35d0579aa62750b918b98c4b935d803ecc57a4bb2fc2ab1193a87fca5386d71516aca89df267fc907bcb3b84d396a0580fae8ca3bbf6b7a016d5f247feb89efbd0412e84524d0746520bd45ea45112e4ce76474636eb36f67b5407249742ee54b97322184135fe0251511f5149328
