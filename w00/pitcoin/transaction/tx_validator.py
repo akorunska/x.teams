@@ -2,6 +2,8 @@ from pitcoin.wallet import *
 from .transaction import Transaction
 
 
+#todo validation for coinbase transaction
+
 def check_tx_validity(tx: Transaction):
     return (check_address_available(tx.sender) and
             check_address_available(tx.recipient) and
