@@ -86,7 +86,7 @@ class TestGetAddressFromPrivateKey(unittest.TestCase):
         self.assertEqual(address, result)
 
 
-class TestSingMessate(unittest.TestCase):
+class TestSingMessage(unittest.TestCase):
     def test_sing_and_check(self):
         privkey = "c1421c809f270aa475f16adeaf3dab4fb9d28eaccbf2e1e35ff38cf99609c308"
         message = b'the test message for signing'

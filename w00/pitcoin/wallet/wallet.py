@@ -45,6 +45,16 @@ def export_hex_from_file_with_wif_privkey(filename):
     return convert_wif_to_hex_private_key(wif_privkey)
 
 
+def get_compressed_form_of_public_key(uncompressed_pubkey):
+    x = uncompressed_pubkey[0:(int(len(uncompressed_pubkey) / 2))]
+    y = uncompressed_pubkey[(int(len(uncompressed_pubkey) / 2)):]
+    if int(y, 16) % 2 == 0:
+        pubkey = b'02' + x
+    else:
+        pubkey = b'03' + x
+    return pubkey
+
+
 def get_public_key_from_private_key(privkey, use_compressed=True):
     privkey_bytes = codecs.decode(privkey, 'hex')
     # Get ECDSA public key
@@ -54,20 +64,13 @@ def get_public_key_from_private_key(privkey, use_compressed=True):
     if not use_compressed:
         pubkey = b"04" + key_hex
     else:
-        x = key_hex[0:(int(len(key_hex)/2))]
-        y = key_hex[(int(len(key_hex)/2)):]
-        if int(y, 16) % 2 == 0:
-            pubkey = b'02' + x
-        else:
-            pubkey = b'03' + x
+        pubkey = get_compressed_form_of_public_key(key_hex)
     return pubkey
 
 
-def get_address_from_private_key(privkey, use_compressed=True):
+def get_address_from_public_key(pubkey):
     # using compressed key as default to generate and address as it becoming default option for many bitcoin clients
     # uncompressed key can be used as well by use_compressed=False
-    pubkey = get_public_key_from_private_key(privkey, use_compressed)
-
     pubkey_sha_encrypted = hashlib.sha256(binascii.unhexlify(pubkey)).hexdigest()
 
     ripemd160 = hashlib.new('ripemd160')
@@ -83,6 +86,13 @@ def get_address_from_private_key(privkey, use_compressed=True):
     return base58.b58encode(binascii.unhexlify(address)).decode('ascii')
 
 
+def get_address_from_private_key(privkey, use_compressed=True):
+    # using compressed key as default to generate and address as it becoming default option for many bitcoin clients
+    # uncompressed key can be used as well by use_compressed=False
+    pubkey = get_public_key_from_private_key(privkey, use_compressed)
+    return get_address_from_public_key(pubkey)
+
+
 def sign_message_with_private_key(privkey, message: bytes):
     responce = {}
     privkey_bytes = codecs.decode(privkey, 'hex')
@@ -96,4 +106,4 @@ def sign_message_with_private_key(privkey, message: bytes):
 
 def check_message_signature(public_key: bytes, signature: bytes, msg: bytes):
     vk = ecdsa.VerifyingKey.from_string(binascii.unhexlify(public_key), curve=ecdsa.SECP256k1)
-    return vk.verify(binascii.unhexlify(signature), msg)  # True
+    return vk.verify(binascii.unhexlify(signature), msg)
