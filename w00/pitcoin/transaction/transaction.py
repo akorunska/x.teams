@@ -3,7 +3,7 @@ from pitcoin.wallet import *
 
 
 class Transaction:
-    def __init__(self, sender: str, recipient: str, amount: int, sign_pubkey=b"", signature=b"", ):
+    def __init__(self, sender: str, recipient: str, amount: int, sign_pubkey="", signature=""):
         self.sender = sender
         self.recipient = recipient
         self.amount = amount
@@ -16,19 +16,12 @@ class Transaction:
 
     def sign_transaction(self, sender_privkey):
         resp = sign_message_with_private_key(sender_privkey, self.get_hash())
-        self.sign_pubkey = resp['public_key']
-        self.signature = resp['signature']
+        self.sign_pubkey = codecs.decode(resp['public_key'], 'ascii')
+        self.signature = codecs.decode(resp['signature'], 'ascii')
         return resp
 
     def __str__(self):
-        data = {
-            "sender": self.sender,
-            "recipient": self.recipient,
-            "amount": self.amount,
-            "sign_pubkey": codecs.decode(self.sign_pubkey, "utf-8"),
-            "signature": codecs.decode(self.signature, "utf-8")
-        }
-        return json.dumps(data)
+        return json.dumps(self.__dict__)
 
     def __eq__(self, other):
         return str(self) == str(other)

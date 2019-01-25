@@ -10,8 +10,10 @@ class Serializer:
         amount = codecs.encode("%04x" % tx.amount)
         sender = codecs.encode(tx.sender, 'utf-8')
         recipient = codecs.encode(tx.recipient, 'utf-8')
+        sign_pubkey = codecs.encode(tx.sign_pubkey, 'utf-8')
+        signature = codecs.encode(tx.signature, 'utf-8')
 
-        serialized_tx = struct.pack("4s34s34s128s128s", amount, sender, recipient, tx.sign_pubkey, tx.signature)
+        serialized_tx = struct.pack("4s34s34s128s128s", amount, sender, recipient, sign_pubkey, signature)
         return serialized_tx
 
 
@@ -23,7 +25,7 @@ class Deserializer:
                             codecs.decode(sender, "utf-8"),
                             codecs.decode(recipient, "utf-8"),
                             int(amount, 16),
-                            sign_pubkey,
-                            signature
+                            codecs.decode(sign_pubkey, "utf-8"),
+                            codecs.decode(signature, "utf-8")
         )
 

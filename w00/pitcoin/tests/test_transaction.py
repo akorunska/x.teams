@@ -55,12 +55,12 @@ class TestTransactionAdressesValidation(unittest.TestCase):
 
 class TestTransactionCorrespondingAddressesValidation(unittest.TestCase):
     def test_check_address_from_uncompressed_pubkey(self):
-        pubkey = b'50e829ca678c60031a11b990fea865e03ba35d0579aa62750b918b98c4b935d803ecc57a4bb2fc2ab1193a87fca5386d71516aca89df267fc907bcb3b84d396a'
+        pubkey = '50e829ca678c60031a11b990fea865e03ba35d0579aa62750b918b98c4b935d803ecc57a4bb2fc2ab1193a87fca5386d71516aca89df267fc907bcb3b84d396a'
         addres_from_uncompressed_privkey = '1GFfoqR4Z4BZEy75Nd9CRMTKAev3oukY2Q'
         self.assertEqual(True, check_corresponding_addressed(addres_from_uncompressed_privkey, pubkey))
 
     def test_check_address_from_compressed_pubkey(self):
-        pubkey = b'50e829ca678c60031a11b990fea865e03ba35d0579aa62750b918b98c4b935d803ecc57a4bb2fc2ab1193a87fca5386d71516aca89df267fc907bcb3b84d396a'
+        pubkey = '50e829ca678c60031a11b990fea865e03ba35d0579aa62750b918b98c4b935d803ecc57a4bb2fc2ab1193a87fca5386d71516aca89df267fc907bcb3b84d396a'
         addres_from_compressed_privkey = '1NERjvtBxL5ErAKhCC3mfgWbp3QMd8y6ba'
         self.assertEqual(True, check_corresponding_addressed(addres_from_compressed_privkey, pubkey))
 

@@ -26,8 +26,10 @@ def check_address_available(address):
 def check_corresponding_addressed(address, pubkey):
     if not len(pubkey) == 128:
         return False
-    received_address_compressed = get_address_from_public_key(b"04" + pubkey)
-    received_address_uncompressed = get_address_from_public_key(get_compressed_form_of_public_key(pubkey))
+    received_address_compressed = get_address_from_public_key(b"04" + codecs.encode(pubkey, 'ascii'))
+    received_address_uncompressed = get_address_from_public_key(
+        get_compressed_form_of_public_key(codecs.encode(pubkey, 'ascii'))
+    )
     if not (received_address_compressed == address or received_address_uncompressed == address):
         return False
     return True

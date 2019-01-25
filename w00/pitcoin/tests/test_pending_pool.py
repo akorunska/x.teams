@@ -1,6 +1,6 @@
 import unittest
 from pitcoin import PROJECT_ROOT
-from pitcoin.block import Storage
+from pitcoin.network.pending_pool import Storage
 from pitcoin.transaction import Transaction
 from pitcoin.transaction import Serializer
 
