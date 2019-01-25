@@ -1,6 +1,6 @@
 import unittest
 from pitcoin import PROJECT_ROOT
-from pitcoin.network.pending_pool import Storage
+from pitcoin.network.pending_pool import MemPoolStorage
 from pitcoin.transaction import Transaction
 from pitcoin.transaction import Serializer
 
@@ -15,7 +15,7 @@ class TestPendingPool(unittest.TestCase):
     storage_filepath = PROJECT_ROOT + "/storage/mempool_test.txt"
 
     def test_adding_to_mempool(self):
-        storage = Storage(self.storage_filepath)
+        storage = MemPoolStorage(self.storage_filepath)
         storage.delete_all_transactions_from_mempool()
         tx = Transaction("sndr", "rspt", 20)
         storage.add_transaction_to_mempool(tx)
@@ -24,7 +24,7 @@ class TestPendingPool(unittest.TestCase):
         self.assertTrue(tx in tx_list)
 
     def test_adding_correct_serialized_tx_to_mempool(self):
-        storage = Storage(self.storage_filepath)
+        storage = MemPoolStorage(self.storage_filepath)
         storage.delete_all_transactions_from_mempool()
         tx = Transaction(
             "1GFfoqR4Z4BZEy75Nd9CRMTKAev3oukY2Q",
@@ -38,7 +38,7 @@ class TestPendingPool(unittest.TestCase):
         self.assertTrue(tx in tx_list)
 
     def test_adding_incorrect_serialized_tx_to_mempool(self):
-        storage = Storage(self.storage_filepath)
+        storage = MemPoolStorage(self.storage_filepath)
         storage.delete_all_transactions_from_mempool()
         tx = Transaction("sndr", "rspt", 20)
         storage.add_serialized_transaction_to_mempool(Serializer.serialize_transaction(tx))
@@ -47,7 +47,7 @@ class TestPendingPool(unittest.TestCase):
         self.assertFalse(tx in tx_list)
 
     def test_deleting_last_transaction(self):
-        storage = Storage(self.storage_filepath)
+        storage = MemPoolStorage(self.storage_filepath)
         storage.delete_all_transactions_from_mempool()
         tx1 = Transaction("sndr", "rspt", 20)
         tx2 = Transaction("sndr1", "rspt2", 20)
@@ -65,7 +65,7 @@ class TestPendingPool(unittest.TestCase):
         self.assertFalse(tx3 in tx_list)
 
     def test_deleting_all_transactions(self):
-        storage = Storage(self.storage_filepath)
+        storage = MemPoolStorage(self.storage_filepath)
         storage.delete_all_transactions_from_mempool()
         tx1 = Transaction("sndr", "rspt", 20)
         tx2 = Transaction("sndr1", "rspt2", 20)
@@ -85,14 +85,14 @@ class TestPendingPool(unittest.TestCase):
         self.assertFalse(tx3 in tx_list)
 
     def test_get_three_last_tx_empty_list(self):
-        storage = Storage(self.storage_filepath)
+        storage = MemPoolStorage(self.storage_filepath)
         storage.delete_all_transactions_from_mempool()
 
         storage.get_three_first_transactions()
         self.assertEqual(0, storage.get_transactions_count())
 
     def test_get_three_last_tx_two_items_list(self):
-        storage = Storage(self.storage_filepath)
+        storage = MemPoolStorage(self.storage_filepath)
         storage.delete_all_transactions_from_mempool()
         tx1 = Transaction("sndr1", "rspt1", 20)
         tx2 = Transaction("sndr2", "rspt2", 20)
@@ -105,7 +105,7 @@ class TestPendingPool(unittest.TestCase):
         self.assertTrue(tx2 in last_tx_list)
 
     def test_get_three_last_tx_many_items_list(self):
-        storage = Storage(self.storage_filepath)
+        storage = MemPoolStorage(self.storage_filepath)
         storage.delete_all_transactions_from_mempool()
         tx1 = Transaction("sndr1", "rspt1", 20)
         tx2 = Transaction("sndr2", "rspt2", 20)

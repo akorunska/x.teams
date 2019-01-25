@@ -16,7 +16,7 @@ class BlocksStorage:
         else:
             with open(self.storage_filepath, 'rb') as fp:
                 try:
-                    blocks_list = tx_list = pickle.load(fp)
+                    blocks_list = pickle.load(fp)
                 except EOFError:
                     blocks_list = []
         return blocks_list
@@ -26,11 +26,13 @@ class BlocksStorage:
         blocks_list.append(b)
         with open(self.storage_filepath, 'wb+') as fp:
             pickle.dump(blocks_list, fp)
+        return True
 
     def delete_all_blocks_from_mempool(self):
         blocks_list = []
         with open(self.storage_filepath, 'wb+') as fp:
             pickle.dump(blocks_list, fp)
+        return True
 
     def get_blocks_count(self):
         blocks_list = self.get_all_blocks()

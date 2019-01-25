@@ -5,7 +5,7 @@ from pathlib import Path
 from pitcoin import PROJECT_ROOT
 
 
-class Storage:
+class MemPoolStorage:
     def __init__(self, filepath=PROJECT_ROOT+'/storage/mempool.txt'):
         self.storage_filepath = filepath
 
@@ -52,6 +52,7 @@ class Storage:
         tx_list = []
         with open(self.storage_filepath, 'wb+') as fp:
             pickle.dump(tx_list, fp)
+        return True
 
     def get_three_first_transactions(self):
         tx_list = self.get_all_transactions()
@@ -64,19 +65,3 @@ class Storage:
     def get_transactions_count(self):
         tx_list = self.get_all_transactions()
         return len(tx_list)
-
-
-if __name__ == '__main__':
-    st = Storage()
-    tx_list = st.get_all_transactions()
-    tx = Transaction(
-        "1GFfoqR4Z4BZEy75Nd9CRMTKAev3oukY2Q",
-        "16hqCUBS1ifCukfodbhTHMpzdqgzvf6HAM",
-        10
-    )
-    tx.sign_transaction("936abdc0429eb4b38a045fcb8f531ff7cf3888c3a83797df5d033106c4ea6a20")
-
-    # st.add_transaction_to_mempool(tx)
-    tx_list = st.get_all_transactions()
-    for tx in tx_list:
-        print(tx)

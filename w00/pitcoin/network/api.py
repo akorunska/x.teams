@@ -1,13 +1,18 @@
+import codecs
+
 from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
 from json import dumps
 import json
 from flask import jsonify
-from pitcoin.network.pending_pool import Storage
+from pitcoin.network.pending_pool import MemPoolStorage
+from pitcoin.network.chain import BlocksStorage
+from pitcoin.block import Block
 from pitcoin.settings import *
 
 
-mempool = Storage()
+mempool = MemPoolStorage()
+blocks = BlocksStorage()
 app = Flask(__name__)
 api = Api(app)
 
@@ -43,8 +48,52 @@ class Transactions(Resource):
         return mempool.delete_all_transactions_from_mempool()
 
 
-api.add_resource(Transaction, '/transaction/new')
-api.add_resource(Transactions, '/transaction/pendings')
+class Chain(Resource):
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('trunc', type=str)
+        args = parser.parse_args()
+
+        list = blocks.get_all_blocks()
+        if args['trunc'] == "last":
+            last = list[-1]
+            json_repr = json.dumps(last.__dict__)
+        else:
+            json_repr = json.dumps([b.__dict__ for b in list])
+        response = app.response_class(
+            response=json_repr,
+            status=200,
+            mimetype='application/json'
+        )
+        return response
+
+    def post(self):
+        json_repr = json.loads(codecs.decode(request.data, 'ascii'))
+        block = Block(
+            json_repr['timestamp'],
+            json_repr['previous_hash'],
+            [codecs.encode(tx, 'ascii') for tx in json_repr['transactions']],
+            json_repr['nonce']
+        )
+        response = app.response_class(
+            response=json.dumps({"result": blocks.add_block_to_storage(block)}),
+            status=200,
+            mimetype='application/json'
+        )
+        return response
+
+    def delete(self):
+        response = app.response_class(
+            response=json.dumps({"result": blocks.delete_all_blocks_from_mempool()}),
+            status=200,
+            mimetype='application/json'
+        )
+        return response
+
+
+api.add_resource(Transaction, '/transaction/new', methods=['POST'])
+api.add_resource(Transactions, '/transaction/pendings', methods=['GET', 'DELETE'])
+api.add_resource(Chain, '/chain',  methods=['GET', 'DELETE', 'POST'])
 
 
 if __name__ == '__main__':

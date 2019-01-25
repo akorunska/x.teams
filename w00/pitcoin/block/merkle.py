@@ -18,6 +18,7 @@ def sha256_bytes_to_bytes(data: bytes):
 
 
 def get_merkle_root(data: list):
+    data = [codecs.encode(tx, 'ascii') for tx in data]
     if len(data) >= 2:
         current_list = data
     else:
@@ -26,8 +27,8 @@ def get_merkle_root(data: list):
         next_list = []
         while len(current_list) > 0:
             el1, el2 = get_two_elements(current_list)
-            hash_of_contatination = sha256_bytes_to_bytes(el1 + el2)
-            next_list.append(hash_of_contatination)
+            hash_of_concatination = sha256_bytes_to_bytes(el1 + el2)
+            next_list.append(hash_of_concatination)
         current_list = next_list
     return current_list[0]
 
