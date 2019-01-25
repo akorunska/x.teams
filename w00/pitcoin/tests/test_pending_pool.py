@@ -88,7 +88,7 @@ class TestPendingPool(unittest.TestCase):
         storage = Storage(self.storage_filepath)
         storage.delete_all_transactions_from_mempool()
 
-        storage.get_three_last_transactions()
+        storage.get_three_first_transactions()
         self.assertEqual(0, storage.get_transactions_count())
 
     def test_get_three_last_tx_two_items_list(self):
@@ -99,7 +99,7 @@ class TestPendingPool(unittest.TestCase):
         storage.add_transaction_to_mempool(tx1)
         storage.add_transaction_to_mempool(tx2)
 
-        last_tx_list = storage.get_three_last_transactions()
+        last_tx_list = storage.get_three_first_transactions()
         self.assertEqual(2, len(last_tx_list))
         self.assertTrue(tx1 in last_tx_list)
         self.assertTrue(tx2 in last_tx_list)
@@ -109,17 +109,17 @@ class TestPendingPool(unittest.TestCase):
         storage.delete_all_transactions_from_mempool()
         tx1 = Transaction("sndr1", "rspt1", 20)
         tx2 = Transaction("sndr2", "rspt2", 20)
-        tx3 = Transaction("sndr3", "rspt4", 20)
-        tx4 = Transaction("sndr3", "rspt4", 20)
+        tx3 = Transaction("sndr3", "rspt3", 20)
+        tx4 = Transaction("sndr4", "rspt4", 20)
         storage.add_transaction_to_mempool(tx1)
         storage.add_transaction_to_mempool(tx2)
         storage.add_transaction_to_mempool(tx3)
         storage.add_transaction_to_mempool(tx4)
 
-        last_tx_list = storage.get_three_last_transactions()
+        last_tx_list = storage.get_three_first_transactions()
         self.assertEqual(3, len(last_tx_list))
-        self.assertFalse(tx1 in last_tx_list)
+        self.assertTrue(tx1 in last_tx_list)
         self.assertTrue(tx2 in last_tx_list)
         self.assertTrue(tx3 in last_tx_list)
-        self.assertTrue(tx4 in last_tx_list)
+        self.assertFalse(tx4 in last_tx_list)
 

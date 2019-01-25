@@ -53,11 +53,11 @@ class Storage:
         with open(self.storage_filepath, 'wb+') as fp:
             pickle.dump(tx_list, fp)
 
-    def get_three_last_transactions(self):
+    def get_three_first_transactions(self):
         tx_list = self.get_all_transactions()
 
         if len(tx_list) >= 4:
-            return tx_list[len(tx_list) - 3: len(tx_list)]
+            return tx_list[0:3]
         else:
             return tx_list
 
