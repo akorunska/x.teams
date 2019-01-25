@@ -12,7 +12,7 @@ So we receive the following game parameters:
 
 When using this parameters in the game, **Grudger** wins.
 
-![Grudger won!](/pics/result.png)
+![Grudger won!](pics/result.png)
 
 Public key:
 `
