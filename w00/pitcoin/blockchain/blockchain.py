@@ -32,6 +32,7 @@ class Blockchain:
             item['sign_pubkey'],
             item['signature']
         )) for item in request_data]
+        tx_list.append(Serializer.serialize_transaction(self.construct_miners_rewarding_transaction()))
         # todo add coinbase transaction in the block
         block = Block(str(int(time.time())), prev['hash_value'], tx_list)
         return block
