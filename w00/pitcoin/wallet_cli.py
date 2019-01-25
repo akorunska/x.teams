@@ -123,7 +123,6 @@ class WalletCLI(cmd.Cmd):
         tx = Transaction(options['sender'], options['recipient'], options['amount'])
         tx.sign_transaction(self.user_privkey)
         serialized = Serializer.serialize_transaction(tx)
-        print(serialized)
         requests.post(self.api_url + '/transaction/new', serialized)
 
     def do_quit(self, arg):

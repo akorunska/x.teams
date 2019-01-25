@@ -31,8 +31,3 @@ def get_merkle_root(data: list):
         current_list = next_list
     return current_list[0]
 
-
-if __name__ == '__main__':
-    data = [b"hello", b'itsme', b'mario']
-    print(get_merkle_root(data))
-
