@@ -59,10 +59,11 @@ class Blockchain:
         serialized = Serializer.serialize_transaction(tx)
         requests.post(self.api_url + '/transaction/new', serialized)
 
-    def submit_block(self, block: Block):
-        pass
+    def mine_and_submit_block(self):
+        block = self.mine()
+        requests.post(self.api_url + '/chain', str(block))
 
 
 if __name__ == '__main__':
     blockchain = Blockchain()
-    print(blockchain.mine())
+    print(blockchain.mine_and_submit_block())
