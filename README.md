@@ -6,14 +6,14 @@
 ## Satoshi Way
 *21.01.19 - 15.02.19*
 
-####Module 1: Fundamentals
+### Module 1: Fundamentals
 * Game theory
 * Genesis block
 * PoW implementation
 * Mining reward and transaction
 * Wallet implementation
 
-####Module 2:
+#### Module 2:
 * Multisig wallet
 * Bitcoin script
 * Segwit
