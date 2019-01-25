@@ -1,6 +1,6 @@
 # Part 07
 
-The result of hashing login **'akorunsk'** with ripemd and sha:
+The result of hashing login **'akorunsk'** with ripemd160 and sha256:
 
 `55ceb0af5617b1e029658cd7e68b569ea1faacc5`
 
