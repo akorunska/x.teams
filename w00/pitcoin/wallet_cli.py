@@ -3,6 +3,7 @@ from pathlib import Path
 from pitcoin.wallet import *
 from pitcoin.transaction import *
 
+# todo rewrite all functions to receive and return a string + add test coverage
 
 class OptionsHandler:
     @staticmethod
