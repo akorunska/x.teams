@@ -25,8 +25,9 @@ class BlocksStorage:
     def add_block_to_storage(self, b: Block):
         blocks_list = self.get_all_blocks()
         # todo check block`s validity
-        if blocks_list[-1].hash_value != b.previous_hash:
-            return False
+        if len(blocks_list) >= 1:
+            if blocks_list[-1].hash_value != b.previous_hash:
+                return False
         blocks_list.append(b)
         with open(self.storage_filepath, 'wb+') as fp:
             pickle.dump(blocks_list, fp)
