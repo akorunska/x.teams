@@ -99,6 +99,7 @@ class ChainBlock(Resource):
         return response
 
     def post(self):
+        print("inside")
         json_repr = json.loads(codecs.decode(request.data, 'ascii'))
         block = Block(
             json_repr['timestamp'],
