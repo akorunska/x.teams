@@ -91,7 +91,7 @@ class ChainBlock(Resource):
         if args['height'] and args['height'] < len(list):
             block = list[args['height']]
         else:
-            block = list[-1]
+            block = list[len(list) - 1]
         json_repr = json.dumps(block.__dict__)
 
         response = app.response_class(
@@ -147,5 +147,8 @@ api.add_resource(ChainBlock, '/chain/block', methods=['GET', 'POST'])
 api.add_resource(ChainLength, '/chain/length', methods=['GET'])
 
 
-if __name__ == '__main__':
+def serve():
     app.run(host=API_HOST, port=API_PORT)
+
+if __name__ == '__main__':
+    serve()
