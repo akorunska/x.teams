@@ -67,25 +67,6 @@ class Chain(Resource):
         )
         return response
 
-    def post(self):
-        json_list = json.loads(codecs.decode(request.data, 'ascii'))
-        blocks = [
-            Block(
-            json_repr['timestamp'],
-            json_repr['previous_hash'],
-            [codecs.encode(tx, 'ascii') for tx in json_repr['transactions']],
-            json_repr['nonce']
-        )
-            for json_repr in json_list
-        ]
-        print(blocks)
-        # response = app.response_class(
-        #     response=json.dumps({"result": blocks.add_block_to_storage(block)}),
-        #     status=200,
-        #     mimetype='application/json'
-        # )
-        # return response
-
     def delete(self):
         response = app.response_class(
             response=json.dumps({"result": blocks.delete_all_blocks_from_mempool()}),
@@ -157,7 +138,7 @@ class Node(Resource):
 
 api.add_resource(Transaction, '/transaction/new', methods=['POST'])
 api.add_resource(Transactions, '/transaction/pendings', methods=['GET', 'DELETE'])
-api.add_resource(Chain, '/chain',  methods=['GET', 'DELETE', 'POST'])
+api.add_resource(Chain, '/chain',  methods=['GET', 'DELETE'])
 api.add_resource(ChainBlock, '/chain/block', methods=['GET', 'POST'])
 api.add_resource(ChainLength, '/chain/length', methods=['GET'])
 api.add_resource(Node, '/node', methods=['GET', 'POST'])
