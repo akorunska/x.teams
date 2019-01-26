@@ -1,5 +1,6 @@
 import codecs
 
+import requests
 from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
 import json
@@ -105,11 +106,21 @@ class ChainBlock(Resource):
             [codecs.encode(tx, 'ascii') for tx in json_repr['transactions']],
             json_repr['nonce']
         )
+
+        last_block = blocks.get_last_block()
+        if block.hash_value == last_block.hash_value:
+            return ""
+
+        # broadcasting new block for all known nodes
+        for node in nodes:
+            requests.post(node + '/chain/block', json.dumps(json_repr))
+
         response = app.response_class(
             response=json.dumps({"result": blocks.add_block_to_storage(block)}),
             status=200,
             mimetype='application/json'
         )
+        print(blocks.get_all_blocks())
         return response
 
 
