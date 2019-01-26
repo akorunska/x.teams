@@ -81,7 +81,7 @@ class Blockchain:
 
     def mine_and_submit_block(self):
         block = self.mine()
-        requests.post(self.api_url + '/chain/block', str(block))
+        return requests.post(self.api_url + '/chain/block', str(block))
 
 
 if __name__ == '__main__':

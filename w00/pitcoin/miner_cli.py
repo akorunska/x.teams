@@ -10,12 +10,13 @@ class MinerCLI(cmd.Cmd):
 
     def do_mine(self, arg):
         'Initiate mining process. \n'
-        self.blockchain.mine_and_submit_block()
+        data = self.blockchain.mine_and_submit_block()
+        print(data.__dict__)
 
     def do_add_node(self, arg):
         'Add new node address to the list of nodes\n' \
         'usage: add_node http://127.0.0.1:3001'
-        self.blockchain.add_node(arg.strip())
+        print(self.blockchain.add_node(arg.strip()))
 
     def do_consensus(self, arg):
         'Check other node`s chains.'\

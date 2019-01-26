@@ -33,6 +33,12 @@ class BlocksStorage:
             pickle.dump(blocks_list, fp)
         return True
 
+    def get_last_block(self):
+        blocks_list = self.get_all_blocks()
+        if len(blocks_list) == 0:
+            return None
+        return blocks_list[-1]
+
     def delete_all_blocks_from_mempool(self):
         blocks_list = []
         with open(self.storage_filepath, 'wb+') as fp:
