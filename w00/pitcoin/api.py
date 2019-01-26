@@ -68,8 +68,23 @@ class Chain(Resource):
         return response
 
     def post(self):
-        # separate post for whole chain (in case we need to replace current chain with a longer one
-        pass
+        json_list = json.loads(codecs.decode(request.data, 'ascii'))
+        blocks = [
+            Block(
+            json_repr['timestamp'],
+            json_repr['previous_hash'],
+            [codecs.encode(tx, 'ascii') for tx in json_repr['transactions']],
+            json_repr['nonce']
+        )
+            for json_repr in json_list
+        ]
+        print(blocks)
+        # response = app.response_class(
+        #     response=json.dumps({"result": blocks.add_block_to_storage(block)}),
+        #     status=200,
+        #     mimetype='application/json'
+        # )
+        # return response
 
     def delete(self):
         response = app.response_class(

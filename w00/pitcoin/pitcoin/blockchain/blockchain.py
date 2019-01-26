@@ -1,3 +1,4 @@
+import json
 import time
 
 import requests
@@ -44,13 +45,31 @@ class Blockchain:
         return tx
 
     def resolve_conflicts(self):
-        pass
+        nodes_list = requests.get(self.api_url + '/node').json()
+        current_len = requests.get(self.api_url + '/chain/length').json()['chain_length']
+        longest = {'len': current_len, 'source': ''}
+        print(current_len)
+        for node in nodes_list:
+            node_chain_len = requests.get(node + '/chain/length').json()['chain_length']
+            print(node_chain_len)
+            if node_chain_len > longest['len']:
+                longest['len'] = node_chain_len
+                longest['source'] = node
+        if longest['source'] == '':
+            return ""
+        block_list = requests.get(longest['source'] + '/chain').json()
+        requests.delete(self.api_url + '/chain')
+        for block in block_list:
+            requests.post(self.api_url + '/chain/block', json.dumps(block))
+        return longest['source']
+
 
     def is_valid_chain(self):
-        pass
+        #todo add real chain validation
+        return True
 
-    def add_node(self):
-        pass
+    def add_node(self, node_url):
+        requests.post(self.api_url + '/node', node_url)
 
     def genesis_block(self):
         genesis = Block(str(int(time.time())), 64 * '0', [Serializer.serialize_transaction(self.construct_miners_rewarding_transaction())])

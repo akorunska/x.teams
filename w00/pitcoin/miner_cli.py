@@ -13,7 +13,14 @@ class MinerCLI(cmd.Cmd):
         self.blockchain.mine_and_submit_block()
 
     def do_add_node(self, arg):
+        'Add new node address to the list of nodes\n' \
+        'usage: add_node http://127.0.0.1:3001'
         self.blockchain.add_node(arg.strip())
+
+    def do_consensus(self, arg):
+        'Check other node`s chains.'\
+        ' If some of them in longer than current chain, replace current chain with the longest'
+        self.blockchain.resolve_conflicts()
 
     def do_quit(self, arg):
         'Exit wallet-cli shell'
