@@ -68,6 +68,40 @@ class Chain(Resource):
         return response
 
     def post(self):
+        # separate post for whole chain (in case we need to replace current chain with a longer one
+        pass
+
+    def delete(self):
+        response = app.response_class(
+            response=json.dumps({"result": blocks.delete_all_blocks_from_mempool()}),
+            status=200,
+            mimetype='application/json'
+        )
+        return response
+
+
+class ChainBlock(Resource):
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('height', type=int)
+        args = parser.parse_args()
+
+        list = blocks.get_all_blocks()
+
+        if args['height'] and args['height'] < len(list):
+            block = list[args['height']]
+        else:
+            block = list[-1]
+        json_repr = json.dumps(block.__dict__)
+
+        response = app.response_class(
+            response=json_repr,
+            status=200,
+            mimetype='application/json'
+        )
+        return response
+
+    def post(self):
         json_repr = json.loads(codecs.decode(request.data, 'ascii'))
         block = Block(
             json_repr['timestamp'],
@@ -82,9 +116,11 @@ class Chain(Resource):
         )
         return response
 
-    def delete(self):
+
+class ChainLength(Resource):
+    def get(self):
         response = app.response_class(
-            response=json.dumps({"result": blocks.delete_all_blocks_from_mempool()}),
+            response=json.dumps({"chain_length": len(blocks.get_all_blocks())}),
             status=200,
             mimetype='application/json'
         )
@@ -94,6 +130,8 @@ class Chain(Resource):
 api.add_resource(Transaction, '/transaction/new', methods=['POST'])
 api.add_resource(Transactions, '/transaction/pendings', methods=['GET', 'DELETE'])
 api.add_resource(Chain, '/chain',  methods=['GET', 'DELETE', 'POST'])
+api.add_resource(ChainBlock, '/chain/block', methods=['GET', 'POST'])
+api.add_resource(ChainLength, '/chain/length', methods=['GET'])
 
 
 if __name__ == '__main__':
