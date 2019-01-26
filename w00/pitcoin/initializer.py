@@ -2,7 +2,6 @@ import requests
 
 from pitcoin.blockchain import Blockchain
 from pitcoin.settings import *
-from pitcoin.api import serve
 
 def genesis_block_setup():
     blockchain = Blockchain()
