@@ -13,8 +13,36 @@ Key points of what should be implemented:
 * wallet-cli and miner-cli
 * test coverage for different system modules
 
-#
+## Setup instructions
+* Clone the repository
+* Create virtualenv with python3 and activate it
+* Intall all project dependencies, using 
+``` 
+pip install -r requirements.txt 
+```
+* In the separate terminal tab launch api.py with the command 
+(this process should run all the time as you work with your pitcoin node)
+``` 
+python api.py 
+```
+* Now run initializer.py. This script will create and publish genesis block
+```
+python initializer.py
+```
+That`s it! You can now use wallet-cli or miner-cli.
 
+## API 'GET' routes
+
+```
+/transaction/pendings
+/transaction/pendings?amount=3
+/chain
+/chain/block
+/chain/block?heigth=<int>
+/chain/length
+```
+
+##
 Running tests from root directory:
 ```
 python -m unittest discover -s pitcoin/tests/
