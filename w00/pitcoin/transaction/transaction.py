@@ -4,6 +4,7 @@ from pitcoin.settings import *
 
 
 class Transaction:
+    # todo add id for the transaction
     def __init__(self, sender: str, recipient: str, amount: int, sign_pubkey="", signature=""):
         self.sender = sender
         self.recipient = recipient
