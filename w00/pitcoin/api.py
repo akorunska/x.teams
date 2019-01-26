@@ -3,10 +3,10 @@ import codecs
 from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
 import json
-from .network.pending_pool import MemPoolStorage
-from .network.chain import BlocksStorage
-from .block import Block
-from .settings import *
+from pitcoin.network.pending_pool import MemPoolStorage
+from pitcoin.network.chain import BlocksStorage
+from pitcoin.block import Block
+from pitcoin.settings import *
 
 
 mempool = MemPoolStorage()
