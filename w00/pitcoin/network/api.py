@@ -3,8 +3,8 @@ import codecs
 from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
 import json
-from .pending_pool import MemPoolStorage
-from .chain import BlocksStorage
+from pitcoin.network.pending_pool import MemPoolStorage
+from pitcoin.network.chain import BlocksStorage
 from pitcoin.block import Block
 from pitcoin.settings import *
 
