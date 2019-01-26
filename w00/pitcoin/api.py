@@ -109,21 +109,21 @@ class ChainBlock(Resource):
         )
 
         last_block = blocks.get_last_block()
-        print(last_block)
+        print(block.hash_value, last_block.hash_value)
         if last_block:
             if block.hash_value == last_block.hash_value:
                 return ""
-
-        # broadcasting new block for all known nodes
-        for node in nodes:
-            requests.post(node + '/chain/block', json.dumps(json_repr))
 
         response = app.response_class(
             response=json.dumps({"result": blocks.add_block_to_storage(block)}),
             status=200,
             mimetype='application/json'
         )
-        print(blocks.get_all_blocks())
+
+        # broadcasting new block for all known nodes
+        for node in nodes:
+            requests.post(node + '/chain/block', json.dumps(json_repr))
+
         return response
 
 
