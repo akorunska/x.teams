@@ -88,7 +88,8 @@ class ChainBlock(Resource):
         if args['height'] and args['height'] < len(list):
             block = list[args['height']]
         else:
-            block = list[len(list) - 1]
+            block = blocks.get_last_block()
+        print(block)
         json_repr = json.dumps(block.__dict__)
 
         response = app.response_class(
@@ -109,7 +110,6 @@ class ChainBlock(Resource):
         )
 
         last_block = blocks.get_last_block()
-        print(block.hash_value, last_block.hash_value)
         if last_block:
             if block.hash_value == last_block.hash_value:
                 return ""
