@@ -109,8 +109,9 @@ class ChainBlock(Resource):
         )
 
         last_block = blocks.get_last_block()
-        if block.hash_value == last_block.hash_value:
-            return ""
+        if last_block:
+            if block.hash_value == last_block.hash_value:
+                return ""
 
         # broadcasting new block for all known nodes
         for node in nodes:
