@@ -49,10 +49,8 @@ class Blockchain:
         nodes_list = requests.get(self.api_url + '/node').json()
         current_len = requests.get(self.api_url + '/chain/length').json()['chain_length']
         longest = {'len': current_len, 'source': ''}
-        print(current_len)
         for node in nodes_list:
             node_chain_len = requests.get(node + '/chain/length').json()['chain_length']
-            print(node_chain_len)
             if node_chain_len > longest['len']:
                 longest['len'] = node_chain_len
                 longest['source'] = node
@@ -62,7 +60,7 @@ class Blockchain:
         requests.delete(self.api_url + '/chain')
         for block in block_list:
             requests.post(self.api_url + '/chain/block', json.dumps(block))
-        return longest['source']
+        return longest
 
 
     def is_valid_chain(self):
