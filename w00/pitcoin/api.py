@@ -109,6 +109,7 @@ class ChainBlock(Resource):
         )
 
         last_block = blocks.get_last_block()
+        print(last_block)
         if last_block:
             if block.hash_value == last_block.hash_value:
                 return ""
