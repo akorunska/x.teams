@@ -2,17 +2,17 @@ import codecs
 
 from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
-from json import dumps
 import json
-from flask import jsonify
-from pitcoin.network.pending_pool import MemPoolStorage
-from pitcoin.network.chain import BlocksStorage
+from .pending_pool import MemPoolStorage
+from .chain import BlocksStorage
 from pitcoin.block import Block
 from pitcoin.settings import *
 
 
 mempool = MemPoolStorage()
 blocks = BlocksStorage()
+nodes = []
+
 app = Flask(__name__)
 api = Api(app)
 
@@ -125,6 +125,19 @@ class ChainLength(Resource):
             mimetype='application/json'
         )
         return response
+
+
+class Node(Resource):
+    def get(self):
+        return app.response_class(
+            response=json.dumps(nodes),
+            status=200,
+            mimetype='application/json'
+        )
+
+    def post(self):
+        nodes.append(codecs.decode(request.data, 'ascii'))
+        return True
 
 
 api.add_resource(Transaction, '/transaction/new', methods=['POST'])
