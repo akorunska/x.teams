@@ -1,8 +1,8 @@
 import cmd, os
 from pathlib import Path
-from pitcoin.wallet import *
-from pitcoin.transaction import *
-from pitcoin.settings import *
+from .pitcoin.wallet import *
+from .pitcoin.transaction import *
+from .pitcoin.settings import *
 import requests
 import json
 
@@ -149,7 +149,7 @@ class WalletCLI(cmd.Cmd):
 
     @staticmethod
     def save_address_to_file(address):
-        file = open("address", "w")
+        file = open(PROJECT_ROOT + "/address", "w")
         file.write(address)
         file.close()
 

@@ -26,7 +26,7 @@ pip install -r requirements.txt
 ``` 
 python api.py 
 ```
-* Now run initializer.py. This script will create and publish genesis block
+* Now run initializer.py. This script will create and publish genesis block.
 ```
 python initializer.py
 ```
