@@ -11,7 +11,7 @@ def genesis_block_setup():
     chain = requests.get(api_url + '/chain').json()
     if len(chain) > 0:
         requests.delete(api_url + '/chain')
-    requests.post(api_url + '/chain', str(genesis_block))
+    requests.post(api_url + '/chain/block', str(genesis_block))
 
 
 genesis_block_setup()
