@@ -1,4 +1,4 @@
-import cmd, os
+import cmd
 from pathlib import Path
 from .pitcoin.wallet import *
 from .pitcoin.transaction import *
@@ -156,12 +156,3 @@ class WalletCLI(cmd.Cmd):
 
 if __name__ == '__main__':
     WalletCLI().cmdloop()
-    # api_url = "http://" + API_HOST + ":" + API_PORT
-    # tx = Transaction(
-    #     "1GFfoqR4Z4BZEy75Nd9CRMTKAev3oukY2Q",
-    #     "16hqCUBS1ifCukfodbhTHMpzdqgzvf6HAM",
-    #     200
-    # )
-    # tx.sign_transaction("936abdc0429eb4b38a045fcb8f531ff7cf3888c3a83797df5d033106c4ea6a20")
-    #
-    # requests.post(api_url + '/transaction/new', Serializer.serialize_transaction(tx))

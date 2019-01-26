@@ -145,10 +145,12 @@ api.add_resource(Transactions, '/transaction/pendings', methods=['GET', 'DELETE'
 api.add_resource(Chain, '/chain',  methods=['GET', 'DELETE', 'POST'])
 api.add_resource(ChainBlock, '/chain/block', methods=['GET', 'POST'])
 api.add_resource(ChainLength, '/chain/length', methods=['GET'])
+api.add_resource(Node, '/node', methods=['GET', 'POST'])
 
 
 def serve():
     app.run(host=API_HOST, port=API_PORT)
+
 
 if __name__ == '__main__':
     serve()
