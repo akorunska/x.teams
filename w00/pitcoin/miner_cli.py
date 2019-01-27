@@ -12,6 +12,7 @@ class MinerCLI(cmd.Cmd):
         'Initiate mining process. \n'
         data = self.blockchain.mine_and_submit_block()
         print("block was mined and broadcasted to other nodes")
+        print("hash of the new block: ", data)
 
     def do_add_node(self, arg):
         'Add new node address to the list of nodes\n' \

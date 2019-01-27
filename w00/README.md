@@ -45,7 +45,7 @@ That`s it! You can now use wallet-cli or miner-cli.
 ```
 
 ##
-Running tests from root directory:
+Running tests:
 ```
 python -m unittest discover -s pitcoin/tests/
 ```

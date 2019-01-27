@@ -34,7 +34,6 @@ class Blockchain:
             item['signature']
         )) for item in request_data]
         tx_list.append(Serializer.serialize_transaction(self.construct_miners_rewarding_transaction()))
-        # todo add coinbase transaction in the block
         block = Block(str(int(time.time())), prev['hash_value'], tx_list)
         return block
 
@@ -79,7 +78,8 @@ class Blockchain:
 
     def mine_and_submit_block(self):
         block = self.mine()
-        return requests.post(self.api_url + '/chain/block', str(block))
+        requests.post(self.api_url + '/chain/block', str(block))
+        return block.hash_value
 
 
 if __name__ == '__main__':
