@@ -25,7 +25,6 @@ class Blockchain:
 
     def create_block_with_loaded_transactions(self):
         prev = requests.get(self.api_url + '/chain/block').json()
-        print(prev)
         request_data = requests.get(self.api_url + '/transaction/pendings' + '?amount=3').json()
         tx_list = [Serializer.serialize_transaction(Transaction(
             item['sender'],

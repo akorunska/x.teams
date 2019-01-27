@@ -1,8 +1,8 @@
 import cmd
 from pathlib import Path
-from .pitcoin.wallet import *
-from .pitcoin.transaction import *
-from .pitcoin.settings import *
+from pitcoin.wallet import *
+from pitcoin.transaction import *
+from pitcoin.settings import *
 import requests
 import json
 
@@ -67,7 +67,7 @@ class OptionsHandler:
         # todo check if recipient and sender addresses are valid
         result['recipient'] = args[0]
         result['amount'] = int(args[1])
-        result['sender'] = read_file_contents('address')
+        result['sender'] = read_file_contents('pitcoin/address')
         if result['amount'] <= 0:
             print("amount specified is not positive integer")
             return result

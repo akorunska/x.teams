@@ -123,3 +123,31 @@ class TestPendingPool(unittest.TestCase):
         self.assertTrue(tx3 in last_tx_list)
         self.assertFalse(tx4 in last_tx_list)
 
+    def test_contains_transaction(self):
+        storage = MemPoolStorage(self.storage_filepath)
+        storage.delete_all_transactions_from_mempool()
+        tx1 = Transaction("sndr1", "rspt1", 20)
+        tx2 = Transaction("sndr2", "rspt2", 20)
+        storage.add_transaction_to_mempool(tx1)
+
+        self.assertTrue(storage.contains_transaction(tx1))
+        self.assertFalse(storage.contains_transaction(tx2))
+
+    def test_delete_transaction_if_exists(self):
+        storage = MemPoolStorage(self.storage_filepath)
+        storage.delete_all_transactions_from_mempool()
+        tx1 = Transaction("sndr1", "rspt1", 20)
+        tx2 = Transaction("sndr2", "rspt2", 20)
+        tx3 = Transaction("sndr3", "rspt3", 20)
+
+        storage.add_transaction_to_mempool(tx1)
+        storage.add_transaction_to_mempool(tx2)
+
+        self.assertEqual(2, len(storage.get_all_transactions()))
+        self.assertFalse(storage.delete_transaction_if_exists(tx3))
+        self.assertEqual(2, len(storage.get_all_transactions()))
+
+        self.assertTrue(storage.delete_transaction_if_exists(tx2))
+        self.assertEqual(1, len(storage.get_all_transactions()))
+
+

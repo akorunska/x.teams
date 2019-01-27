@@ -8,6 +8,7 @@ from pitcoin.storage_handlers.pending_pool import MemPoolStorage
 from pitcoin.storage_handlers.chain import BlocksStorage
 from pitcoin.block import Block
 from pitcoin.settings import *
+from pitcoin.transaction.serialization import *
 
 
 mempool = MemPoolStorage()
@@ -100,7 +101,6 @@ class ChainBlock(Resource):
         return response
 
     def post(self):
-        print("inside")
         json_repr = json.loads(codecs.decode(request.data, 'ascii'))
         block = Block(
             json_repr['timestamp'],
@@ -119,6 +119,10 @@ class ChainBlock(Resource):
             status=200,
             mimetype='application/json'
         )
+        # deleting all transactions that new block contains from the mempool
+        for tx in block.transactions:
+            deserialized = Deserializer.deserialize_transaction(codecs.encode(tx, 'ascii'))
+            mempool.delete_transaction_if_exists(deserialized)
 
         # broadcasting new block for all known nodes
         for node in nodes:

@@ -40,6 +40,13 @@ class MemPoolStorage:
         tx_list.append(tx)
         with open(self.storage_filepath, 'wb+') as fp:
             pickle.dump(tx_list, fp)
+        return True
+
+    def contains_transaction(self, tx):
+        tx_list = self.get_all_transactions()
+        if tx in tx_list:
+            return True
+        return False
 
     def delete_last_transaction_from_mempool(self):
         tx_list = self.get_all_transactions()
@@ -54,6 +61,18 @@ class MemPoolStorage:
             pickle.dump(tx_list, fp)
         return True
 
+    def delete_transaction_if_exists(self, tx):
+        if self.contains_transaction(tx):
+            tx_list = self.get_all_transactions()
+            for i in range(len(tx_list)):
+                if tx_list[i] == tx:
+                    del(tx_list[i])
+                    break
+            with open(self.storage_filepath, 'wb+') as fp:
+                pickle.dump(tx_list, fp)
+            return True
+        return False
+
     def get_three_first_transactions(self):
         tx_list = self.get_all_transactions()
 
@@ -65,3 +84,4 @@ class MemPoolStorage:
     def get_transactions_count(self):
         tx_list = self.get_all_transactions()
         return len(tx_list)
+
