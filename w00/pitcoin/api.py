@@ -9,6 +9,7 @@ from pitcoin.storage_handlers.chain import BlocksStorage
 from pitcoin.block import Block
 from pitcoin.settings import *
 from pitcoin.transaction.serialization import *
+from pitcoin.blockchain.address_balance import *
 
 
 mempool = MemPoolStorage()
@@ -163,12 +164,27 @@ class Node(Resource):
         return True
 
 
+class Balance(Resource):
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('address', type=str, required=True)
+        args = parser.parse_args()
+
+        res = get_balance(blocks.get_all_blocks(), args['address'])
+        return app.response_class(
+            response=json.dumps({'balance': res}),
+            status=200,
+            mimetype='application/json'
+        )
+
+
 api.add_resource(Transaction, '/transaction/new', methods=['POST'])
 api.add_resource(Transactions, '/transaction/pendings', methods=['GET', 'DELETE'])
 api.add_resource(Chain, '/chain',  methods=['GET', 'DELETE'])
 api.add_resource(ChainBlock, '/chain/block', methods=['GET', 'POST'])
 api.add_resource(ChainLength, '/chain/length', methods=['GET'])
 api.add_resource(Node, '/node', methods=['GET', 'POST'])
+api.add_resource(Balance, '/balance', methods=['GET'])
 
 
 def serve():

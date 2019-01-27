@@ -125,6 +125,13 @@ class WalletCLI(cmd.Cmd):
         serialized = Serializer.serialize_transaction(tx)
         requests.post(self.api_url + '/transaction/new', serialized)
 
+    def do_balance(self, arg):
+        'Send some pitcoins to another address\n' \
+        'usage: <balance address>'
+        addr = arg.strip()
+        resp = requests.get(self.api_url + '/balance?address=' + addr).json()
+        print(resp['balance'])
+
     def do_quit(self, arg):
         'Exit wallet-cli shell'
         print('Thank you for using pitcoin-wallet-cli')

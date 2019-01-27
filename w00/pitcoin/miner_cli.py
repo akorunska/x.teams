@@ -17,7 +17,8 @@ class MinerCLI(cmd.Cmd):
     def do_add_node(self, arg):
         'Add new node address to the list of nodes\n' \
         'usage: add_node http://127.0.0.1:3001'
-        self.blockchain.add_node(arg.strip())
+        url = arg.strip()
+        self.blockchain.add_node()
 
     def do_consensus(self, arg):
         'Check other node`s chains.'\

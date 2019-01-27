@@ -32,6 +32,12 @@ python initializer.py
 ```
 That`s it! You can now use wallet-cli or miner-cli.
 
+If you get errors about port being occupied already that is okay. 
+The reason for it must be other pitcoin node already running on the computer.
+
+In this case you may want to edit settings.py file inside inner pitcoin folder. 
+This file specifies port and host api will use to run.
+
 ## API 'GET' routes
 
 ```
@@ -42,6 +48,7 @@ That`s it! You can now use wallet-cli or miner-cli.
 /chain/block?heigth=<int>
 /chain/length
 /node
+/balance
 ```
 
 ##
@@ -52,6 +59,6 @@ python -m unittest discover -s pitcoin/tests/
 
 Getting coverage information: 
 ```
-coverage run -m --source=pitcoin unittest discover -s pitcoin/tests/
+coverage run -m --source=. unittest discover -s pitcoin/tests/
 coverage report -m
 ```
