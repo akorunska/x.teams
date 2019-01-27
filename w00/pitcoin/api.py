@@ -21,6 +21,10 @@ api = Api(app)
 
 class Transaction(Resource):
     def post(self):
+        deserialized = Deserializer.deserialize_transaction(request.data)
+        if mempool.contains_transaction(deserialized):
+            return
+
         response = app.response_class(
             response=json.dumps({"result": mempool.add_serialized_transaction_to_mempool(request.data)}),
             status=200,
