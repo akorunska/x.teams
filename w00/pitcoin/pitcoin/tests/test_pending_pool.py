@@ -12,7 +12,7 @@ class TestPendingPool(unittest.TestCase):
     #         10
     #     ).sign_transaction("936abdc0429eb4b38a045fcb8f531ff7cf3888c3a83797df5d033106c4ea6a20")
 
-    storage_filepath = PROJECT_ROOT + "/storage/mempool_test.txt"
+    storage_filepath = PROJECT_ROOT + "/storage/.mempool_test.txt"
 
     def test_adding_to_mempool(self):
         storage = MemPoolStorage(self.storage_filepath)

@@ -106,5 +106,9 @@ venv.bak/
 */.idea/*
 *_env*
 .*
-*/storage/*.txt
-*storage/*.txt
+*/block.txt
+*/mempool*.txt
+
+
+
+

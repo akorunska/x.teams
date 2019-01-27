@@ -7,7 +7,7 @@ from pitcoin import PROJECT_ROOT
 
 
 class BlocksStorage:
-    def __init__(self, filepath=PROJECT_ROOT+'/storage/blocks.txt'):
+    def __init__(self, filepath=PROJECT_ROOT+'/storage/.blocks.txt'):
         self.storage_filepath = filepath
 
     def get_all_blocks(self):
