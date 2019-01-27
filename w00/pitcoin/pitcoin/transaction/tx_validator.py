@@ -2,14 +2,21 @@ from pitcoin.wallet import *
 from .transaction import Transaction
 
 
-#todo validation for coinbase transaction
-
 def check_tx_validity(tx: Transaction):
+    if check_coinbase_transaction(tx):
+        return True
+
     return (check_address_available(tx.sender) and
             check_address_available(tx.recipient) and
             check_corresponding_addressed(tx.sender, tx.sign_pubkey) and
             check_signature_validity(tx.sign_pubkey, tx.signature, tx.get_hash()))
 
+def check_coinbase_transaction(tx: Transaction):
+    return (tx.amount == 50 and
+            tx.sender == "0" * 34 and
+            check_address_available(tx.recipient) and
+            check_corresponding_addressed(tx.recipient, tx.sign_pubkey) and
+            check_signature_validity(tx.sign_pubkey, tx.signature, tx.get_hash()))
 
 def check_address_available(address):
     try:

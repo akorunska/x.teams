@@ -50,19 +50,32 @@ class Blockchain:
         for node in nodes_list:
             node_chain_len = requests.get(node + '/chain/length').json()['chain_length']
             if node_chain_len > longest['len']:
-                longest['len'] = node_chain_len
-                longest['source'] = node
+                block_list = requests.get(node + '/chain').json()
+                block_obj_list = [Block.from_json(b) for b in block_list]
+                if Blockchain.is_valid_chain(block_obj_list):
+                    longest['len'] = node_chain_len
+                    longest['source'] = node
         if longest['source'] == '':
             return ""
-        block_list = requests.get(longest['source'] + '/chain').json()
         requests.delete(self.api_url + '/chain')
         for block in block_list:
             requests.post(self.api_url + '/chain/block', json.dumps(block))
         return longest
 
-
-    def is_valid_chain(self):
-        #todo add real chain validation
+    @staticmethod
+    def is_valid_chain(list):
+        if len(list) == 0:
+            return True
+        prev = list[0]
+        for i in range(1, len(list)):
+            cur = list[i]
+            if cur.hash_value != cur.get_hash():
+                return False
+            if cur.previous_hash != prev.hash_value:
+                return False
+            if not cur.validate_all_transactions():
+                return False
+            prev = cur
         return True
 
     def add_node(self, node_url):
