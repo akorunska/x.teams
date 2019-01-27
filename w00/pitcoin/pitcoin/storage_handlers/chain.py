@@ -24,7 +24,8 @@ class BlocksStorage:
 
     def add_block_to_storage(self, b: Block):
         blocks_list = self.get_all_blocks()
-        # todo check block`s validity
+        if not b.validate_all_transactions():
+            return False
         if len(blocks_list) != 0:
             if blocks_list[-1].hash_value != b.previous_hash:
                 return False
