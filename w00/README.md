@@ -41,6 +41,7 @@ That`s it! You can now use wallet-cli or miner-cli.
 /chain/block
 /chain/block?heigth=<int>
 /chain/length
+/node
 ```
 
 ##

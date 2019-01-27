@@ -4,8 +4,8 @@ import requests
 from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
 import json
-from pitcoin.network.pending_pool import MemPoolStorage
-from pitcoin.network.chain import BlocksStorage
+from pitcoin.storage_handlers.pending_pool import MemPoolStorage
+from pitcoin.storage_handlers.chain import BlocksStorage
 from pitcoin.block import Block
 from pitcoin.settings import *
 

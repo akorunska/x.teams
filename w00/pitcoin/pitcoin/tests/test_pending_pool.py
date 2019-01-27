@@ -1,6 +1,6 @@
 import unittest
-from pitcoin import PROJECT_ROOT
-from pitcoin.network.pending_pool import MemPoolStorage
+from pitcoin.settings import PROJECT_ROOT
+from pitcoin.storage_handlers.pending_pool import MemPoolStorage
 from pitcoin.transaction import Transaction
 from pitcoin.transaction import Serializer
 
