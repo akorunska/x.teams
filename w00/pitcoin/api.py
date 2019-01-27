@@ -26,6 +26,11 @@ class Transaction(Resource):
             status=200,
             mimetype='application/json'
         )
+
+        #broadcasting transaction to all known nodes
+        for node in nodes:
+            requests.post(node + '/transaction/new', request.data)
+
         return response
 
 

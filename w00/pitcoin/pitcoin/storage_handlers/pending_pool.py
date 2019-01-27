@@ -6,7 +6,7 @@ from pitcoin import PROJECT_ROOT
 
 
 class MemPoolStorage:
-    def __init__(self, filepath=PROJECT_ROOT+'/storage/..mempool.txt'):
+    def __init__(self, filepath=PROJECT_ROOT+'/storage/.mempool.txt'):
         self.storage_filepath = filepath
 
     def get_validated_deserialized_transaction(self, data):
