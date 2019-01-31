@@ -4,12 +4,12 @@ import requests
 from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
 import json
-from pitcoin.storage_handlers.pending_pool import MemPoolStorage
-from pitcoin.storage_handlers.chain import BlocksStorage
-from pitcoin.block import Block
-from pitcoin.settings import *
-from pitcoin.transaction.serialization import *
-from pitcoin.blockchain.address_balance import *
+from pitcoin_modules.storage_handlers.pending_pool import MemPoolStorage
+from pitcoin_modules.storage_handlers.chain import BlocksStorage
+from pitcoin_modules.block import Block
+from pitcoin_modules.settings import *
+from pitcoin_modules.transaction.serialization import *
+from pitcoin_modules.blockchain.address_balance import *
 
 
 mempool = MemPoolStorage()

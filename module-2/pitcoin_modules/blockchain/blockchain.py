@@ -3,10 +3,10 @@ import time
 
 import requests
 
-from pitcoin.transaction import *
-from pitcoin.block import Block
-from pitcoin.settings import *
-from pitcoin.wallet import *
+from pitcoin_modules.transaction import *
+from pitcoin_modules.block import Block
+from pitcoin_modules.settings import *
+from pitcoin_modules.wallet import *
 
 
 class Blockchain:

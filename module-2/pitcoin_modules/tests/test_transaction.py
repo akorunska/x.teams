@@ -1,5 +1,5 @@
 import unittest
-from pitcoin.transaction import *
+from pitcoin_modules.transaction import *
 
 
 class TestSerialization(unittest.TestCase):

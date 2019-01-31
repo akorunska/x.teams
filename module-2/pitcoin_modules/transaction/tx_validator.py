@@ -1,4 +1,4 @@
-from pitcoin.wallet import *
+from pitcoin_modules.wallet import *
 from .transaction import Transaction
 
 

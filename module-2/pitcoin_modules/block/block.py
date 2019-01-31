@@ -1,7 +1,7 @@
 import json
 
-from pitcoin.block.merkle import get_merkle_root, sha256_bytes_to_bytes
-from pitcoin.transaction import Serializer, Deserializer, check_tx_validity
+from pitcoin_modules.block.merkle import get_merkle_root, sha256_bytes_to_bytes
+from pitcoin_modules.transaction import Serializer, Deserializer, check_tx_validity
 
 import codecs
 

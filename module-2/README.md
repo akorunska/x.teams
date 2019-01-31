@@ -1,21 +1,14 @@
-# Satoshi Way: module 1
+# Satoshi Way: module 2
 
-The aim of week one is to prototype a simple bitcoin-like system step-by-step using python.
-
-Key points of what should be implemented:
-* cryptography 
-* transactions creation, serialization, deserialization and validation
-* mempool for storing unconfirmed transactions
-* block structure, calculating merkle root
-* mining and PoW
-* several possible roles at the system: simple user and the miner
-* creating the testnet
-* wallet-cli and miner-cli
-* test coverage for different system modules
+The aim of week one is to improve some modules of the system to be more bitcoin-like.
+* Transactions, constructed in the way Bitcoin network can accept them
+* UTXO system
+* Updated wallet_cli
+* Bitcoin Script implementation
 
 ## Setup instructions
 * Clone the repository
-* Create virtualenv with python3 and activate it
+* Create virtualenv with python3.6+ and activate it
 * Install all project dependencies, using 
 ``` 
 pip install -r requirements.txt 
@@ -54,11 +47,11 @@ This file specifies port and host api will use to run.
 ##
 Running tests:
 ```
-python -m unittest discover -s pitcoin/tests/
+python -m unittest discover -s pitcoin_modules/tests/
 ```
 
 Getting coverage information: 
 ```
-coverage run -m --source=. unittest discover -s pitcoin/tests/
+coverage run -m --source=. unittest discover -s pitcoin/pitcoin_modules/tests/
 coverage report -m
 ```

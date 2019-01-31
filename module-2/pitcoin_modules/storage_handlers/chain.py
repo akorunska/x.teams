@@ -1,9 +1,9 @@
-from pitcoin.block import Block
-from pitcoin.transaction import Deserializer, Transaction
-from pitcoin.transaction.tx_validator import check_tx_validity
+from pitcoin_modules.block import Block
+from pitcoin_modules.transaction import Deserializer, Transaction
+from pitcoin_modules.transaction.tx_validator import check_tx_validity
 import pickle
 from pathlib import Path
-from pitcoin import PROJECT_ROOT
+from pitcoin_modules import PROJECT_ROOT
 
 
 class BlocksStorage:

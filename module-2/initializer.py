@@ -1,8 +1,8 @@
 import errno
 import os
 import requests
-from pitcoin.blockchain import Blockchain
-from pitcoin.settings import *
+from pitcoin_modules.blockchain import Blockchain
+from pitcoin_modules.settings import *
 
 
 def make_sure_path_exists(path):
@@ -23,5 +23,5 @@ def genesis_block_setup():
     requests.post(api_url + '/chain/block', str(genesis_block))
 
 
-make_sure_path_exists('pitcoin/storage')
+make_sure_path_exists('pitcoin_modules/storage')
 genesis_block_setup()

@@ -1,6 +1,6 @@
 import codecs
-from pitcoin.block.block import Block
-from pitcoin.transaction import *
+from pitcoin_modules.block.block import Block
+from pitcoin_modules.transaction import *
 
 
 def get_balance(block_list: list, address: str):

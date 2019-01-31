@@ -1,8 +1,8 @@
 import unittest
-from pitcoin.settings import PROJECT_ROOT
-from pitcoin.storage_handlers.pending_pool import MemPoolStorage
-from pitcoin.transaction import Transaction
-from pitcoin.transaction import Serializer
+from pitcoin_modules.settings import PROJECT_ROOT
+from pitcoin_modules.storage_handlers.pending_pool import MemPoolStorage
+from pitcoin_modules.transaction import Transaction
+from pitcoin_modules.transaction import Serializer
 
 
 class TestPendingPool(unittest.TestCase):

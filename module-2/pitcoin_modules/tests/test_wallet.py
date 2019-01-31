@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from pitcoin.wallet import *
+from pitcoin_modules.wallet import *
 
 
 class TestGeneratePrivateKey(unittest.TestCase):

@@ -1,8 +1,8 @@
 import cmd
 from pathlib import Path
-from pitcoin.wallet import *
-from pitcoin.transaction import *
-from pitcoin.settings import *
+from pitcoin_modules.wallet import *
+from pitcoin_modules.transaction import *
+from pitcoin_modules.settings import *
 import requests
 import json
 
@@ -67,7 +67,7 @@ class OptionsHandler:
         # todo check if recipient and sender addresses are valid
         result['recipient'] = args[0]
         result['amount'] = int(args[1])
-        result['sender'] = read_file_contents('pitcoin/address')
+        result['sender'] = read_file_contents('pitcoin_modules/address')
         if result['amount'] <= 0:
             print("amount specified is not positive integer")
             return result
@@ -76,8 +76,8 @@ class OptionsHandler:
 
 
 class WalletCLI(cmd.Cmd):
-    intro = 'Welcome to pitcoin wallet-cli. Type help or ? to list commands.\n'
-    prompt = '\n(pitcoin-wallet-cli) '
+    intro = 'Welcome to pitcoin_modules wallet-cli. Type help or ? to list commands.\n'
+    prompt = '\n(pitcoin_modules-wallet-cli) '
     user_privkey = ""
     api_url = "http://" + API_HOST + ":" + API_PORT
     i = 0
@@ -134,7 +134,7 @@ class WalletCLI(cmd.Cmd):
 
     def do_quit(self, arg):
         'Exit wallet-cli shell'
-        print('Thank you for using pitcoin-wallet-cli')
+        print('Thank you for using pitcoin_modules-wallet-cli')
         return True
 
     # service static methods, containing repetative logic
@@ -152,7 +152,7 @@ class WalletCLI(cmd.Cmd):
         print("hex private key | ", hex_private_key)
         print("wif private key | ", wif_private_key)
         print("public key      | ", public_key)
-        print("pitcoin address | ", address)
+        print("pitcoin_modules address | ", address)
 
     @staticmethod
     def save_address_to_file(address):

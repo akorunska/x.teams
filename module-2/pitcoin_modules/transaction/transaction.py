@@ -1,6 +1,6 @@
 import json
-from pitcoin.wallet import *
-from pitcoin.settings import *
+from pitcoin_modules.wallet import *
+from pitcoin_modules.settings import *
 
 
 class Transaction:
