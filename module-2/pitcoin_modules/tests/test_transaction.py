@@ -1,66 +1,21 @@
 import unittest
 from pitcoin_modules.transaction import *
+from pitcoin_modules.transaction.input import Input
+from pitcoin_modules.transaction.output import Output
 
 
-class TestSerialization(unittest.TestCase):
-    def test_serialization_basic(self):
-        tx = Transaction("1GFfoqR4Z4BZEy75Nd9CRMTKAev3oukY2Q", "1FrNfonA4Z24ugVww9JjoeqzjxCE9LN3cf", 20)
-        tx.sign_transaction("936abdc0429eb4b38a045fcb8f531ff7cf3888c3a83797df5d033106c4ea6a20")
+class TestTransaction(unittest.TestCase):
+    def test_raw_transaction_basic(self):
+        inputs = [Input(
+            "7967a5185e907a25225574544c31f7b059c1a191d65b53dcc1554d339c4f9efc",
+            "47304402206a2eb16b7b92051d0fa38c133e67684ed064effada1d7f925c842da401d4f22702201f196b10e6e4b4a9fff948e5c5d71ec5da53e90529c8dbd122bff2b1d21dc8a90121039b7bcd0824b9a9164f7ba098408e63e5b7e3cf90835cceb19868f54f8961a825"
+        )]
+        outputs = [Output(
+            2207563,
+            "76a914db4d1141d0048b1ed15839d0b7a4c488cd368b0e88ac"
+        )]
+        tx = Transaction(inputs, outputs, locktime=0)
+        print(tx)
 
-        serialized = Serializer.serialize_transaction(tx)
-        deserialized = Deserializer.deserialize_transaction(serialized)
-        self.assertEqual(str(tx), str(deserialized))
-
-
-class TestTransactionAdressesValidation(unittest.TestCase):
-    def test_check_valid_address(self):
-        addr = "1F2h8wVXzUaatkgJjNLCRzsrts3MuaBnjM"
-        self.assertEqual(True, check_address_available(addr))
-
-    def test_check_short_address(self):
-        addr = "1F2h8wVXzUaatkgJjNLCRzsrts3MuaBnj"
-        self.assertEqual(False, check_address_available(addr))
-
-    def test_check_long_address(self):
-        addr = "1F2h8wVXzUaatkgJjNLCRzsrts3MuaBnjMe"
-        self.assertEqual(False, check_address_available(addr))
-
-    def test_check_bad_checksum(self):
-        pubkey = "033fb2d971568a6952b1f436c7cf471efca5d4cd2ec37a51003d463584106ba1e4"
-        pubkey_sha_encrypted = hashlib.sha256(binascii.unhexlify(pubkey)).hexdigest()
-        ripemd160 = hashlib.new('ripemd160')
-        ripemd160.update(binascii.unhexlify(pubkey_sha_encrypted))
-        pubkey_ripemd_encrypted = ripemd160.hexdigest()
-        mainnet_network_bytes = "00"
-        key_with_network_bytes = mainnet_network_bytes + pubkey_ripemd_encrypted
-        address = key_with_network_bytes + "cb4ae80c"
-        addr = base58.b58encode(binascii.unhexlify(address)).decode('ascii')
-
-        self.assertEqual(False, check_address_available(addr))
-
-    def test_check_bad_network_bytes(self):
-        pubkey = "033fb2d971568a6952b1f436c7cf471efca5d4cd2ec37a51003d463584106ba1e4"
-        pubkey_sha_encrypted = hashlib.sha256(binascii.unhexlify(pubkey)).hexdigest()
-        ripemd160 = hashlib.new('ripemd160')
-        ripemd160.update(binascii.unhexlify(pubkey_sha_encrypted))
-        pubkey_ripemd_encrypted = ripemd160.hexdigest()
-        network_bytes = "02"
-        key_with_network_bytes = network_bytes + pubkey_ripemd_encrypted
-        key_hashed1 = hashlib.sha256(binascii.unhexlify(key_with_network_bytes)).hexdigest()
-        key_hashed2 = hashlib.sha256(binascii.unhexlify(key_hashed1)).hexdigest()
-        address = key_with_network_bytes + key_hashed2[:8]
-        addr = base58.b58encode(binascii.unhexlify(address)).decode('ascii')
-
-        self.assertEqual(False, check_address_available(addr))
-
-class TestTransactionCorrespondingAddressesValidation(unittest.TestCase):
-    def test_check_address_from_uncompressed_pubkey(self):
-        pubkey = '50e829ca678c60031a11b990fea865e03ba35d0579aa62750b918b98c4b935d803ecc57a4bb2fc2ab1193a87fca5386d71516aca89df267fc907bcb3b84d396a'
-        addres_from_uncompressed_privkey = '1GFfoqR4Z4BZEy75Nd9CRMTKAev3oukY2Q'
-        self.assertEqual(True, check_corresponding_addressed(addres_from_uncompressed_privkey, pubkey))
-
-    def test_check_address_from_compressed_pubkey(self):
-        pubkey = '50e829ca678c60031a11b990fea865e03ba35d0579aa62750b918b98c4b935d803ecc57a4bb2fc2ab1193a87fca5386d71516aca89df267fc907bcb3b84d396a'
-        addres_from_compressed_privkey = '1NERjvtBxL5ErAKhCC3mfgWbp3QMd8y6ba'
-        self.assertEqual(True, check_corresponding_addressed(addres_from_compressed_privkey, pubkey))
-
+        raw_tx = "01000000017967a5185e907a25225574544c31f7b059c1a191d65b53dcc1554d339c4f9efc010000006a47304402206a2eb16b7b92051d0fa38c133e67684ed064effada1d7f925c842da401d4f22702201f196b10e6e4b4a9fff948e5c5d71ec5da53e90529c8dbd122bff2b1d21dc8a90121039b7bcd0824b9a9164f7ba098408e63e5b7e3cf90835cceb19868f54f8961a825ffffffff014baf2100000000001976a914db4d1141d0048b1ed15839d0b7a4c488cd368b0e88ac00000000"
+        # self.assertEqual(raw_tx, Serializer.serialize_transaction(tx))

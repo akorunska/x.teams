@@ -14,5 +14,14 @@ class Stack:
         del(self.stack[-1])
         return arg
 
-    def perform_operation(self, opcode):
+    def op_dup(self):
+        pass
+
+    def op_hash160(self):
+        pass
+
+    def op_equal_verify(self):
+        pass
+
+    def op_checksig(self):
         pass

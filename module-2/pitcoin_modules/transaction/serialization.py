@@ -7,14 +7,11 @@ from .transaction import Transaction
 class Serializer:
     @staticmethod
     def serialize_transaction(tx: Transaction):
-        amount = codecs.encode("%04x" % tx.amount)
-        sender = codecs.encode(tx.sender, 'utf-8')
-        recipient = codecs.encode(tx.recipient, 'utf-8')
-        sign_pubkey = codecs.encode(tx.sign_pubkey, 'utf-8')
-        signature = codecs.encode(tx.signature, 'utf-8')
+        # amount = codecs.encode("%04x" % tx.amount)
+        # sender = codecs.encode(tx.sender, 'utf-8')
 
-        serialized_tx = struct.pack("4s34s34s128s128s", amount, sender, recipient, sign_pubkey, signature)
-        return serialized_tx
+        # serialized_tx = struct.pack("4s34s34s128s128s", amount, sender, recipient, sign_pubkey, signature)
+        pass
 
 
 class Deserializer:

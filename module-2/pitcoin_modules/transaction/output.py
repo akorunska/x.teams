@@ -1,4 +1,8 @@
+import json
 
 
 class Output:
-    pass
+    def __init__(self, value, scriptpubkey):
+        self.value = value
+        self.scriptpubkey = scriptpubkey
+
