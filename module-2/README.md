@@ -8,7 +8,7 @@ The aim of week one is to improve some modules of the system to be more bitcoin-
 
 ## Setup instructions
 * Clone the repository
-* Create virtualenv with python3.6+ and activate it
+* Create virtualenv with python3.6+ and activate it (python version currently being used in development is Python 3.6.7 )
 * Install all project dependencies, using 
 ``` 
 pip install -r requirements.txt 
@@ -37,11 +37,13 @@ This file specifies port and host api will use to run.
 /transaction/pendings
 /transaction/pendings?amount=3
 /chain
-/chain/block
+/chain/block                        # returns last known block
 /chain/block?heigth=<int>
 /chain/length
 /node
-/balance
+/balance?address=some_pitcoin_adr
+/utxo
+/utxo?address=some_pitcoin_adr
 ```
 
 ##
@@ -52,6 +54,6 @@ python -m unittest discover -s pitcoin_modules/tests/
 
 Getting coverage information: 
 ```
-coverage run -m --source=. unittest discover -s pitcoin/pitcoin_modules/tests/
+coverage run -m --source=pitcoin_modules unittest discover -s pitcoin_modules/tests/
 coverage report -m
 ```
