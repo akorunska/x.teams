@@ -14,8 +14,21 @@ class Transaction:
     def get_hash(self):
         return ""
 
-    # def __str__(self):
-    #     return json.dumps(self.__dict__)
+    def __str__(self):
+        return self.to_json()
+
+    def to_json(self):
+        data = {
+            "version": self.version,
+            "inputs": [input.__dict__ for input in self.inputs],
+            "ouputs": [output.__dict__ for output in self.outputs],
+            "locktime": self.locktime,
+            "txid": self.txid
+        }
+        return json.dumps(data)
+
+    def from_json(self):
+        pass
 
     def __eq__(self, other):
         return str(self) == str(other)

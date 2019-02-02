@@ -1,5 +1,8 @@
 import codecs
 import struct
+
+from pitcoin_modules.transaction.input import Input
+from pitcoin_modules.transaction.output import Output
 from .tx_validator import *
 from .transaction import Transaction
 
@@ -15,10 +18,6 @@ def reverse_bytes(s: str):
 class Serializer:
     @staticmethod
     def serialize_transaction(tx: Transaction):
-        # amount = codecs.encode("%04x" % tx.amount)
-        # sender = codecs.encode(tx.sender, 'utf-8')
-
-        # serialized_tx = struct.pack("4s34s34s128s128s", amount, sender, recipient, sign_pubkey, signature)
         result = ""
 
         #packing tx version
@@ -55,14 +54,40 @@ class Serializer:
 
 class Deserializer:
     @staticmethod
-    def deserialize_transaction(stx: bytes):
-        # (amount, sender, recipient, sign_pubkey, signature) = struct.unpack("4s34s34s128s128s", stx)
-        # return Transaction(
-        #                     codecs.decode(sender, "utf-8"),
-        #                     codecs.decode(recipient, "utf-8"),
-        #                     int(amount, 16),
-        #                     codecs.decode(sign_pubkey, "utf-8"),
-        #                     codecs.decode(signature, "utf-8")
-        # )
-        pass
+    def deserialize_transaction(stx: str):
+        cur = 0
+        version = int(reverse_bytes(stx[cur:cur + 8]), 16)
+        cur += 8
+
+        inputs_count = int(stx[cur:cur + 2], 16)
+        cur += 2
+        inputs = []
+        for i in range(inputs_count):
+            txid = reverse_bytes(stx[cur:cur + 64])
+            cur += 64
+            vout = int(reverse_bytes(stx[cur:cur+8]), 16)
+            cur += 8
+            len = int(stx[cur:cur+2], 16)
+            cur += 2
+            scriptsig = stx[cur:cur + len*2]
+            cur += len*2
+            cur += 8    #skipping sequence
+
+            inputs.append(Input(txid, vout, scriptsig))
+
+        outputs_count = int(stx[cur:cur + 2], 16)
+        cur += 2
+        outputs = []
+        for i in range(outputs_count):
+            value = int(reverse_bytes(stx[cur:cur+16]), 16)
+            cur += 16
+            len = int(stx[cur:cur + 2], 16)
+            cur += 2
+            scriptpubkey = stx[cur:cur + len*2]
+            cur += len*2
+
+            outputs.append(Output(value, scriptpubkey))
+
+        locktime = int(reverse_bytes(stx[cur:cur + 8]), 16)
+        return Transaction(inputs, outputs, locktime)
 
