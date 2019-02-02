@@ -36,8 +36,9 @@ This file specifies port and host api will use to run.
 ```
 /transaction/pendings
 /transaction/pendings?amount=3
+/transaction/deserialize?data=raw_transaction_as_str
 /chain
-/chain/block                        # returns last known block
+/chain/block    # returns last known block
 /chain/block?heigth=<int>
 /chain/length
 /node

@@ -60,6 +60,21 @@ class TransactionPending(Resource):
         return mempool.delete_all_transactions_from_mempool()
 
 
+class TransactionDeserialize(Resource):
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('data', type=str, required=True)
+        args = parser.parse_args()
+
+        tx = Deserializer.deserialize_transaction(args['data'])
+        response = app.response_class(
+            response=json.dumps(tx.to_dict()),
+            status=200,
+            mimetype='application/json'
+        )
+        return response
+
+
 class Chain(Resource):
     def get(self):
         parser = reqparse.RequestParser()
@@ -200,6 +215,7 @@ class UTXO(Resource):
 
 api.add_resource(Transaction, '/transaction/new', methods=['POST'])
 api.add_resource(TransactionPending, '/transaction/pendings', methods=['GET', 'DELETE'])
+api.add_resource(TransactionDeserialize, '/transaction/deserialize', methods=['GET'])
 api.add_resource(Chain, '/chain',  methods=['GET', 'DELETE'])
 api.add_resource(ChainBlock, '/chain/block', methods=['GET', 'POST'])
 api.add_resource(ChainLength, '/chain/length', methods=['GET'])
