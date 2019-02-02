@@ -29,6 +29,9 @@ class Transaction:
             "locktime": self.locktime,
             "txid": self.txid
         }
+        for i, output in zip(range(1, len(data['outputs']) + 1), data['outputs']):
+            output['txid'] = self.txid
+            output['vout'] = i
         return data
 
     def to_json(self):

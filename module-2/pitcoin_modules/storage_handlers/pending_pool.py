@@ -9,15 +9,15 @@ class MemPoolStorage:
     def __init__(self, filepath=PROJECT_ROOT+'/storage/.mempool.txt'):
         self.storage_filepath = filepath
 
-    def get_validated_deserialized_transaction(self, data):
+    def get_validated_deserialized_transaction(self, data, transactions: list):
         tx = Deserializer.deserialize_transaction(data)
-        if check_tx_validity(tx):
+        if check_tx_validity(tx, transactions):
             return tx
         else:
             return None
 
-    def add_serialized_transaction_to_mempool(self, data):
-        tx = self.get_validated_deserialized_transaction(data)
+    def add_serialized_transaction_to_mempool(self, data, transactions: list):
+        tx = self.get_validated_deserialized_transaction(data, transactions)
         if tx is None:
             return False
         self.add_transaction_to_mempool(tx)

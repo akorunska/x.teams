@@ -36,6 +36,7 @@ class Transaction(Resource):
         )
         return response
 
+
 class TransactionNew(Resource):
     def post(self):
         serialized_tx = codecs.decode(request.data)
@@ -43,8 +44,11 @@ class TransactionNew(Resource):
         if mempool.contains_transaction(deserialized):
             return
 
+        transactions = blocks.get_all_transactions_from_blocks()
         response = app.response_class(
-            response=json.dumps({"result": mempool.add_serialized_transaction_to_mempool(serialized_tx)}),
+            response=json.dumps({
+                "result": mempool.add_serialized_transaction_to_mempool(serialized_tx, transactions)
+            }),
             status=200,
             mimetype='application/json'
         )

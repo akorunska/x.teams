@@ -137,7 +137,7 @@ class WalletCLI(cmd.Cmd):
         'Get balance of the address\n' \
         'usage: <broadcast raw_tx>'
         raw_tx = arg.strip()
-        requests.post(self.api_url + '/transaction/new', raw_tx)
+        print(requests.post(self.api_url + '/transaction/new', raw_tx).json())
 
     def do_balance(self, arg):
         'Get balance of the address\n' \

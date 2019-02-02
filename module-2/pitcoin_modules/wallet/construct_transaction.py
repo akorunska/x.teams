@@ -10,7 +10,8 @@ def construct_transaction_locking_script(recipient):
 
 def construct_transaction_unlocking_script(privkey, txid):
     resp = sign_message_with_private_key(privkey, codecs.encode(txid))
-    script = "%02x" % len(resp['signature']) + codecs.decode(resp['signature']) + "%02x" % len(resp['public_key']) + codecs.decode(resp['public_key'])
+    resp['public_key'] = b"04" + resp['public_key']
+    script = "%02x" % (len(resp['signature']) // 2) + codecs.decode(resp['signature']) + "%02x" % (len(resp['public_key']) // 2) + codecs.decode(resp['public_key'])
     return script
 
 def construct_transaction(sender_privkey, sender, recipient, amount, utxo_list):
