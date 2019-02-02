@@ -4,7 +4,7 @@ from pitcoin_modules.settings import *
 
 
 class Transaction:
-    def __init__(self, inputs: list, outputs: list, locktime: str):
+    def __init__(self, inputs: list, outputs: list, locktime: int):
         self.version = 1
         self.inputs = inputs
         self.outputs = outputs
