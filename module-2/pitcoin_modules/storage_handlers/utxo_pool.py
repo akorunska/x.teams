@@ -1,3 +1,4 @@
+from pitcoin_modules.wallet.wallet import *
 from pitcoin_modules.transaction import Transaction
 from pitcoin_modules.transaction import Output
 import pickle
@@ -20,6 +21,19 @@ class UTXOStorage:
                 except EOFError:
                     tx_list = []
         return tx_list
+
+    @staticmethod
+    def __address_from_p2pkh_script(script: str):
+        pubkey_hashed = script[6:len(script) - 4]
+        return get_address_from_hashed_public_key(pubkey_hashed)
+
+    def get_all_unspent_outputs_for_address(self, address):
+        res = []
+        outp_list = self.get_all_outputs()
+        for outp in outp_list:
+            if self.__address_from_p2pkh_script(outp.scriptpubkey) == address:
+                res.append(outp)
+        return res
 
     def contains_output(self, outp):
         outp_list = self.get_all_outputs()

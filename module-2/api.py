@@ -38,7 +38,7 @@ class Transaction(Resource):
         return response
 
 
-class Transactions(Resource):
+class TransactionPending(Resource):
     def get(self):
         parser = reqparse.RequestParser()
         parser.add_argument('amount', type=int)
@@ -172,16 +172,24 @@ class Balance(Resource):
         parser.add_argument('address', type=str, required=True)
         args = parser.parse_args()
 
-        res = get_balance(utxo_pool.get_all_outputs(), args['address'])
+        res = get_balance(utxo_pool.get_all_unspent_outputs_for_address(args['address']))
         return app.response_class(
             response=json.dumps({'balance': res}),
             status=200,
             mimetype='application/json'
         )
 
+
 class UTXO(Resource):
     def get(self):
-        utxo_list = utxo_pool.get_all_outputs()
+        parser = reqparse.RequestParser()
+        parser.add_argument('address', type=str)
+        args = parser.parse_args()
+
+        if args['address']:
+            utxo_list = utxo_pool.get_all_unspent_outputs_for_address(args['address'])
+        else:
+            utxo_list = utxo_pool.get_all_outputs()
         return app.response_class(
             response=json.dumps([outp.__dict__ for outp in utxo_list]),
             status=200,
@@ -190,7 +198,7 @@ class UTXO(Resource):
 
 
 api.add_resource(Transaction, '/transaction/new', methods=['POST'])
-api.add_resource(Transactions, '/transaction/pendings', methods=['GET', 'DELETE'])
+api.add_resource(TransactionPending, '/transaction/pendings', methods=['GET', 'DELETE'])
 api.add_resource(Chain, '/chain',  methods=['GET', 'DELETE'])
 api.add_resource(ChainBlock, '/chain/block', methods=['GET', 'POST'])
 api.add_resource(ChainLength, '/chain/length', methods=['GET'])

@@ -65,7 +65,7 @@ def get_compressed_form_of_public_key(uncompressed_pubkey):
     return pubkey
 
 
-def get_public_key_from_private_key(privkey, use_compressed=True):
+def get_public_key_from_private_key(privkey, use_compressed=False):
     privkey_bytes = codecs.decode(privkey, 'hex')
     # Get ECDSA public key
     key = ecdsa.SigningKey.from_string(privkey_bytes, curve=ecdsa.SECP256k1).verifying_key

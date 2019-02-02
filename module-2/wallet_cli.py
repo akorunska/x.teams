@@ -11,12 +11,12 @@ import json
 class OptionsHandler:
     @staticmethod
     def handle_do_new_options(arg):
-        result = {'compressed': True, 'save_address': False}
+        result = {'compressed': False, 'save_address': False}
         args = arg.split()
         for arg in args:
-            if arg == "-u":
-                print("using uncompressed public key for address creation")
-                result['compressed'] = False
+            if arg == "-c":
+                print("using compressed public key for address creation")
+                result['compressed'] = True
             elif arg == "-a":
                 print("created address is going to be saved in file named 'address'")
                 result["save_address"] = True
@@ -26,13 +26,13 @@ class OptionsHandler:
 
     @staticmethod
     def handle_do_import_options(arg):
-        result = {'compressed': True, 'save_address': False, 'args_valid': False}
+        result = {'compressed': False, 'save_address': False, 'args_valid': False}
         args = arg.split()
         result['filepath'] = args[0]
         for i in range(1, len(args)):
-            if args[i] == "-u":
-                print("using uncompressed public key for address creation")
-                result['compressed'] = False
+            if args[i] == "-c":
+                print("using compressed public key for address creation")
+                result['compressed'] = True
             elif args[i] == "-a":
                 print("created address is going to be saved in file named 'address'")
                 result["save_address"] = True
@@ -76,16 +76,16 @@ class OptionsHandler:
 
 
 class WalletCLI(cmd.Cmd):
-    intro = 'Welcome to pitcoin_modules wallet-cli. Type help or ? to list commands.\n'
-    prompt = '\n(pitcoin_modules-wallet-cli) '
+    intro = 'Welcome to pitcoin wallet-cli. Type help or ? to list commands.\n'
+    prompt = '\n(pitcoin-wallet-cli) '
     user_privkey = ""
     api_url = "http://" + API_HOST + ":" + API_PORT
     i = 0
 
     def do_new(self, arg):
         'Generate new private key and receive associated public key and address. \n' \
-        'usage: <new -u -a> \n' \
-        '-u: By default compressed public key is used. To use uncompressed public key type <new -u> \n' \
+        'usage: <new -c -a> \n' \
+        '-c: By default uncompressed public key is used. To use compressed public key type <new -c> \n' \
         '-a: Save created address to the file on the machine called address.'
 
         options = OptionsHandler.handle_do_new_options(arg)
@@ -96,8 +96,8 @@ class WalletCLI(cmd.Cmd):
 
     def do_import(self, arg):
         'Import private key in WIF format and receive associated public key and address. \n' \
-        'usage: <import path/to/file -u -a> \n' \
-        '-u: By default compressed public key is used. To use uncompressed public key type <new -u> \n' \
+        'usage: <import path/to/file -c -a> \n' \
+        '-c: By default uncompressed public key is used. To use compressed public key type <new -c> \n' \
         '-a: Save created address to the file on the machine called address.'
         options = OptionsHandler.handle_do_import_options(arg)
         if not options['args_valid']:
@@ -120,10 +120,19 @@ class WalletCLI(cmd.Cmd):
         options = OptionsHandler.handle_do_send_options(arg, self.user_privkey)
         if not options['args_valid']:
             return
-        tx = Transaction(options['sender'], options['recipient'], options['amount'])
-        tx.sign_transaction(self.user_privkey)
-        serialized = Serializer.serialize_transaction(tx)
-        requests.post(self.api_url + '/transaction/new', serialized)
+        # tx = Transaction(options['sender'], options['recipient'], options['amount'])
+        # tx.sign_transaction(self.user_privkey)
+        # serialized = Serializer.serialize_transaction(tx)
+        # requests.post(self.api_url + '/transaction/new', serialized)
+        if requests.get(self.api_url + '/balance?address=' + options['sender']).json()['balance'] < options['amount']:
+            print("sender does not have enough pitcoins for this transaction")
+            return
+        utxo_list = requests.get(self.api_url + '/utxo?address=' + options['sender']).json()
+        utxo_list = [Output(utxo['value'], utxo['scriptpubkey'], utxo['txid'], utxo['vout']) for utxo in utxo_list]
+        tx = construct_transaction(self.user_privkey, options['sender'], options['recipient'], options['amount'], utxo_list)
+        print(tx)
+        print(Serializer.serialize_transaction(tx))
+
 
     def do_balance(self, arg):
         'Send some pitcoins to another address\n' \
@@ -134,7 +143,7 @@ class WalletCLI(cmd.Cmd):
 
     def do_quit(self, arg):
         'Exit wallet-cli shell'
-        print('Thank you for using pitcoin_modules-wallet-cli')
+        print('Thank you for using pitcoin-wallet-cli')
         return True
 
     # service static methods, containing repetative logic
@@ -152,7 +161,7 @@ class WalletCLI(cmd.Cmd):
         print("hex private key | ", hex_private_key)
         print("wif private key | ", wif_private_key)
         print("public key      | ", public_key)
-        print("pitcoin_modules address | ", address)
+        print("pitcoin address | ", address)
 
     @staticmethod
     def save_address_to_file(address):
