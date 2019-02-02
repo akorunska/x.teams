@@ -47,12 +47,12 @@ class TestRawTransaction(unittest.TestCase):
         self.assertEqual(tx, deserialized)
 
     def test_raw_coinbase_transaction_creation(self):
-        coinbase_tx = CoinbaseTransaction("76a914bfd3ebb5485b49a6cf1657824623ead693b5a45888ac")
-        raw_tx = "01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff00ffffffff0100f2052a010000001976a914bfd3ebb5485b49a6cf1657824623ead693b5a45888ac00000000"
+        coinbase_tx = CoinbaseTransaction("76a914bfd3ebb5485b49a6cf1657824623ead693b5a45888ac", 2)
+        raw_tx = "01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff080000000000000002ffffffff0100f2052a010000001976a914bfd3ebb5485b49a6cf1657824623ead693b5a45888ac00000000"
         self.assertEqual(raw_tx, Serializer.serialize_transaction(coinbase_tx))
 
     def test_deserializing_raw_coinbase_transaction(self):
-        coinbase_tx = CoinbaseTransaction("76a914bfd3ebb5485b49a6cf1657824623ead693b5a45888ac")
-        raw_tx = "01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff00ffffffff0100f2052a010000001976a914bfd3ebb5485b49a6cf1657824623ead693b5a45888ac00000000"
+        coinbase_tx = CoinbaseTransaction("76a914bfd3ebb5485b49a6cf1657824623ead693b5a45888ac", 2)
+        raw_tx = "01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff080000000000000002ffffffff0100f2052a010000001976a914bfd3ebb5485b49a6cf1657824623ead693b5a45888ac00000000"
         self.assertEqual(coinbase_tx, Deserializer.deserialize_transaction(raw_tx))
 

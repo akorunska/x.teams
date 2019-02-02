@@ -26,20 +26,22 @@ class Blockchain:
     def create_block_with_loaded_transactions(self):
         prev = requests.get(self.api_url + '/chain/block').json()
         request_data = requests.get(self.api_url + '/transaction/pendings' + '?amount=3').json()
-        tx_list = [Serializer.serialize_transaction(Transaction(
-            item['sender'],
-            item['recipient'],
-            item['amount'],
-            item['sign_pubkey'],
-            item['signature']
-        )) for item in request_data]
+        # tx_list = [Serializer.serialize_transaction(Transaction(
+        #     item['sender'],
+        #     item['recipient'],
+        #     item['amount'],
+        #     item['sign_pubkey'],
+        #     item['signature']
+        # )) for item in request_data]
+        tx_list = []
         tx_list.append(Serializer.serialize_transaction(self.construct_miners_rewarding_transaction()))
         block = Block(str(int(time.time())), prev['hash_value'], tx_list)
         return block
 
     def construct_miners_rewarding_transaction(self):
         recipient = read_file_contents(PROJECT_ROOT + '/address')
-        tx = CoinbaseTransaction(construct_transaction_locking_script(recipient))
+        block_hei = requests.get(self.api_url + '/chain/length').json()['chain_length']
+        tx = CoinbaseTransaction(construct_transaction_locking_script(recipient), block_hei)
         return tx
 
     def resolve_conflicts(self):
