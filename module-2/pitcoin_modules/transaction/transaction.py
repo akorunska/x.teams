@@ -1,4 +1,7 @@
 import json
+
+from pitcoin_modules.transaction.input import Input
+from pitcoin_modules.transaction.output import Output
 from pitcoin_modules.wallet import *
 from pitcoin_modules.settings import *
 
@@ -34,11 +37,10 @@ class Transaction:
         return str(self) == str(other)
 
 
-# class CoinbaseTransaction(Transaction):
-#     def __init__(self, recipient: str):
-#         super().__init__("0" * 34, recipient, 50)
-#
-#     def sign_transaction(self, **kwargs):
-#         privkey = export_hex_from_file_with_wif_privkey(PROJECT_ROOT + "/minerkey")
-#         return super().sign_transaction(privkey)
+class CoinbaseTransaction(Transaction):
+    def __init__(self, scriptpubkey):
+        inputs = []
+        inputs.append(Input("0" * 64, int("f" * 8, 16), ""))
+        outputs = [Output(5000000000, scriptpubkey)]
+        super().__init__(inputs, outputs, 0)
 

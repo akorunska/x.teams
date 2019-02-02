@@ -4,7 +4,7 @@ import struct
 from pitcoin_modules.transaction.input import Input
 from pitcoin_modules.transaction.output import Output
 from .tx_validator import *
-from .transaction import Transaction
+from .transaction import Transaction, CoinbaseTransaction
 
 
 def reverse_bytes(s: str):
