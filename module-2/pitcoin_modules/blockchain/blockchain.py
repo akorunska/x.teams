@@ -38,9 +38,8 @@ class Blockchain:
         return block
 
     def construct_miners_rewarding_transaction(self):
-        resipient = read_file_contents(PROJECT_ROOT + '/address')
-        tx = CoinbaseTransaction(resipient)
-        tx.sign_transaction()
+        recipient = read_file_contents(PROJECT_ROOT + '/address')
+        tx = CoinbaseTransaction(construct_transaction_locking_script(recipient))
         return tx
 
     def resolve_conflicts(self):
@@ -82,7 +81,10 @@ class Blockchain:
         requests.post(self.api_url + '/node', node_url)
 
     def genesis_block(self):
-        genesis = Block(str(int(time.time())), 64 * '0', [Serializer.serialize_transaction(self.construct_miners_rewarding_transaction())])
+        genesis = Block(
+            str(int(time.time())), 64 * '0',
+            [Serializer.serialize_transaction(self.construct_miners_rewarding_transaction())]
+        )
         return self.mine(block=genesis)
 
     def submit_tx(self, tx):
