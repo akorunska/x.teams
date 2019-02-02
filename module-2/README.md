@@ -34,19 +34,19 @@ This file specifies port and host api will use to run.
 ## API 'GET' routes
 
 ```
-/transaction   # get list of all transaction included in known blocks
-/transaction?txid=txid_of_transaction_as_str    # get tx with specific txid or empty list
-/transaction/pendings
-/transaction/pendings?amount=3
+/transaction                                            # get list of all transaction included in known blocks
+/transaction?txid=txid_of_transaction_as_str            # get tx with specific txid or empty list
+/transaction/pendings                                   # get all transactions form the mempool
+/transaction/pendings?amount=3                          # get thee transactions from the mining pool (handy for mining purposes)
 /transaction/deserialize?data=raw_transaction_as_str    # convert raw transaction to readable format
-/chain
-/chain/block    # returns last known block
-/chain/block?heigth=<int>
-/chain/length
-/node
-/balance?address=some_pitcoin_adr
-/utxo
-/utxo?address=some_pitcoin_adr
+/chain                                                  # get all chain of the blocks
+/chain/block                                            # get last known block
+/chain/block?heigth=<int>                               # get block at certain height
+/chain/length                                           # get length of the current chain
+/node                                                   # get list of all known pitcoin nodes
+/balance?address=some_pitcoin_addr                      # get balance for some_pitcoin_addr address
+/utxo                                                   # get all unspent outputs
+/utxo?address=some_pitcoin_adr                          # get unspent outputs for certain address 
 ```
 
 ##
