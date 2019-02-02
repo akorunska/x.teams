@@ -5,12 +5,14 @@ from flask import Flask, request
 
 from pitcoin_modules.storage_handlers.pending_pool import MemPoolStorage
 from pitcoin_modules.storage_handlers.chain import BlocksStorage
+from pitcoin_modules.storage_handlers.utxo_pool import UTXOStorage
 from pitcoin_modules.settings import *
 from pitcoin_modules.blockchain.address_balance import *
 
 
 mempool = MemPoolStorage()
 blocks = BlocksStorage()
+utxo_pool = UTXOStorage()
 nodes = []
 
 app = Flask(__name__)
@@ -126,10 +128,13 @@ class ChainBlock(Resource):
             status=200,
             mimetype='application/json'
         )
+
         # deleting all transactions that new block contains from the mempool
+        # update utxo pool with new transactions data
         for tx in block.transactions:
             deserialized = Deserializer.deserialize_transaction(tx)
             mempool.delete_transaction_if_exists(deserialized)
+            utxo_pool.update_with_new_transaction(deserialized)
 
         # broadcasting new block for all known nodes
         for node in nodes:
@@ -174,6 +179,15 @@ class Balance(Resource):
             mimetype='application/json'
         )
 
+class UTXO(Resource):
+    def get(self):
+        utxo_list = utxo_pool.get_all_outputs()
+        return app.response_class(
+            response=json.dumps([outp.__dict__ for outp in utxo_list]),
+            status=200,
+            mimetype='application/json'
+        )
+
 
 api.add_resource(Transaction, '/transaction/new', methods=['POST'])
 api.add_resource(Transactions, '/transaction/pendings', methods=['GET', 'DELETE'])
@@ -182,6 +196,7 @@ api.add_resource(ChainBlock, '/chain/block', methods=['GET', 'POST'])
 api.add_resource(ChainLength, '/chain/length', methods=['GET'])
 api.add_resource(Node, '/node', methods=['GET', 'POST'])
 api.add_resource(Balance, '/balance', methods=['GET'])
+api.add_resource(UTXO, '/utxo', methods=['GET'])
 
 
 def serve():
