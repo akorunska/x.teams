@@ -21,18 +21,24 @@ class Transaction:
     def __str__(self):
         return self.to_json()
 
-    def to_json(self):
+    def to_dict(self):
         data = {
             "version": self.version,
             "inputs": [input.__dict__ for input in self.inputs],
-            "ouputs": [output.__dict__ for output in self.outputs],
+            "outputs": [output.__dict__ for output in self.outputs],
             "locktime": self.locktime,
             "txid": self.txid
         }
-        return json.dumps(data)
+        return data
 
-    def from_json(self):
-        pass
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
+    @staticmethod
+    def from_dict(dict):
+        inputs = [Input(input['txid'], input['vout'], input['scriptsig']) for input in dict['inputs']]
+        outputs = [Output(output['value'], output['scriptpubkey']) for output in dict['outputs']]
+        return Transaction(inputs, outputs, dict['locktime'])
 
     def __eq__(self, other):
         return str(self) == str(other)

@@ -133,9 +133,14 @@ class WalletCLI(cmd.Cmd):
         print(tx)
         print(Serializer.serialize_transaction(tx))
 
+    def do_broadcast(self, arg):
+        'Get balance of the address\n' \
+        'usage: <broadcast raw_tx>'
+        raw_tx = arg.strip()
+        requests.post(self.api_url + '/transaction/new', raw_tx)
 
     def do_balance(self, arg):
-        'Send some pitcoins to another address\n' \
+        'Get balance of the address\n' \
         'usage: <balance address>'
         addr = arg.strip()
         resp = requests.get(self.api_url + '/balance?address=' + addr).json()

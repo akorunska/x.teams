@@ -21,19 +21,20 @@ api = Api(app)
 
 class Transaction(Resource):
     def post(self):
-        deserialized = Deserializer.deserialize_transaction(request.data)
+        serialized_tx = codecs.decode(request.data)
+        deserialized = Deserializer.deserialize_transaction(serialized_tx)
         if mempool.contains_transaction(deserialized):
             return
 
         response = app.response_class(
-            response=json.dumps({"result": mempool.add_serialized_transaction_to_mempool(request.data)}),
+            response=json.dumps({"result": mempool.add_serialized_transaction_to_mempool(serialized_tx)}),
             status=200,
             mimetype='application/json'
         )
 
         #broadcasting transaction to all known nodes
         for node in nodes:
-            requests.post(node + '/transaction/new', request.data)
+            requests.post(node + '/transaction/new', serialized_tx)
 
         return response
 
@@ -49,7 +50,7 @@ class TransactionPending(Resource):
         else:
             list = mempool.get_all_transactions()
         response = app.response_class(
-            response=json.dumps([tx.__dict__ for tx in list]),
+            response=json.dumps([tx.to_dict() for tx in list]),
             status=200,
             mimetype='application/json'
         )
