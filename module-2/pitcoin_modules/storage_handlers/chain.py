@@ -22,6 +22,24 @@ class BlocksStorage:
                     blocks_list = []
         return blocks_list
 
+    def get_all_transactions_from_blocks(self):
+        transactions = []
+        blocks_list = self.get_all_blocks()
+        for block in blocks_list:
+            for tx in block.transactions:
+                transactions.append(Deserializer.deserialize_transaction(tx))
+        return transactions
+
+    def get_transaction_by_txid(self, txid):
+        transaction = []
+        blocks_list = self.get_all_blocks()
+        for block in blocks_list:
+            for tx in block.transactions:
+                deserialized = Deserializer.deserialize_transaction(tx)
+                if deserialized.txid == txid:
+                    transaction.append(deserialized)
+        return transaction
+
     def add_block_to_storage(self, b: Block):
         blocks_list = self.get_all_blocks()
         if not b.validate_all_transactions():

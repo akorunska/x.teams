@@ -20,6 +20,23 @@ api = Api(app)
 
 
 class Transaction(Resource):
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('txid', type=str)
+        args = parser.parse_args()
+
+        if args['txid']:
+            json_repr = json.dumps([tx.to_dict() for tx in blocks.get_transaction_by_txid(args['txid'])])
+        else:
+            json_repr = json.dumps([tx.to_dict() for tx in blocks.get_all_transactions_from_blocks()])
+        response = app.response_class(
+            response=json_repr,
+            status=200,
+            mimetype='application/json'
+        )
+        return response
+
+class TransactionNew(Resource):
     def post(self):
         serialized_tx = codecs.decode(request.data)
         deserialized = Deserializer.deserialize_transaction(serialized_tx)
@@ -145,11 +162,11 @@ class ChainBlock(Resource):
             mimetype='application/json'
         )
 
-        # deleting all transactions that new block contains from the mempool
-        # update utxo pool with new transactions data
         for tx in block.transactions:
             deserialized = Deserializer.deserialize_transaction(tx)
+            # deleting all transactions that new block contains from the mempool
             mempool.delete_transaction_if_exists(deserialized)
+            # update utxo pool with new transactions data
             utxo_pool.update_with_new_transaction(deserialized)
 
         # broadcasting new block for all known nodes
@@ -213,7 +230,8 @@ class UTXO(Resource):
         )
 
 
-api.add_resource(Transaction, '/transaction/new', methods=['POST'])
+api.add_resource(Transaction, '/transaction/', methods=['GET'])
+api.add_resource(TransactionNew, '/transaction/new', methods=['POST'])
 api.add_resource(TransactionPending, '/transaction/pendings', methods=['GET', 'DELETE'])
 api.add_resource(TransactionDeserialize, '/transaction/deserialize', methods=['GET'])
 api.add_resource(Chain, '/chain',  methods=['GET', 'DELETE'])

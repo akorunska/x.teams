@@ -34,9 +34,11 @@ This file specifies port and host api will use to run.
 ## API 'GET' routes
 
 ```
+/transaction   # get list of all transaction included in known blocks
+/transaction?txid=txid_of_transaction_as_str    # get tx with specific txid or empty list
 /transaction/pendings
 /transaction/pendings?amount=3
-/transaction/deserialize?data=raw_transaction_as_str
+/transaction/deserialize?data=raw_transaction_as_str    # convert raw transaction to readable format
 /chain
 /chain/block    # returns last known block
 /chain/block?heigth=<int>
