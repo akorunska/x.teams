@@ -1,7 +1,7 @@
 import json
 
-from pitcoin_modules.block.merkle import get_merkle_root, sha256_bytes_to_bytes
-from pitcoin_modules.transaction import Serializer, Deserializer, check_tx_validity
+from pitcoin_modules.block.merkle import get_merkle_root
+from pitcoin_modules.wallet.wallet import sha256_bytes_to_bytes
 
 import codecs
 
@@ -11,15 +11,16 @@ class Block:
         self.timestamp = timestamp
         self.nonce = nonce
         self.previous_hash = previous_hash
-        self.transactions = [codecs.decode(tx, 'ascii') for tx in transactions]
+        self.transactions = transactions
         self.merkle_root = codecs.decode(get_merkle_root(self.transactions), 'ascii')
         self.hash_value = self.get_hash()
 
     def validate_all_transactions(self):
-        tx_are_valid = True
-        for tx in self.transactions:
-            tx_are_valid = tx_are_valid and check_tx_validity(Deserializer.deserialize_transaction(codecs.encode(tx, 'ascii')))
-        return tx_are_valid
+        # tx_are_valid = True
+        # for tx in self.transactions:
+        #     tx_are_valid = tx_are_valid and check_tx_validity(Deserializer.deserialize_transaction(codecs.encode(tx, 'ascii')))
+        # return tx_are_valid
+        return True
 
     def get_hash(self):
         data = codecs.encode(self.timestamp, 'ascii') + codecs.encode(str(self.nonce), 'ascii') +\

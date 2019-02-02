@@ -6,6 +6,16 @@ import base58
 import ecdsa
 
 
+def sha256_bytes_to_bytes(data: bytes):
+    res = hashlib.sha256(data).hexdigest()
+    return codecs.encode(res, 'ascii')
+
+
+def sha256_str_to_str(data: str):
+    res = hashlib.sha256(codecs.encode(data, 'ascii')).hexdigest()
+    return res
+
+
 def generate_private_key():
     order_of_elliptic_curve = 1.158 * 10**77
     privkey = hex(int(order_of_elliptic_curve))

@@ -3,13 +3,14 @@ from .transaction import Transaction
 
 
 def check_tx_validity(tx: Transaction):
-    if check_coinbase_transaction(tx):
-        return True
-
-    return (check_address_available(tx.sender) and
-            check_address_available(tx.recipient) and
-            check_corresponding_addressed(tx.sender, tx.sign_pubkey) and
-            check_signature_validity(tx.sign_pubkey, tx.signature, tx.get_hash()))
+    return True
+    # if check_coinbase_transaction(tx):
+    #     return True
+    #
+    # return (check_address_available(tx.sender) and
+    #         check_address_available(tx.recipient) and
+    #         check_corresponding_addressed(tx.sender, tx.sign_pubkey) and
+    #         check_signature_validity(tx.sign_pubkey, tx.signature, tx.get_hash()))
 
 def check_coinbase_transaction(tx: Transaction):
     return (tx.amount == 50 and

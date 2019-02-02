@@ -12,6 +12,7 @@ def make_sure_path_exists(path):
         if exception.errno != errno.EEXIST:
             raise
 
+
 def genesis_block_setup():
     blockchain = Blockchain()
     genesis_block = blockchain.genesis_block()

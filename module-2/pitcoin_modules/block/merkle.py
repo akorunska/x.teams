@@ -1,6 +1,6 @@
 import hashlib
 import codecs
-
+from pitcoin_modules.wallet.wallet import sha256_bytes_to_bytes
 
 def get_two_elements(data: list):
     el1 = data[0]
@@ -12,13 +12,8 @@ def get_two_elements(data: list):
     return el1, el2
 
 
-def sha256_bytes_to_bytes(data: bytes):
-    res = hashlib.sha256(data).hexdigest()
-    return codecs.encode(res, 'ascii')
-
-
 def get_merkle_root(data: list):
-    data = [codecs.encode(tx, 'ascii') for tx in data]
+    data = [codecs.encode(tx) for tx in data]
     if len(data) >= 2:
         current_list = data
     else:

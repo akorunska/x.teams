@@ -112,7 +112,7 @@ class ChainBlock(Resource):
         block = Block(
             json_repr['timestamp'],
             json_repr['previous_hash'],
-            [codecs.encode(tx, 'ascii') for tx in json_repr['transactions']],
+            [tx for tx in json_repr['transactions']],
             json_repr['nonce']
         )
 
@@ -128,7 +128,7 @@ class ChainBlock(Resource):
         )
         # deleting all transactions that new block contains from the mempool
         for tx in block.transactions:
-            deserialized = Deserializer.deserialize_transaction(codecs.encode(tx, 'ascii'))
+            deserialized = Deserializer.deserialize_transaction(tx)
             mempool.delete_transaction_if_exists(deserialized)
 
         # broadcasting new block for all known nodes
