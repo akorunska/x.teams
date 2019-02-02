@@ -86,6 +86,11 @@ def get_address_from_public_key(pubkey):
     return base58.b58encode(binascii.unhexlify(address)).decode('ascii')
 
 
+def get_hashed_public_key_from_address(address):
+    decoded = codecs.decode(binascii.hexlify(base58.b58decode_check(address)), "ascii")
+    return decoded[2:len(decoded)]
+
+
 def get_address_from_private_key(privkey, use_compressed=True):
     # using compressed key as default to generate and address as it becoming default option for many bitcoin clients
     # uncompressed key can be used as well by use_compressed=False
