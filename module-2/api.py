@@ -172,7 +172,7 @@ class Balance(Resource):
         parser.add_argument('address', type=str, required=True)
         args = parser.parse_args()
 
-        res = get_balance(blocks.get_all_blocks(), args['address'])
+        res = get_balance(utxo_pool.get_all_outputs(), args['address'])
         return app.response_class(
             response=json.dumps({'balance': res}),
             status=200,

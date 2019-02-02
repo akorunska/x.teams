@@ -101,6 +101,16 @@ def get_hashed_public_key_from_address(address):
     return decoded[2:len(decoded)]
 
 
+def get_address_from_hashed_public_key(hashed_pubkey):
+    mainnet_network_bytes = "00"
+    key_with_network_bytes = mainnet_network_bytes + hashed_pubkey
+
+    key_hashed1 = hashlib.sha256(binascii.unhexlify(key_with_network_bytes)).hexdigest()
+    key_hashed2 = hashlib.sha256(binascii.unhexlify(key_hashed1)).hexdigest()
+    address = key_with_network_bytes + key_hashed2[:8]
+    return base58.b58encode(binascii.unhexlify(address)).decode('ascii')
+
+
 def get_address_from_private_key(privkey, use_compressed=True):
     # using compressed key as default to generate and address as it becoming default option for many bitcoin clients
     # uncompressed key can be used as well by use_compressed=False
