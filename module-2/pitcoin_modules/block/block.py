@@ -15,10 +15,10 @@ class Block:
         self.merkle_root = codecs.decode(get_merkle_root(self.transactions), 'ascii')
         self.hash_value = self.get_hash()
 
-    def validate_all_transactions(self):
+    def validate_all_transactions(self, tx_list=[]):
         # tx_are_valid = True
         # for tx in self.transactions:
-        #     tx_are_valid = tx_are_valid and check_tx_validity(Deserializer.deserialize_transaction(codecs.encode(tx, 'ascii')))
+        #     tx_are_valid = tx_are_valid and check_tx_validity(Deserializer.deserialize_transaction(tx), tx_list)
         # return tx_are_valid
         return True
 

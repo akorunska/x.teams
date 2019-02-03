@@ -4,7 +4,7 @@ from pitcoin_modules.blockchain import Blockchain
 
 class MinerCLI(cmd.Cmd):
     intro = 'Welcome to pitcoin_modules miner-cli. Type help or ? to list commands.\n'
-    prompt = '\n(pitcoin_modules-miner-cli) '
+    prompt = '\n(pitcoin-miner-cli) '
     blockchain = Blockchain()
     i = 0
 
@@ -31,7 +31,7 @@ class MinerCLI(cmd.Cmd):
 
     def do_quit(self, arg):
         'Exit wallet-cli shell'
-        print('Thank you for using pitcoin_modules-wallet-cli')
+        print('Thank you for using pitcoin_-wallet-cli')
         return True
 
 
