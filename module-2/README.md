@@ -97,7 +97,145 @@ The other one will display newly mined block in it's history
 
 ## Wallet CLI
 
+When typing ```help``` inside ```wallet_cli``` following list of command appears.
+```
+balance  broadcast  help  import  new  quit  remember_privkey  send
+```
+
+Every command above is documented. 
+It means that by typing ```help command_name``` in the cli you can see small explanation + usage info.
+
+**Example of workflow with wallet_cli**
+
+* First we start by getting help about the system.
+```
+(pitcoin-wallet-cli) help
+
+Documented commands (type help <topic>):
+========================================
+balance  broadcast  help  import  new  quit  remember_privkey  send
+```
+
+You can also check out usage information for every specific command.
+
+* Let's create new address by calling command ```new```.
+If you want this address to be saved in a ```pitcoin_modules/address``` file, call command with ```-a``` option.
+
+**Important note:** If you rewrite the address in ```pitcoin_modules/address``` and you also wish to mine pitcoins using this address,
+update ```pitcoin_modules/minerkey``` with corresponding private key in hex format.
+```
+(pitcoin-wallet-cli) new
+hex private key |  676595aad53004ad4b9b0d32e9651d5360ecd83e65402e4df44c0f94e87dc5ba
+wif private key |  5JbpiPQo1Fo3eNUrTBEoqELABuc7Fj2ntf6ea9etvjREVQsdL66
+public key      |  041ac2dabe2ebb4a96b4b887beee9b7d0ddb11aa63418c23211ce2e191371ae9f7b809e92aeeb610f8c3c51a72192a96072509d3b3ffdc11bac262f1713e1381b9
+pitcoin address |  14wc26VyerPrjrorSguL9JngNcTHc8esya
+```
+
+* It is also possible to use compressed public keys. To do so, use ```-c``` option.
+```
+(pitcoin-wallet-cli) new -c
+using compressed public key for address creation
+hex private key |  f04656230e354565e5185b89b14b42e223977dd7ce45994682f905fd62dc1a4e
+wif private key |  5Ke75TAzbrZkCNTNqk8NRK3R56RsH2xtuo7kiykf9X3VhFKQq7m
+public key      |  0341ac7dc06cfbb4e6d5372c54abab81e506e43f9c3905b69afd82b85b22570c79
+pitcoin address |  1LsmyP2Z6snhNVNgeFMSKt5J6oBq8WLDwG
+```
+
+* You can use some existing private key by importing them it wif format.
+Flags ```-a``` and ```-c``` work for ```import``` command as well.
+
+```
+(pitcoin-wallet-cli) import pitcoin_modules/minerkey
+hex private key |  936abdc0429eb4b38a045fcb8f531ff7cf3888c3a83797df5d033106c4ea6a20
+wif private key |  5JwD9eKwBsYQJTc2Sx9wFa1jYvb7WRHespU56J6ZtWXipb1kgLN
+public key      |  0450e829ca678c60031a11b990fea865e03ba35d0579aa62750b918b98c4b935d803ecc57a4bb2fc2ab1193a87fca5386d71516aca89df267fc907bcb3b84d396a
+pitcoin address |  1NERjvtBxL5ErAKhCC3mfgWbp3QMd8y6ba
+```
+
+* Let's try to ```send``` some pitcoins. It will only work if we specify private key first.
+```
+(pitcoin-wallet-cli) send
+please, specify your private key using <remember_privkey> command before calling send
+```
+
+* ```remember_privkey``` command is going to tell miner_cli which private key to use in transactions. 
+Note that private key you specify must correspond with address in ```pitcoin_modules/address```.
+```
+(pitcoin-wallet-cli) remember_privkey 936abdc0429eb4b38a045fcb8f531ff7cf3888c3a83797df5d033106c4ea6a20
+```
+
+* After specifying private key you can call send command. 
+Hex string below is pitcoin raw_transaction. Copy it, so you can use it in your next step.
+```
+(pitcoin-wallet-cli) send 1KV2VGQiTB1B5KPEyyEPvifcqfS6PUxdxj 900
+{"version": 1, "inputs": [{"txid": "07c0efe33946c5f81b5a86d79eda89e47979d4796d5ec675a9fccde7c31c4f50", "vout": 1, "scriptsig": "404bb493aa8509356c1295c65acd3a44c339729d865422a47cb15631cda545ee3fc2eb86b418a5bb90202040430b723fdbf8429ff232bfa521c25da09539644093410450e829ca678c60031a11b990fea865e03ba35d0579aa62750b918b98c4b935d803ecc57a4bb2fc2ab1193a87fca5386d71516aca89df267fc907bcb3b84d396a"}], "outputs": [{"value": 900, "scriptpubkey": "76a914cabf271134a5f9228132598c8b4e6ad4586532f888ac", "txid": "1423215db125380dd21051c0d22f31fd4be2a25794b8789796343f4015c1baff", "vout": 1}, {"value": 4999999100, "scriptpubkey": "76a914e8e4b375038b0a1a1dc70543eab7ea6ce279df4388ac", "txid": "1423215db125380dd21051c0d22f31fd4be2a25794b8789796343f4015c1baff", "vout": 2}], "locktime": 0, "txid": "1423215db125380dd21051c0d22f31fd4be2a25794b8789796343f4015c1baff"}
+0100000001504f1cc3e7cdfca975c65e6d79d47979e489da9ed7865a1bf8c54639e3efc0070100000083404bb493aa8509356c1295c65acd3a44c339729d865422a47cb15631cda545ee3fc2eb86b418a5bb90202040430b723fdbf8429ff232bfa521c25da09539644093410450e829ca678c60031a11b990fea865e03ba35d0579aa62750b918b98c4b935d803ecc57a4bb2fc2ab1193a87fca5386d71516aca89df267fc907bcb3b84d396affffffff0284030000000000001976a914cabf271134a5f9228132598c8b4e6ad4586532f888ac7cee052a010000001976a914e8e4b375038b0a1a1dc70543eab7ea6ce279df4388ac00000000 
+```
+
+* It is time to broadcast your transaction to the network.
+Use hex string from previous step as the parameter for this command.
+You will either get False of True result, depending on if transaction was successfully accepted by node's mempool.
+```
+(pitcoin-wallet-cli) broadcast 0100000001504f1cc3e7cdfca975c65e6d79d47979e489da9ed7865a1bf8c54639e3efc0070100000083404bb493aa8509356c1295c65acd3a44c339729d865422a47cb15631cda545ee3fc2eb86b418a5bb90202040430b723fdbf8429ff232bfa521c25da09539644093410450e829ca678c60031a11b990fea865e03ba35d0579aa62750b918b98c4b935d803ecc57a4bb2fc2ab1193a87fca5386d71516aca89df267fc907bcb3b84d396affffffff0284030000000000001976a914cabf271134a5f9228132598c8b4e6ad4586532f888ac7cee052a010000001976a914e8e4b375038b0a1a1dc70543eab7ea6ce279df4388ac00000000
+{'result': True} 
+```
+If broadcasting returned True, you can check out API ```http://127.0.0.1:port/transaction/pendings``` and find your transaction there.
+
+* Finally, you can check balance of certain address.
+Note that transaction must necessarily be included in the block before being inculed in calculating balance.
+```
+(pitcoin-wallet-cli) balance 1KV2VGQiTB1B5KPEyyEPvifcqfS6PUxdxj
+900
+```
+
+* Once you're done, type ```quit``` to exit wallet_cli
+```
+(pitcoin-wallet-cli) quit
+Thank you for using pitcoin-wallet-cli
+```
+
+
 ## Miner CLI
+
+**Important info about using this system as a miner**
+
+You must provide file called ```minerkey``` inside ```pitcoin_modules``` folder.
+Initially this file exists in the repo and contains sample private key in hex format. 
+If you with to change it, edit this file along with file ```pitcoin_modules/address```, 
+that must contain corresponding address in mainnet format.
+
+* Getting help about the system:
+
+(pitcoin-miner-cli) help
+```
+Documented commands (type help <topic>):
+========================================
+add_node  consensus  help  mine  quit
+```
+
+* Adding node to the list of known nodes:
+```
+(pitcoin_modules-miner-cli) add_node http://127.0.0.1:5002
+```
+
+* Switching to the longest valid chain among known nodes:
+```
+(pitcoin_modules-miner-cli) consensus
+Loaded new chain from  http://127.0.0.1:5000  with length  3
+```
+
+* Calling ```mine```:
+```
+(pitcoin-miner-cli) mine
+block was mined and broadcasted to other nodes
+hash of the new block:  0046cc50bc59bcbcb1adc5a5b45ee0ae703e00418f51706583e1d39f05af3ef1
+```
+
+* Once you're done, type ```quit``` to exit miner_cli
+```
+(pitcoin_modules-miner-cli) quit
+Thank you for using pitcoin-miner-clii
+```
 
 ## Testing
 Running tests:
