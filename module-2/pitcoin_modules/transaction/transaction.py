@@ -44,7 +44,7 @@ class Transaction:
         return Transaction(inputs, outputs, dict['locktime'])
 
     def __eq__(self, other):
-        return str(self) == str(other)
+        return self.txid == other.txid
 
 
 class CoinbaseTransaction(Transaction):
@@ -98,6 +98,20 @@ class Serializer:
         #packing locktime
         result += reverse_bytes("%08x" % tx.locktime)
         return result
+
+    @staticmethod
+    def construct_tx_data_as_signature_message(inputs, outputs, locktime, utxo_list):
+        for input in inputs:
+            prev_txid = input.txid
+            prev_vout = input.vout
+            output_to_spend = None
+            for utxo in utxo_list:
+                if utxo.txid == prev_txid and utxo.vout == prev_vout:
+                    output_to_spend = utxo
+                    break
+            input.scriptsig = output_to_spend.scriptpubkey
+        return Serializer.serialize_transaction(Transaction(inputs, outputs, locktime))
+
 
 
 class Deserializer:

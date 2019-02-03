@@ -136,7 +136,6 @@ class ChainBlock(Resource):
             block = list[args['height']]
         else:
             block = blocks.get_last_block()
-        print(block)
         json_repr = json.dumps(block.__dict__)
 
         response = app.response_class(
@@ -238,7 +237,7 @@ api.add_resource(Transaction, '/transaction/', methods=['GET'])
 api.add_resource(TransactionNew, '/transaction/new', methods=['POST'])
 api.add_resource(TransactionPending, '/transaction/pendings', methods=['GET', 'DELETE'])
 api.add_resource(TransactionDeserialize, '/transaction/deserialize', methods=['GET'])
-api.add_resource(Chain, '/chain',  methods=['GET', 'DELETE'])
+api.add_resource(Chain, '/chain', methods=['GET', 'DELETE'])
 api.add_resource(ChainBlock, '/chain/block', methods=['GET', 'POST'])
 api.add_resource(ChainLength, '/chain/length', methods=['GET'])
 api.add_resource(Node, '/node', methods=['GET', 'POST'])
@@ -246,9 +245,5 @@ api.add_resource(Balance, '/balance', methods=['GET'])
 api.add_resource(UTXO, '/utxo', methods=['GET'])
 
 
-def serve():
-    app.run(host=API_HOST, port=API_PORT)
-
-
 if __name__ == '__main__':
-    serve()
+    app.run(host=API_HOST, port=API_PORT)

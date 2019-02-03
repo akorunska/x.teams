@@ -18,6 +18,7 @@ class MemPoolStorage:
 
     def add_serialized_transaction_to_mempool(self, data, transactions: list):
         tx = self.get_validated_deserialized_transaction(data, transactions)
+        print("adding tx with txid", tx.txid)
         if tx is None:
             return False
         self.add_transaction_to_mempool(tx)
@@ -42,10 +43,12 @@ class MemPoolStorage:
             pickle.dump(tx_list, fp)
         return True
 
-    def contains_transaction(self, tx):
+    def contains_transaction(self, tx_to_find):
         tx_list = self.get_all_transactions()
-        if tx in tx_list:
-            return True
+        for tx in tx_list:
+            print(tx.txid, "searching: ", tx_to_find.txid)
+            if tx.txid == tx_to_find.txid:
+                return True
         return False
 
     def delete_last_transaction_from_mempool(self):
@@ -62,7 +65,9 @@ class MemPoolStorage:
         return True
 
     def delete_transaction_if_exists(self, tx):
+        print(tx.txid)
         if self.contains_transaction(tx):
+            print("contains")
             tx_list = self.get_all_transactions()
             for i in range(len(tx_list)):
                 if tx_list[i] == tx:

@@ -12,17 +12,28 @@ def make_sure_path_exists(path):
         if exception.errno != errno.EEXIST:
             raise
 
+    try:
+        os.remove(path + ".blocks.txt")
+        os.remove(path + ".mempool.txt")
+        os.remove(path + ".utxopool.txt")
+    except OSError:
+        pass
+
 
 def genesis_block_setup():
     blockchain = Blockchain()
     genesis_block = blockchain.genesis_block()
     api_url = "http://" + API_HOST + ":" + API_PORT
 
-    chain = requests.get(api_url + '/chain').json()
-    if len(chain) > 0:
-        requests.delete(api_url + '/chain')
+    # if os.path.exists(PROJECT_ROOT + "pitcoin_modules/storage/.blocks.txt"):
+    #     os.remove(PROJECT_ROOT + "pitcoin_modules/storage/.blocks.txt")
+    # if os.path.exists(PROJECT_ROOT + "pitcoin_modules/storage/.mempool.txt"):
+    #     os.remove(PROJECT_ROOT + "pitcoin_modules/storage/.mempool.txt")
+    # if os.path.exists(PROJECT_ROOT + "pitcoin_modules/storage/.utxopool.txt"):
+    #     os.remove("PROJECT_ROOT + pitcoin_modules/storage/.utxopool.txt")
+
     requests.post(api_url + '/chain/block', str(genesis_block))
 
 
-make_sure_path_exists('pitcoin_modules/storage')
+make_sure_path_exists('pitcoin_modules/storage/')
 genesis_block_setup()

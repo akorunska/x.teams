@@ -1,7 +1,7 @@
 from .stack import Stack
 
 
-def run_script(code: str, prev_txid):
+def run_script(code: str, msg):
     cur = 0
     stack = Stack()
     while cur < len(code):
@@ -19,7 +19,7 @@ def run_script(code: str, prev_txid):
             if not stack.op_equal_verify():
                 return False
         if opcode == 172:
-            stack.op_checksig(prev_txid)
+            stack.op_checksig(msg)
         # print(stack)
     return stack.running_succeeded()
 
