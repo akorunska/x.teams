@@ -31,7 +31,7 @@ class MinerCLI(cmd.Cmd):
 
     def do_quit(self, arg):
         'Exit wallet-cli shell'
-        print('Thank you for using pitcoin_-wallet-cli')
+        print('Thank you for using pitcoin-miner-cli')
         return True
 
 
