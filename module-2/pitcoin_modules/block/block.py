@@ -35,7 +35,7 @@ class Block:
         block = Block(
             json_str['timestamp'],
             json_str['previous_hash'],
-            [codecs.encode(tx, 'ascii') for tx in json_str['transactions']],
+            [tx for tx in json_str['transactions']],
             json_str['nonce']
         )
         return block
