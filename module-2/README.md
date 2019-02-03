@@ -1,6 +1,6 @@
 # Satoshi Way: module 2
 
-The aim of week one is to improve some modules of the system to be more bitcoin-like.
+The aim of second week is to improve some modules of the system to be more bitcoin-like.
 * Transactions, constructed in the way Bitcoin network can accept them
 * UTXO system
 * Updated wallet_cli
