@@ -25,13 +25,6 @@ def genesis_block_setup():
     genesis_block = blockchain.genesis_block()
     api_url = "http://" + API_HOST + ":" + API_PORT
 
-    # if os.path.exists(PROJECT_ROOT + "pitcoin_modules/storage/.blocks.txt"):
-    #     os.remove(PROJECT_ROOT + "pitcoin_modules/storage/.blocks.txt")
-    # if os.path.exists(PROJECT_ROOT + "pitcoin_modules/storage/.mempool.txt"):
-    #     os.remove(PROJECT_ROOT + "pitcoin_modules/storage/.mempool.txt")
-    # if os.path.exists(PROJECT_ROOT + "pitcoin_modules/storage/.utxopool.txt"):
-    #     os.remove("PROJECT_ROOT + pitcoin_modules/storage/.utxopool.txt")
-
     requests.post(api_url + '/chain/block', str(genesis_block))
 
 
