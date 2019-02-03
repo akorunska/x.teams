@@ -13,7 +13,7 @@ The aim of week one is to improve some modules of the system to be more bitcoin-
 ``` 
 pip install -r requirements.txt 
 ```
-* Now enter the pitcoin directory. It contains some scripts that should be launched before you begin exploring pitcoin.
+* Root module-2 directory contains some scripts that should be launched before you begin exploring pitcoin.
 * In the separate terminal tab launch api.py with the command 
 (this process should run all the time as you work with your pitcoin node)
 ``` 
