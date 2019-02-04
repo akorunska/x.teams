@@ -13,14 +13,11 @@ def get_tx_by_txid(tx_list, txid):
 
 def tx_list_to_txo_list(tx_list):
     txo_list = []
-    print(tx_list)
     for tx in tx_list:
-        print(tx.outputs)
         for i, output in zip(range(1, len(tx.outputs) + 1), tx.outputs):
             output.txid = tx.txid
             output.vout = i
             txo_list.append(output)
-    print(txo_list)
     return txo_list
 
 

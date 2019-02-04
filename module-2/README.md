@@ -122,7 +122,7 @@ You can also check out usage information for every specific command.
 If you want this address to be saved in a ```pitcoin_modules/address``` file, call command with ```-a``` option.
 
 **Important note:** If you rewrite the address in ```pitcoin_modules/address``` and you also wish to mine pitcoins using this address,
-update ```pitcoin_modules/minerkey``` with corresponding private key in hex format.
+update ```pitcoin_modules/minerkey``` with corresponding private key in wif format.
 ```
 (pitcoin-wallet-cli) new
 hex private key |  676595aad53004ad4b9b0d32e9651d5360ecd83e65402e4df44c0f94e87dc5ba
@@ -200,7 +200,7 @@ Thank you for using pitcoin-wallet-cli
 **Important info about using this system as a miner**
 
 You must provide file called ```minerkey``` inside ```pitcoin_modules``` folder.
-Initially this file exists in the repo and contains sample private key in hex format. 
+Initially this file exists in the repo and contains sample private key in wif format. 
 If you with to change it, edit this file along with file ```pitcoin_modules/address```, 
 that must contain corresponding address in mainnet format.
 
