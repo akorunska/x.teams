@@ -188,7 +188,7 @@ Note that transaction must necessarily be included in the block before being inc
 900
 ```
 
-* Once you're done, type ```quit``` to exit wallet_cli
+* Once you're done, type ```quit``` to exit wallet_cli.
 ```
 (pitcoin-wallet-cli) quit
 Thank you for using pitcoin-wallet-cli
@@ -231,7 +231,7 @@ block was mined and broadcasted to other nodes
 hash of the new block:  0046cc50bc59bcbcb1adc5a5b45ee0ae703e00418f51706583e1d39f05af3ef1
 ```
 
-* Once you're done, type ```quit``` to exit miner_cli
+* Once you're done, type ```quit``` to exit miner_cli.
 ```
 (pitcoin_modules-miner-cli) quit
 Thank you for using pitcoin-miner-clii

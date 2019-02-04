@@ -53,6 +53,12 @@ class UTXOStorage:
             return True
         return False
 
+    def delete_all_otputs(self):
+        outp_list = []
+        with open(self.storage_filepath, 'wb+') as fp:
+            pickle.dump(outp_list, fp)
+        return True
+
     def add_new_output(self, outp):
         outp_list = self.get_all_outputs()
         outp_list.append(outp)
