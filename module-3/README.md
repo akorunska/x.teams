@@ -1,9 +1,10 @@
 # Satoshi Way: module 3
 
-The aim of the third week is to ... .
-* ...
-* ...
-* ..
+The aim of the third week is to:
+* Update pitcoin mining to be more real-world one: add atomatic mining, total supply and difficulty adjusment.
+* Implement P2PWPKH transaction logic.
+* Add bech32 wallets in the wallet_cli.
+* Update block for P2PWPKH as well.
 
 ## Setup instructions
 * Clone the repository
