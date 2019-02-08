@@ -33,21 +33,26 @@ def clear_storage(path):
 
 
 def genesis_block_setup():
-    blockchain = Blockchain()
     genesis_block = blockchain.genesis_block()
-    api_url = "http://" + API_HOST + ":" + API_PORT
 
     requests.post(api_url + '/chain/block', str(genesis_block))
 
 
-def get_known_nodes():
-    pass
+def add_known_nodes():
+    for node in TRUSTED_NODES:
+        requests.post(api_url + '/node', node)
+    blockchain.resolve_conflicts()
 
-
+api_url = "http://" + API_HOST + ":" + API_PORT
 
 make_sure_path_exists('pitcoin_modules/storage/')
 clear_storage('pitcoin_modules/storage/')
 
-# get all known nodes from the config file
+# get all known nodes from the settings file
 # if there are no nodes, create own genesis block
-genesis_block_setup()
+blockchain = Blockchain()
+
+if len(TRUSTED_NODES) > 0:
+    add_known_nodes()
+else:
+    genesis_block_setup()
