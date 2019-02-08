@@ -18,7 +18,9 @@ class BlockchainMetaStorage:
             'target_update_frequency': 3,   # every 3 blocks difficulty is going to be updated
             'halving_frequency': 5,
             'seconds_to_create_block_expected': 20,    # time in seconds to create each block for the network
-            'current_miner_reward': 50
+            'current_miner_reward': 50,
+            'total_supply': 21 * 10**6,
+            'mined_pitcoins': 0
         }
         with open(self.storage_filepath, 'wb+') as fp:
             pickle.dump(blockchain_meta, fp)
@@ -39,6 +41,15 @@ class BlockchainMetaStorage:
     def update_meta(self, new_meta):
         with open(self.storage_filepath, 'wb+') as fp:
             pickle.dump(new_meta, fp)
+
+    def halving(self):
+        meta = self.get_meta()
+        if meta['mined_pitcoins'] == meta['total_supply']:
+            meta['current_miner_reward'] = 0
+        else:
+            meta['current_miner_reward'] = meta['current_miner_reward'] / 2
+        with open(self.storage_filepath, 'wb+') as fp:
+            pickle.dump(meta, fp)
 
     def recalculate_difficulty(self, last_n_blocks):
         meta = self.get_meta()

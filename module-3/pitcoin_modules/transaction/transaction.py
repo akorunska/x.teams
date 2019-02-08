@@ -51,7 +51,7 @@ class CoinbaseTransaction(Transaction):
     def __init__(self, scriptpubkey, block_height: int, reward):
         inputs = []
         inputs.append(Input("0" * 64, int("f" * 8, 16), "%016x" % block_height))
-        outputs = [Output(reward * 10**8, scriptpubkey)]
+        outputs = [Output(int(reward * 10**8), scriptpubkey)]
         super().__init__(inputs, outputs, 0)
 
 

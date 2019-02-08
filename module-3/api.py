@@ -180,11 +180,16 @@ class ChainBlock(Resource):
             # update utxo pool with new transactions data
             utxo_pool.update_with_new_transaction(deserialized)
 
-        # recalculate difficulty
         meta = blockchain_meta.get_meta()
+
+        # recalculate difficulty
         if len(blocks.get_all_blocks()) % meta['target_update_frequency'] == 0:
             bl_list = blocks.get_last_n_blocks(3)
             blockchain_meta.recalculate_difficulty(bl_list)
+
+        # halving
+        if len(blocks.get_all_blocks()) % meta['halving_frequency'] == 0:
+            blockchain_meta.halving()
 
         # broadcasting new block for all known nodes
         for node in nodes:
