@@ -40,7 +40,8 @@ class Blockchain:
     def construct_miners_rewarding_transaction(self):
         recipient = read_file_contents(PROJECT_ROOT + '/address')
         block_hei = requests.get(self.api_url + '/chain/length').json()['chain_length']
-        tx = CoinbaseTransaction(construct_transaction_locking_script(recipient), block_hei)
+        reward = requests.get(self.api_url + '/meta').json()['current_miner_reward']
+        tx = CoinbaseTransaction(construct_transaction_locking_script(recipient), block_hei, reward)
         return tx
 
     def resolve_conflicts(self):
