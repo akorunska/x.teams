@@ -26,6 +26,10 @@ def clear_storage(path):
         os.remove(path + ".utxopool.txt")
     except OSError:
         pass
+    try:
+        os.remove(path + ".blockchain_meta.txt")
+    except OSError:
+        pass
 
 
 def genesis_block_setup():

@@ -58,6 +58,14 @@ class BlocksStorage:
             return None
         return blocks_list[-1]
 
+    def get_last_n_blocks(self, n):
+        blocks_list = self.get_all_blocks()
+        if len(blocks_list) == 0:
+            return None
+        if len(blocks_list) < n:
+            return blocks_list
+        return blocks_list[-n:]
+
     def delete_all_blocks_from_mempool(self):
         blocks_list = []
         with open(self.storage_filepath, 'wb+') as fp:

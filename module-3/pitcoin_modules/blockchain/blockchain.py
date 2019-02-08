@@ -1,4 +1,5 @@
 import json
+import random
 import time
 
 import requests
@@ -11,16 +12,21 @@ from pitcoin_modules.wallet import *
 
 class Blockchain:
     def __init__(self):
-        self.difficulty = 2
-        self.chain = []
         self.api_url = "http://" + API_HOST + ":" + API_PORT
 
     def mine(self, block=None):
         if not block:
             block = self.create_block_with_loaded_transactions()
-        while block.hash_value[0:self.difficulty] != '0' * self.difficulty:
-            block.nonce += 1
+
+        initial_chain_len = requests.get(self.api_url + '/chain/length').json()['chain_length']
+        target = requests.get(self.api_url + '/meta').json()['current_target']
+        target = int(target, 16)
+
+        while int(block.hash_value, 16) > target:
+            block.nonce = random.randint(0, 2**32)
             block.hash_value = block.get_hash()
+            if requests.get(self.api_url + '/chain/length').json()['chain_length'] > initial_chain_len:
+                return None
         return block
 
     def create_block_with_loaded_transactions(self):
@@ -88,6 +94,8 @@ class Blockchain:
 
     def mine_and_submit_block(self):
         block = self.mine()
+        if not block:
+            return None
         requests.post(self.api_url + '/chain/block', str(block))
         return block.hash_value
 

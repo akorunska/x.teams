@@ -6,16 +6,24 @@ from flask import Flask, request
 from pitcoin_modules.storage_handlers.pending_pool import MemPoolStorage
 from pitcoin_modules.storage_handlers.chain import BlocksStorage
 from pitcoin_modules.storage_handlers.utxo_pool import UTXOStorage
+from pitcoin_modules.storage_handlers.blockchain_meta import BlockchainMetaStorage
 from pitcoin_modules.settings import *
 from pitcoin_modules.blockchain.address_balance import *
+import logging
 
 
 mempool = MemPoolStorage()
 blocks = BlocksStorage()
 utxo_pool = UTXOStorage()
+blockchain_meta = BlockchainMetaStorage()
 nodes = []
 
 app = Flask(__name__)
+
+log = logging.getLogger('werkzeug')
+log.disabled = True
+app.logger.disabled = True
+
 api = Api(app)
 
 
@@ -172,6 +180,12 @@ class ChainBlock(Resource):
             # update utxo pool with new transactions data
             utxo_pool.update_with_new_transaction(deserialized)
 
+        # recalculate difficulty
+        meta = blockchain_meta.get_meta()
+        if len(blocks.get_all_blocks()) % meta['target_update_frequency'] == 0:
+            bl_list = blocks.get_last_n_blocks(3)
+            blockchain_meta.recalculate_difficulty(bl_list)
+
         # broadcasting new block for all known nodes
         for node in nodes:
             requests.post(node + '/chain/block', json.dumps(json_repr))
@@ -233,6 +247,15 @@ class UTXO(Resource):
         )
 
 
+class Meta(Resource):
+    def get(self):
+        return app.response_class(
+            response=json.dumps(blockchain_meta.get_meta()),
+            status=200,
+            mimetype='application/json'
+        )
+
+
 api.add_resource(Transaction, '/transaction/', methods=['GET'])
 api.add_resource(TransactionNew, '/transaction/new', methods=['POST'])
 api.add_resource(TransactionPending, '/transaction/pendings', methods=['GET', 'DELETE'])
@@ -243,6 +266,7 @@ api.add_resource(ChainLength, '/chain/length', methods=['GET'])
 api.add_resource(Node, '/node', methods=['GET', 'POST'])
 api.add_resource(Balance, '/balance', methods=['GET'])
 api.add_resource(UTXO, '/utxo', methods=['GET'])
+api.add_resource(Meta, '/meta', methods=['GET'])
 
 
 if __name__ == '__main__':
