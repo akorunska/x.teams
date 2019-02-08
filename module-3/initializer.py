@@ -41,6 +41,8 @@ def genesis_block_setup():
 def add_known_nodes():
     for node in TRUSTED_NODES:
         requests.post(api_url + '/node', node)
+    for node in TRUSTED_NODES:
+        requests.post(node, + '/node', api_url)
     blockchain.resolve_conflicts()
 
 api_url = "http://" + API_HOST + ":" + API_PORT
