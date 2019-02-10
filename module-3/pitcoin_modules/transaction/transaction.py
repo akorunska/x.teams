@@ -12,9 +12,9 @@ class Transaction:
         self.inputs = inputs
         self.outputs = outputs
         self.locktime = locktime
-        self.txid = self.get_hash()
         self.witness = witness
         self.wtxid = ""
+        self.txid = self.get_hash()
 
     def get_hash(self):
         tx_data = Serializer.serialize_transaction(self)
@@ -42,9 +42,11 @@ class Transaction:
 
     @staticmethod
     def from_dict(dict):
+        version = dict['version']
         inputs = [Input(input['txid'], input['vout'], input['scriptsig']) for input in dict['inputs']]
         outputs = [Output(output['value'], output['scriptpubkey']) for output in dict['outputs']]
-        return Transaction(inputs, outputs, dict['locktime'])
+        witness = [wint for wint in dict['witness']]
+        return Transaction(inputs, outputs, dict['locktime'], version=version, witness=witness)
 
     def __eq__(self, other):
         return self.txid == other.txid
@@ -69,6 +71,8 @@ def reverse_bytes(s: str):
 class Serializer:
     @staticmethod
     def serialize_transaction(tx: Transaction):
+        if tx.version == 2:
+            return Serializer.serialize_sw_transaction(tx)
         result = ""
 
         #packing tx version
