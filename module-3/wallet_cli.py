@@ -94,6 +94,19 @@ class WalletCLI(cmd.Cmd):
         wif_private_key = convert_hex_private_key_to_wif(hex_private_key)
         self.hande_wallet_credentials_generation(options, hex_private_key, wif_private_key.decode("utf-8"))
 
+
+    def do_snew(self, arg):
+        'Generate new private key and receive associated public key and address. \n' \
+        'usage: <new -a> \n' \
+        '-a: Save created address to the file on the machine called address.'
+
+        options = OptionsHandler.handle_do_new_options(arg)
+
+        hex_private_key = generate_private_key()
+        wif_private_key = convert_hex_private_key_to_wif(hex_private_key)
+        self.hande_swallet_credentials_generation(options, hex_private_key, wif_private_key.decode("utf-8"))
+
+
     def do_import(self, arg):
         'Import private key in WIF format and receive associated public key and address. \n' \
         'usage: <import path/to/file -c -a> \n' \
@@ -156,6 +169,15 @@ class WalletCLI(cmd.Cmd):
     def hande_wallet_credentials_generation(options, hex_private_key, wif_private_key):
         public_key = get_public_key_from_private_key(hex_private_key, options['compressed'])
         address = get_address_from_private_key(hex_private_key, options['compressed'])
+
+        WalletCLI.print_wallet_info(hex_private_key, wif_private_key, public_key.decode("utf-8"), address)
+        if options["save_address"]:
+            WalletCLI.save_address_to_file(address)
+
+    @staticmethod
+    def hande_swallet_credentials_generation(options, hex_private_key, wif_private_key):
+        public_key = get_public_key_from_private_key(hex_private_key, use_compressed=True)
+        address = get_bech32_address(public_key, 'tb')
 
         WalletCLI.print_wallet_info(hex_private_key, wif_private_key, public_key.decode("utf-8"), address)
         if options["save_address"]:
