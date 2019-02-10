@@ -251,6 +251,14 @@ class UTXO(Resource):
             mimetype='application/json'
         )
 
+    def delete(self):
+        response = app.response_class(
+            response=json.dumps({"result": utxo_pool.delete_all_otputs()}),
+            status=200,
+            mimetype='application/json'
+        )
+        return response
+
 
 class Meta(Resource):
     def get(self):

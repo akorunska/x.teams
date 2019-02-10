@@ -59,6 +59,7 @@ class Blockchain:
         if longest['source'] == '':
             return ""
         requests.delete(self.api_url + '/chain')
+        requests.delete(self.api_url + '/utxo')
         for block in block_list:
             requests.post(self.api_url + '/chain/block', json.dumps(block))
         return longest
