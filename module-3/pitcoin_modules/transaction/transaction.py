@@ -7,12 +7,14 @@ from pitcoin_modules.settings import *
 
 
 class Transaction:
-    def __init__(self, inputs: list, outputs: list, locktime: int):
-        self.version = 1
+    def __init__(self, inputs: list, outputs: list, locktime: int, witness=[], version=1):
+        self.version = version
         self.inputs = inputs
         self.outputs = outputs
         self.locktime = locktime
         self.txid = self.get_hash()
+        self.witness = witness
+        self.wtxid = ""
 
     def get_hash(self):
         tx_data = Serializer.serialize_transaction(self)
@@ -96,6 +98,51 @@ class Serializer:
             result += output.scriptpubkey
 
         #packing locktime
+        result += reverse_bytes("%08x" % tx.locktime)
+        return result
+
+    @staticmethod
+    def serialize_sw_transaction(tx: Transaction):
+        result = ""
+
+        # packing tx version
+        result += reverse_bytes("%08x" % tx.version)
+
+        # packing flag and marker
+        result += "%02x%02x" % (0, 1)
+
+        # packing tx inputs
+        result += "%02x" % len(tx.inputs)
+        # packing each input
+        for input in tx.inputs:
+            # pack txid
+            result += reverse_bytes(input.txid)
+            # pack vout
+            result += reverse_bytes("%08x" % input.vout)
+            # pack scriptsig
+            result += "%02x" % (len(input.scriptsig) // 2)
+            result += input.scriptsig
+            # add sequence
+            result += "f" * 8
+
+        # packing tx outputs
+        result += "%02x" % len(tx.outputs)
+        # packing each output
+        for output in tx.outputs:
+            # pack value
+            result += reverse_bytes("%016x" % output.value)
+            # pack scriptsig
+            result += "%02x" % (len(output.scriptpubkey) // 2)
+            result += output.scriptpubkey
+
+        # packing witness data
+        result += "%02x" % len(tx.witness)
+        for witn in tx.witness:
+            # pack witness data
+            result += "%02x" % (len(witn) // 2)
+            result += witn
+
+        # packing locktime
         result += reverse_bytes("%08x" % tx.locktime)
         return result
 
