@@ -20,9 +20,9 @@ nodes = []
 
 app = Flask(__name__)
 
-log = logging.getLogger('werkzeug')
-log.disabled = True
-app.logger.disabled = True
+# log = logging.getLogger('werkzeug')
+# log.disabled = True
+# app.logger.disabled = True
 
 api = Api(app)
 

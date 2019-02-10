@@ -1,3 +1,4 @@
+import codecs
 import hashlib
 import binascii
 
@@ -62,6 +63,18 @@ def get_bech32_address(compressed_public_key: bytes, hrp):
     pubkey_sha_ripemd_encrypted = binascii.unhexlify(ripemd160.hexdigest())
     print(len(binascii.hexlify(pubkey_sha_ripemd_encrypted)))
     converted = [0] + convertbits(list(pubkey_sha_ripemd_encrypted), 8, 5)
+
+    checksum = bech32_create_checksum(hrp, converted)
+
+    data = converted + checksum
+    string_data = ""
+    for value in data:
+        string_data += chars32[value]
+    return hrp + '1' + string_data
+
+
+def get_bech32_address_from_hashed_pubkey(pubkey, hrp='tb'):
+    converted = [0] + convertbits(list(binascii.hexlify(pubkey)), 8, 5)
 
     checksum = bech32_create_checksum(hrp, converted)
 
