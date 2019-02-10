@@ -3,6 +3,7 @@ import codecs
 import secrets
 import hashlib
 import base58
+import bitcoinlib as bitcoinlib
 import ecdsa
 
 
@@ -97,6 +98,10 @@ def get_address_from_public_key(pubkey):
 
 
 def get_hashed_public_key_from_address(address):
+    # check if address is bech32
+    if address[:2] == 'tb':
+        # if bc is at start, decode is likely to produce an error
+        return codecs.decode(binascii.hexlify(bitcoinlib.encoding.addr_bech32_to_pubkeyhash(address, 'tb')))
     decoded = codecs.decode(binascii.hexlify(base58.b58decode_check(address)), "ascii")
     return decoded[2:len(decoded)]
 
