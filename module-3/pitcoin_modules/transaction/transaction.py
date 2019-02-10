@@ -29,7 +29,8 @@ class Transaction:
             "inputs": [input.__dict__ for input in self.inputs],
             "outputs": [output.__dict__ for output in self.outputs],
             "locktime": self.locktime,
-            "txid": self.txid
+            "txid": self.txid,
+            "witness": self.witness
         }
         for i, output in zip(range(1, len(data['outputs']) + 1), data['outputs']):
             output['txid'] = self.txid
@@ -138,6 +139,9 @@ class Serializer:
         # packing witness data
         result += "%02x" % len(tx.witness)
         for witn in tx.witness:
+            # todo it is possibly nessesary to incude amount of stack elements of each witness
+            # like this: result += "%02x" % 2 (2 elements in witness -- signature and pubkey
+
             # pack witness data
             result += "%02x" % (len(witn) // 2)
             result += witn

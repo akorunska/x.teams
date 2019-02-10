@@ -1,5 +1,6 @@
 import unittest
 from pitcoin_modules.transaction import Transaction, Serializer, Output, Input
+from pitcoin_modules.wallet import construct_witness_transaction
 
 
 class TestRawWitnessTransaction(unittest.TestCase):
@@ -19,3 +20,32 @@ class TestRawWitnessTransaction(unittest.TestCase):
         # raw_tx = "01000000017967a5185e907a25225574544c31f7b059c1a191d65b53dcc1554d339c4f9efc010000006a47304402206a2eb16b7b92051d0fa38c133e67684ed064effada1d7f925c842da401d4f22702201f196b10e6e4b4a9fff948e5c5d71ec5da53e90529c8dbd122bff2b1d21dc8a90121039b7bcd0824b9a9164f7ba098408e63e5b7e3cf90835cceb19868f54f8961a825ffffffff014baf2100000000001976a914db4d1141d0048b1ed15839d0b7a4c488cd368b0e88ac00000000"
         # self.assertEqual(raw_tx, Serializer.serialize_transaction(tx))
         print(Serializer.serialize_sw_transaction(tx))
+
+
+    def test_forming_sw_transaction(self):
+        sender_privkey = "936abdc0429eb4b38a045fcb8f531ff7cf3888c3a83797df5d033106c4ea6a20"
+        sender_address = "1NERjvtBxL5ErAKhCC3mfgWbp3QMd8y6ba"
+        recipient_address = "1K9moTCMoSrA9bNdYTgMt6ac1nim83xScU"
+
+        utxo_list = [
+            Output(
+                5000000000,
+                "76a914e8e4b375038b0a1a1dc70543eab7ea6ce279df4388ac",
+                txid="07c0efe33946c5f81b5a86d79eda89e47979d4796d5ec675a9fccde7c31c4f50",
+                vout=1
+            )
+        ]
+
+        formed_tx = construct_witness_transaction(sender_privkey, sender_address, recipient_address, 800, utxo_list)
+        print(formed_tx)
+        self.assertEqual(2, len(formed_tx.outputs))
+        outp1 = formed_tx.outputs[0]
+        outp2 = formed_tx.outputs[1]
+
+        self.assertTrue(outp1.value + outp2.value <= 5000000000)
+        self.assertEqual(800, outp1.value)
+        self.assertEqual("0014c71afd5d2303c987ce8a4882ccb5c06636aaa224", outp1.scriptpubkey)
+
+        self.assertEqual(1, len(formed_tx.witness))
+        self.assertEqual("", formed_tx.inputs[0].scriptsig)
+
