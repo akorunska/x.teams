@@ -37,13 +37,8 @@ class TestBlockchainMeta(unittest.TestCase):
         ]
 
         old_meta = storage.get_meta()
-        print(old_meta)
         storage.recalculate_difficulty(block_list)
         meta = storage.get_meta()
         self.assertNotEqual(old_meta['current_target'], meta['current_target'])
-
-    def test(self):
-        storage = BlockchainMetaStorage()
-        print(storage.get_meta())
 
 

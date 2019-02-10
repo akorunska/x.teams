@@ -50,6 +50,7 @@ Some of the routes below are actually being used by the node itself, but feel fr
 /balance?address=some_pitcoin_addr                      # get balance for some_pitcoin_addr address
 /utxo                                                   # get all unspent outputs
 /utxo?address=some_pitcoin_adr                          # get unspent outputs for certain address 
+/meta                                                   # get meta info about current pitcoin blockchain
 ```
 
 ## Setting up two nodes interaction
@@ -57,43 +58,39 @@ Let's create simple pitcoin testnet consisting of two nodes. Assuming you've alr
 * Clone repository once again in separate location.
 * Repeat every step as if you were setting the node up first time. 
 Be careful: this time you **have to change the port** in `pitcoin_modules/settings.py`, otherwise api.py wont start.
-And make sure you run `initializer.py` for this node as well, otherwise api.pi will not work correctly.
+* Change **TRUSTED_NODES** list as well. Be sure to add there node at port ```5000```.
+
+Settings file for node ```5001``` should look like this:
+```
+    import os
+    
+    PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+    API_HOST = '127.0.0.1'
+    API_PORT = '5001'
+    
+    TRUSTED_NODES = [
+        'http://127.0.0.1:5000'
+]
+```
+
+* Make sure you run `initializer.py` for this node as well, otherwise api.pi will not work correctly.
+For now it will not create genesis block. It's going to load the longest chain from all nodes from settings file.
 * Run miner-cli of the second (newly created) node.
 
 All actions described below assume the case, when more then one block is included in the chain of first (older one) node.
 If not, both nodes have chain length equal to one and calling `consensus` command will result nothing.
 
-In this case you want to mine on each of two nodes just to make at least one chain longer than the other one.
-Every node will then use longest chain as main one.
-
 The example below assumes, that first node in launched on the default ```5000``` port and the second node runs on port ```5001```.
 
 * Run miner_cli for node at port ```5001```:    
 ```python miner_cli.py```
-* Let your second node know about the first one.  
-```(pitcoin-miner-cli) add_node http://127.0.0.1:5000```
-* Call consensus and see if new chain gets loaded.
-```
-(pitcoin_modules-miner-cli) consensus```
-Loaded new chain from  http://127.0.0.1:5000  with length  3
-```
 
-Great! Right now two nodes share same block history. 
-However if one of them mines new block, it will be only passed to *known* nodes. 
-In an example above second node (port ```5001```) knows about node at port ```5000```, but not vice versa.
-
-This can be fixed easily:
-* Switch to ```miner_cli``` of node at port ```5000```.
-* Notify the node about another node out there
-```(pitcoin-miner-cli) add_node http://127.0.0.1:5001```
+Now both nodes run in parallel. You should be seing messages about mined blocks (both by first and second node)
 
 **Important fact about known nodes**: those addresses added by ```add_node``` command are only stored in api.py program memory.
 If you relaunch api.py, you have to redo ```add_node``` as just after launch ```api.py``` knows nothing about other pitcoin nodes.
+After running `initializer.py` you can always do it through the api.
 
-Now to nodes know about each other's existence. 
-You can easily make sure it works by mining a new block on one of the two nodes.
-The other one will display newly mined block in it's history 
-(considering the situation when histories of two nodes were same before mining started)
 
 ## Wallet CLI
 
@@ -204,38 +201,12 @@ Initially this file exists in the repo and contains sample private key in wif fo
 If you with to change it, edit this file along with file ```pitcoin_modules/address```, 
 that must contain corresponding address in mainnet format.
 
-* Getting help about the system:
+After launch you should be seeing messages like this:
+```
+new block was mined and broadcast to the network. block hash is:  000304598f1158c21aa83df95ed20ce60a65c8ca118d65e9cc8c80d2bcce3f7b
+```
+You can go to the api and check out those mined blocks.
 
-(pitcoin-miner-cli) help
-```
-Documented commands (type help <topic>):
-========================================
-add_node  consensus  help  mine  quit
-```
-
-* Adding node to the list of known nodes:
-```
-(pitcoin_modules-miner-cli) add_node http://127.0.0.1:5002
-```
-
-* Switching to the longest valid chain among known nodes:
-```
-(pitcoin_modules-miner-cli) consensus
-Loaded new chain from  http://127.0.0.1:5000  with length  3
-```
-
-* Calling ```mine```:
-```
-(pitcoin-miner-cli) mine
-block was mined and broadcasted to other nodes
-hash of the new block:  0046cc50bc59bcbcb1adc5a5b45ee0ae703e00418f51706583e1d39f05af3ef1
-```
-
-* Once you're done, type ```quit``` to exit miner_cli.
-```
-(pitcoin_modules-miner-cli) quit
-Thank you for using pitcoin-miner-clii
-```
 
 ## Testing
 Running tests:
