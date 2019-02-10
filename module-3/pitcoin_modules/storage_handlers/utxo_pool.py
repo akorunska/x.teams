@@ -27,12 +27,20 @@ class UTXOStorage:
         pubkey_hashed = script[6:len(script) - 4]
         return get_address_from_hashed_public_key(pubkey_hashed)
 
+    @staticmethod
+    def __address_from_p2wpkh_script(script: str):
+        pubkey_hashed = script[6:len(script) - 4]
+        return get_address_from_hashed_public_key(pubkey_hashed)
+
     def get_all_unspent_outputs_for_address(self, address):
         res = []
         outp_list = self.get_all_outputs()
-        for outp in outp_list:
-            if self.__address_from_p2pkh_script(outp.scriptpubkey) == address:
-                res.append(outp)
+        if address[:2] == 'tb':
+            pass
+        else:
+            for outp in outp_list:
+                if self.__address_from_p2pkh_script(outp.scriptpubkey) == address:
+                    res.append(outp)
         return res
 
     def contains_output(self, outp):

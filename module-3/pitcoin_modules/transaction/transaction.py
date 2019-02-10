@@ -164,12 +164,13 @@ class Serializer:
         return Serializer.serialize_transaction(Transaction(inputs, outputs, locktime))
 
 
-
 class Deserializer:
     @staticmethod
     def deserialize_transaction(stx: str):
         cur = 0
         version = int(reverse_bytes(stx[cur:cur + 8]), 16)
+        if version == 2:
+            return Deserializer.deserialize_sw_transaction(stx)
         cur += 8
 
         inputs_count = int(stx[cur:cur + 2], 16)
@@ -203,3 +204,54 @@ class Deserializer:
 
         locktime = int(reverse_bytes(stx[cur:cur + 8]), 16)
         return Transaction(inputs, outputs, locktime)
+
+    @staticmethod
+    def deserialize_sw_transaction(stx: str):
+        cur = 0
+        version = int(reverse_bytes(stx[cur:cur + 8]), 16)
+        cur += 8
+
+        cur += 4
+
+        inputs_count = int(stx[cur:cur + 2], 16)
+        cur += 2
+        inputs = []
+        for i in range(inputs_count):
+            txid = reverse_bytes(stx[cur:cur + 64])
+            cur += 64
+            vout = int(reverse_bytes(stx[cur:cur + 8]), 16)
+            cur += 8
+            len = int(stx[cur:cur + 2], 16)
+            cur += 2
+            scriptsig = stx[cur:cur + len * 2]
+            cur += len * 2
+            cur += 8  # skipping sequence
+
+            inputs.append(Input(txid, vout, scriptsig))
+
+        outputs_count = int(stx[cur:cur + 2], 16)
+        cur += 2
+        outputs = []
+        for i in range(outputs_count):
+            value = int(reverse_bytes(stx[cur:cur + 16]), 16)
+            cur += 16
+            len = int(stx[cur:cur + 2], 16)
+            cur += 2
+            scriptpubkey = stx[cur:cur + len * 2]
+            cur += len * 2
+
+            outputs.append(Output(value, scriptpubkey))
+
+        witness_count = int(stx[cur:cur + 2], 16)
+        cur += 2
+        witness = []
+        for i in range(witness_count):
+            len = int(stx[cur:cur + 2], 16)
+            cur += 2
+            wit = stx[cur:cur + len * 2]
+            cur += len * 2
+
+            witness.append(wit)
+
+        locktime = int(reverse_bytes(stx[cur:cur + 8]), 16)
+        return Transaction(inputs, outputs, locktime, version=version, witness=witness)
