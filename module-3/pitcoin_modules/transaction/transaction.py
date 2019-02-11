@@ -12,9 +12,10 @@ class Transaction:
         self.inputs = inputs
         self.outputs = outputs
         self.locktime = locktime
-        self.witness = witness
-        self.wtxid = ""
+        self.witness = []
         self.txid = self.get_hash()
+        self.witness = witness
+        self.wtxid = self.get_hash()
 
     def get_hash(self):
         tx_data = Serializer.serialize_transaction(self)
@@ -30,7 +31,8 @@ class Transaction:
             "outputs": [output.__dict__ for output in self.outputs],
             "locktime": self.locktime,
             "txid": self.txid,
-            "witness": self.witness
+            "witness": self.witness,
+            "wtxid": self.wtxid
         }
         for i, output in zip(range(1, len(data['outputs']) + 1), data['outputs']):
             output['txid'] = self.txid
