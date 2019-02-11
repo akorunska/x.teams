@@ -30,7 +30,7 @@ class UTXOStorage:
     @staticmethod
     def __hashed_pubkey_from_p2wpkh_script(script: str):
         pubkey_hashed = script[4:len(script)]
-        return get_address_from_hashed_public_key(pubkey_hashed)
+        return pubkey_hashed
 
     def get_all_unspent_outputs_for_address(self, address):
         res = []
@@ -38,7 +38,6 @@ class UTXOStorage:
         if address[:2] == 'tb':
             for outp in outp_list:
                 pubkey = self.__hashed_pubkey_from_p2wpkh_script(outp.scriptpubkey)
-                print(pubkey, get_bech32_address_from_hashed_pubkey(pubkey))
                 if get_bech32_address_from_hashed_pubkey(pubkey) == address:
                     res.append(outp)
         else:

@@ -61,7 +61,7 @@ def get_bech32_address(compressed_public_key: bytes, hrp):
     ripemd160 = hashlib.new('ripemd160')
     ripemd160.update(binascii.unhexlify(pubkey_sha_encrypted))
     pubkey_sha_ripemd_encrypted = binascii.unhexlify(ripemd160.hexdigest())
-    print(len(binascii.hexlify(pubkey_sha_ripemd_encrypted)))
+    print(binascii.hexlify(pubkey_sha_ripemd_encrypted))
     converted = [0] + convertbits(list(pubkey_sha_ripemd_encrypted), 8, 5)
 
     checksum = bech32_create_checksum(hrp, converted)
@@ -74,7 +74,7 @@ def get_bech32_address(compressed_public_key: bytes, hrp):
 
 
 def get_bech32_address_from_hashed_pubkey(pubkey, hrp='tb'):
-    converted = [0] + convertbits(list(binascii.hexlify(pubkey)), 8, 5)
+    converted = [0] + convertbits(list(binascii.unhexlify(pubkey)), 8, 5)
 
     checksum = bech32_create_checksum(hrp, converted)
 
