@@ -95,7 +95,6 @@ class TestGetBech32Address(unittest.TestCase):
     def test_bech32_from_hashed_pubkey(self):
         compressed_pk = b'0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798'
         bech32 = get_bech32_address(compressed_pk, 'tb')
-        print(bech32)
         self.assertEqual("tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx", bech32)
         self.assertEqual(bech32, get_bech32_address_from_hashed_pubkey("751e76e8199196d454941c45d1b3a323f1433bd6"))
 

@@ -5,7 +5,7 @@ import time
 import requests
 
 from pitcoin_modules.transaction import *
-from pitcoin_modules.block import Block
+from pitcoin_modules.block import Block, get_merkle_root
 from pitcoin_modules.settings import *
 from pitcoin_modules.wallet import *
 
@@ -33,15 +33,22 @@ class Blockchain:
         prev = requests.get(self.api_url + '/chain/block').json()
         request_data = requests.get(self.api_url + '/transaction/pendings' + '?amount=3').json()
         tx_list = [Serializer.serialize_transaction(Transaction.from_dict(item)) for item in request_data]
-        tx_list.append(Serializer.serialize_transaction(self.construct_miners_rewarding_transaction()))
+        if len(tx_list) > 0:
+            wtxid_list = [Deserializer.deserialize_transaction(tx).wtxid for tx in tx_list]
+            wtx_merkle = codecs.decode(get_merkle_root(wtxid_list), 'ascii')
+        else:
+            wtx_merkle = ""
+
+        tx_list.append(Serializer.serialize_transaction(self.construct_miners_rewarding_transaction(wtx_merkle)))
         block = Block(str(int(time.time())), prev['hash_value'], tx_list)
         return block
 
-    def construct_miners_rewarding_transaction(self):
+    def construct_miners_rewarding_transaction(self, wtx_merkle):
         recipient = read_file_contents(PROJECT_ROOT + '/address')
         block_hei = requests.get(self.api_url + '/chain/length').json()['chain_length']
         reward = requests.get(self.api_url + '/meta').json()['current_miner_reward']
-        tx = CoinbaseTransaction(construct_transaction_locking_script(recipient), block_hei, reward)
+
+        tx = CoinbaseTransaction(construct_transaction_locking_script(recipient), block_hei, reward, wtx_merkle)
         return tx
 
     def resolve_conflicts(self):

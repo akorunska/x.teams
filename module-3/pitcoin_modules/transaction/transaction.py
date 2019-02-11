@@ -55,10 +55,13 @@ class Transaction:
 
 
 class CoinbaseTransaction(Transaction):
-    def __init__(self, scriptpubkey, block_height: int, reward):
+    def __init__(self, scriptpubkey, block_height: int, reward, wtx_merkle_root):
         inputs = []
         inputs.append(Input("0" * 64, int("f" * 8, 16), "%016x" % block_height))
-        outputs = [Output(int(reward * 10**8), scriptpubkey)]
+        outputs = [
+            Output(int(reward * 10**8), scriptpubkey),
+            Output(0, "6a%02x%s" % (len(wtx_merkle_root) * 2, wtx_merkle_root))
+        ]
         super().__init__(inputs, outputs, 0)
 
 

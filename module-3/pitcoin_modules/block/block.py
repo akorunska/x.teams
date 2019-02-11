@@ -2,7 +2,7 @@ import json
 
 from pitcoin_modules.block.merkle import get_merkle_root
 from pitcoin_modules.wallet.wallet import sha256_bytes_to_bytes
-
+from pitcoin_modules.transaction import *
 import codecs
 
 
@@ -12,7 +12,15 @@ class Block:
         self.nonce = nonce
         self.previous_hash = previous_hash
         self.transactions = transactions
-        self.merkle_root = codecs.decode(get_merkle_root(self.transactions), 'ascii')
+        tx_list = [Deserializer.deserialize_transaction(tx) for tx in self.transactions]
+        txid_list = [tx.txid for tx in tx_list]
+        self.merkle_root = codecs.decode(get_merkle_root(txid_list), 'ascii')
+
+        wtxid_list = [tx.wtxid for tx in tx_list[:-1]]
+        if len(wtxid_list) > 0:
+            self.sw_merkle_root = codecs.decode(get_merkle_root(wtxid_list), 'ascii')
+        else:
+            self.sw_merkle_root = ""
         self.hash_value = self.get_hash()
 
     def validate_all_transactions(self, tx_list=[]):
