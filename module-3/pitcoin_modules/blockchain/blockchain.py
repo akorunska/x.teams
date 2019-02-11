@@ -93,7 +93,7 @@ class Blockchain:
     def genesis_block(self):
         genesis = Block(
             str(int(time.time())), 64 * '0',
-            [Serializer.serialize_transaction(self.construct_miners_rewarding_transaction())]
+            [Serializer.serialize_transaction(self.construct_miners_rewarding_transaction(""))]
         )
         return self.mine(block=genesis)
 
