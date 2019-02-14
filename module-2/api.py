@@ -2,6 +2,7 @@ import requests
 import json
 from flask_restful import Resource, Api, reqparse
 from flask import Flask, request
+from flask_cors import CORS
 
 from pitcoin_modules.storage_handlers.pending_pool import MemPoolStorage
 from pitcoin_modules.storage_handlers.chain import BlocksStorage
@@ -17,6 +18,9 @@ nodes = []
 
 app = Flask(__name__)
 api = Api(app)
+
+# enable CORS
+CORS(app)
 
 
 class Transaction(Resource):

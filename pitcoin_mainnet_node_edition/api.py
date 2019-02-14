@@ -2,6 +2,7 @@ import requests
 import json
 from flask_restful import Resource, Api, reqparse
 from flask import Flask, request
+from flask_cors import CORS
 
 from pitcoin_modules.storage_handlers.pending_pool import MemPoolStorage
 from pitcoin_modules.storage_handlers.chain import BlocksStorage
@@ -23,6 +24,9 @@ app = Flask(__name__)
 # log = logging.getLogger('werkzeug')
 # log.disabled = True
 # app.logger.disabled = True
+
+# enable CORS
+CORS(app)
 
 api = Api(app)
 
