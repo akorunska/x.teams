@@ -48,10 +48,9 @@ class Transaction(Resource):
         )
         return response
 
-
-class TransactionNew(Resource):
     def post(self):
-        serialized_tx = codecs.decode(request.data)
+        json_data = json.loads(codecs.decode(request.data))
+        serialized_tx = json_data['transaction']
         deserialized = Deserializer.deserialize_transaction(serialized_tx)
         if mempool.contains_transaction(deserialized):
             return
@@ -67,7 +66,7 @@ class TransactionNew(Resource):
 
         #broadcasting transaction to all known nodes
         for node in nodes:
-            requests.post(node + '/transaction/new', serialized_tx)
+            requests.post(node + '/transaction', json_data)
 
         return response
 
@@ -139,32 +138,33 @@ class Chain(Resource):
 class ChainBlock(Resource):
     def get(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('height', type=int)
+        parser.add_argument('block_height', type=int)
         args = parser.parse_args()
 
         list = blocks.get_all_blocks()
-
-        if args['height'] and args['height'] < len(list):
-            block = list[args['height']]
+        if not 0 <= args['block_height'] < len(list):
+            data = "no block on such height"
+            code = 400
+        elif args['block_height']:
+            block = list[args['block_height']]
+            data = block.__dict__
+            code = 200
         else:
             block = blocks.get_last_block()
-        json_repr = json.dumps(block.__dict__)
+            data = block.__dict__
+            code = 200
+
 
         response = app.response_class(
-            response=json_repr,
-            status=200,
+            response=json.dumps({'block': data}),
+            status=code,
             mimetype='application/json'
         )
         return response
 
     def post(self):
         json_repr = json.loads(codecs.decode(request.data, 'ascii'))
-        block = Block(
-            json_repr['timestamp'],
-            json_repr['previous_hash'],
-            [tx for tx in json_repr['transactions']],
-            json_repr['nonce']
-        )
+        block = Block.from_json(json.loads(json_repr['block']))
 
         last_block = blocks.get_last_block()
         if last_block:
@@ -205,7 +205,7 @@ class ChainBlock(Resource):
 class ChainLength(Resource):
     def get(self):
         response = app.response_class(
-            response=json.dumps({"chain_length": len(blocks.get_all_blocks())}),
+            response=json.dumps({"chainlength": len(blocks.get_all_blocks())}),
             status=200,
             mimetype='application/json'
         )
@@ -273,12 +273,11 @@ class Meta(Resource):
         )
 
 
-api.add_resource(Transaction, '/transaction/', methods=['GET'])
-api.add_resource(TransactionNew, '/transaction/new', methods=['POST'])
+api.add_resource(Transaction, '/transaction', methods=['GET', 'POST'])
 api.add_resource(TransactionPending, '/transaction/pendings', methods=['GET', 'DELETE'])
 api.add_resource(TransactionDeserialize, '/transaction/deserialize', methods=['GET'])
 api.add_resource(Chain, '/chain', methods=['GET', 'DELETE'])
-api.add_resource(ChainBlock, '/chain/block', methods=['GET', 'POST'])
+api.add_resource(ChainBlock, '/block', methods=['GET', 'POST'])
 api.add_resource(ChainLength, '/chain/length', methods=['GET'])
 api.add_resource(Node, '/node', methods=['GET', 'POST'])
 api.add_resource(Balance, '/balance', methods=['GET'])

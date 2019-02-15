@@ -18,53 +18,56 @@ class Blockchain:
         if not block:
             block = self.create_block_with_loaded_transactions()
 
-        initial_chain_len = requests.get(self.api_url + '/chain/length').json()['chain_length']
+        initial_chain_len = requests.get(self.api_url + '/chain/length').json()['chainlength']
         target = requests.get(self.api_url + '/meta').json()['current_target']
         target = int(target, 16)
 
         while int(block.hash_value, 16) > target:
             block.nonce = random.randint(0, 2**32)
             block.hash_value = block.get_hash()
-            if requests.get(self.api_url + '/chain/length').json()['chain_length'] > initial_chain_len:
+            if requests.get(self.api_url + '/chain/length').json()['chainlength'] > initial_chain_len:
                 return None
         return block
 
     def create_block_with_loaded_transactions(self):
-        prev = requests.get(self.api_url + '/chain/block').json()
+        data = requests.get(self.api_url + '/block').json()
+        prev = json.loads(data['block'])
         request_data = requests.get(self.api_url + '/transaction/pendings' + '?amount=3').json()
         tx_list = [Serializer.serialize_transaction(Transaction.from_dict(item)) for item in request_data]
 
         tx_list.append(Serializer.serialize_transaction(self.construct_miners_rewarding_transaction()))
-        block = Block(str(int(time.time())), prev['hash_value'], tx_list)
+        target = requests.get(self.api_url + '/meta').json()['current_target']
+        block = Block(str(int(time.time())), prev['hash_value'], tx_list, target)
         return block
 
     def construct_miners_rewarding_transaction(self):
         recipient = read_file_contents(PROJECT_ROOT + '/address')
-        block_hei = requests.get(self.api_url + '/chain/length').json()['chain_length']
+        block_hei = requests.get(self.api_url + '/chain/length').json()['chainlength']
         reward = requests.get(self.api_url + '/meta').json()['current_miner_reward']
 
         tx = CoinbaseTransaction(construct_transaction_locking_script(recipient), block_hei, reward)
         return tx
 
     def resolve_conflicts(self):
-        nodes_list = requests.get(self.api_url + '/node').json()
-        current_len = requests.get(self.api_url + '/chain/length').json()['chain_length']
-        longest = {'len': current_len, 'source': ''}
-        for node in nodes_list:
-            node_chain_len = requests.get(node + '/chain/length').json()['chain_length']
-            if node_chain_len > longest['len']:
-                block_list = requests.get(node + '/chain').json()
-                block_obj_list = [Block.from_json(b) for b in block_list]
-                if Blockchain.is_valid_chain(block_obj_list):
-                    longest['len'] = node_chain_len
-                    longest['source'] = node
-        if longest['source'] == '':
-            return ""
-        requests.delete(self.api_url + '/chain')
-        requests.delete(self.api_url + '/utxo')
-        for block in block_list:
-            requests.post(self.api_url + '/chain/block', json.dumps(block))
-        return longest
+        # nodes_list = requests.get(self.api_url + '/node').json()
+        # current_len = requests.get(self.api_url + '/chain/length').json()['chainlength']
+        # longest = {'len': current_len, 'source': ''}
+        # for node in nodes_list:
+        #     node_chain_len = requests.get(node + '/chain/length').json()['chainlength']
+        #     if node_chain_len > longest['len']:
+        #         block_list = requests.get(node + '/chain').json()
+        #         block_obj_list = [Block.from_json(b) for b in block_list]
+        #         if Blockchain.is_valid_chain(block_obj_list):
+        #             longest['len'] = node_chain_len
+        #             longest['source'] = node
+        # if longest['source'] == '':
+        #     return ""
+        # requests.delete(self.api_url + '/chain')
+        # requests.delete(self.api_url + '/utxo')
+        # for block in block_list:
+        #     requests.post(self.api_url + '/chain', json.dumps(block))
+        # return longest
+        pass
 
     @staticmethod
     def is_valid_chain(list):
@@ -86,21 +89,24 @@ class Blockchain:
         requests.post(self.api_url + '/node', node_url)
 
     def genesis_block(self):
+        target = requests.get(self.api_url + '/meta').json()['current_target']
         genesis = Block(
             str(int(time.time())), 64 * '0',
-            [Serializer.serialize_transaction(self.construct_miners_rewarding_transaction())]
+            [Serializer.serialize_transaction(self.construct_miners_rewarding_transaction())],
+            target
         )
         return self.mine(block=genesis)
 
-    def submit_tx(self, tx):
-        serialized = Serializer.serialize_transaction(tx)
-        requests.post(self.api_url + '/transaction/new', serialized)
+    def submit_tx(self, raw_tx):
+        data = json.dumps({'transaction': raw_tx})
+        return requests.post(self.api_url + '/transaction', data).json()
 
     def mine_and_submit_block(self):
         block = self.mine()
         if not block:
             return None
-        requests.post(self.api_url + '/chain/block', str(block))
+        data = json.dumps({'block': str(block)})
+        requests.post(self.api_url + '/block', data)
         return block.hash_value
 
 

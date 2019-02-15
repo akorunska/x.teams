@@ -1,5 +1,7 @@
 import cmd
 from pathlib import Path
+
+from pitcoin_modules import Blockchain
 from pitcoin_modules.wallet import *
 from pitcoin_modules.transaction import *
 from pitcoin_modules.settings import *
@@ -149,7 +151,8 @@ class WalletCLI(cmd.Cmd):
         'Get balance of the address\n' \
         'usage: <broadcast raw_tx>'
         raw_tx = arg.strip()
-        print(requests.post(self.api_url + '/transaction/new', raw_tx).json())
+        b = Blockchain()
+        print(b.submit_tx(raw_tx))
 
     def do_balance(self, arg):
         'Get balance of the address\n' \

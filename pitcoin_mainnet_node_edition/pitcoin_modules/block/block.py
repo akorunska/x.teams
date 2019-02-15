@@ -7,14 +7,15 @@ import codecs
 
 
 class Block:
-    def __init__(self, timestamp, previous_hash, transactions, nonce=0):
+    def __init__(self, timestamp, previous_hash, transactions, target, nonce=0):
         self.timestamp = timestamp
         self.nonce = nonce
-        self.previous_hash = previous_hash
+        self.previous_block_hash = previous_hash
         self.transactions = transactions
         tx_list = [Deserializer.deserialize_transaction(tx) for tx in self.transactions]
         txid_list = [tx.txid for tx in tx_list]
         self.merkle_root = codecs.decode(get_merkle_root(txid_list), 'ascii')
+        self.target = target
 
         self.hash_value = self.get_hash()
 
@@ -27,7 +28,7 @@ class Block:
 
     def get_hash(self):
         data = codecs.encode(self.timestamp, 'ascii') + codecs.encode(str(self.nonce), 'ascii') +\
-            codecs.encode(self.previous_hash, 'ascii')
+            codecs.encode(self.previous_block_hash, 'ascii')
         for tx in self.transactions:
             data += codecs.encode(tx)
         data += codecs.encode(self.merkle_root, 'ascii')
@@ -37,9 +38,10 @@ class Block:
     def from_json(json_str):
         block = Block(
             json_str['timestamp'],
-            json_str['previous_hash'],
+            json_str['previous_block_hash'],
             [tx for tx in json_str['transactions']],
-            json_str['nonce']
+            json_str['target'],
+            nonce=json_str['nonce']
         )
         return block
 

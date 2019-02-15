@@ -45,7 +45,7 @@ class BlocksStorage:
         if not b.validate_all_transactions():
             return False
         if len(blocks_list) != 0:
-            if blocks_list[-1].hash_value != b.previous_hash:
+            if blocks_list[-1].hash_value != b.previous_block_hash:
                 return False
         blocks_list.append(b)
         with open(self.storage_filepath, 'wb+') as fp:

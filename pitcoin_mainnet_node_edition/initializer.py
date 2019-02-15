@@ -1,4 +1,5 @@
 import errno
+import json
 import os
 import requests
 from pitcoin_modules.blockchain import Blockchain
@@ -35,7 +36,8 @@ def clear_storage(path):
 def genesis_block_setup():
     genesis_block = blockchain.genesis_block()
 
-    requests.post(api_url + '/chain/block', str(genesis_block))
+    data = json.dumps({'block': str(genesis_block)})
+    requests.post(api_url + '/block', data)
 
 
 def add_known_nodes():
