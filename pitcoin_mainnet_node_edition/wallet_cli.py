@@ -95,18 +95,6 @@ class WalletCLI(cmd.Cmd):
         self.hande_wallet_credentials_generation(options, hex_private_key, wif_private_key.decode("utf-8"))
 
 
-    def do_swnew(self, arg):
-        'Generate new private key and receive associated public key and address. \n' \
-        'usage: <swnew -a> \n' \
-        '-a: Save created address to the file on the machine called address.'
-
-        options = OptionsHandler.handle_do_new_options(arg)
-
-        hex_private_key = generate_private_key()
-        wif_private_key = convert_hex_private_key_to_wif(hex_private_key)
-        self.hande_swallet_credentials_generation(options, hex_private_key, wif_private_key.decode("utf-8"))
-
-
     def do_import(self, arg):
         'Import private key in WIF format and receive associated public key and address. \n' \
         'usage: <import path/to/file -c -a> \n' \
@@ -157,25 +145,6 @@ class WalletCLI(cmd.Cmd):
         print(tx)
         print(Serializer.serialize_transaction(tx))
 
-    def do_swsend(self, arg):
-        'Send some pitcoins to another address\n' \
-        'usage: <send recipient_address amount>'
-        options = OptionsHandler.handle_do_send_options(arg, self.user_privkey)
-        if not options['args_valid']:
-            return
-        # tx = Transaction(options['sender'], options['recipient'], options['amount'])
-        # tx.sign_transaction(self.user_privkey)
-        # serialized = Serializer.serialize_transaction(tx)
-        # requests.post(self.api_url + '/transaction/new', serialized)
-        if requests.get(self.api_url + '/balance?address=' + options['sender']).json()['balance'] < options['amount']:
-            print("sender does not have enough pitcoins for this transaction")
-            return
-        utxo_list = requests.get(self.api_url + '/utxo?address=' + options['sender']).json()
-        utxo_list = [Output(utxo['value'], utxo['scriptpubkey'], utxo['txid'], utxo['vout']) for utxo in utxo_list]
-        tx = construct_witness_transaction(self.user_privkey, options['sender'], options['recipient'], options['amount'], utxo_list)
-        print(tx)
-        print(Serializer.serialize_sw_transaction(tx))
-
     def do_broadcast(self, arg):
         'Get balance of the address\n' \
         'usage: <broadcast raw_tx>'
@@ -203,15 +172,6 @@ class WalletCLI(cmd.Cmd):
         WalletCLI.print_wallet_info(hex_private_key, wif_private_key, public_key.decode("utf-8"), address)
         if options["save_address"]:
             WalletCLI.save_address_to_file(address, "address")
-
-    @staticmethod
-    def hande_swallet_credentials_generation(options, hex_private_key, wif_private_key):
-        public_key = get_public_key_from_private_key(hex_private_key, use_compressed=True)
-        address = get_bech32_address(public_key, 'tb')
-
-        WalletCLI.print_wallet_info(hex_private_key, wif_private_key, public_key.decode("utf-8"), address)
-        if options["save_address"]:
-            WalletCLI.save_address_to_file(address, "swaddress")
 
     @staticmethod
     def print_wallet_info(hex_private_key, wif_private_key, public_key, address):

@@ -33,22 +33,17 @@ class Blockchain:
         prev = requests.get(self.api_url + '/chain/block').json()
         request_data = requests.get(self.api_url + '/transaction/pendings' + '?amount=3').json()
         tx_list = [Serializer.serialize_transaction(Transaction.from_dict(item)) for item in request_data]
-        if len(tx_list) > 0:
-            wtxid_list = [Deserializer.deserialize_transaction(tx).wtxid for tx in tx_list]
-            wtx_merkle = codecs.decode(get_merkle_root(wtxid_list), 'ascii')
-        else:
-            wtx_merkle = ""
 
-        tx_list.append(Serializer.serialize_transaction(self.construct_miners_rewarding_transaction(wtx_merkle)))
+        tx_list.append(Serializer.serialize_transaction(self.construct_miners_rewarding_transaction()))
         block = Block(str(int(time.time())), prev['hash_value'], tx_list)
         return block
 
-    def construct_miners_rewarding_transaction(self, wtx_merkle):
+    def construct_miners_rewarding_transaction(self):
         recipient = read_file_contents(PROJECT_ROOT + '/address')
         block_hei = requests.get(self.api_url + '/chain/length').json()['chain_length']
         reward = requests.get(self.api_url + '/meta').json()['current_miner_reward']
 
-        tx = CoinbaseTransaction(construct_transaction_locking_script(recipient), block_hei, reward, wtx_merkle)
+        tx = CoinbaseTransaction(construct_transaction_locking_script(recipient), block_hei, reward)
         return tx
 
     def resolve_conflicts(self):
@@ -93,7 +88,7 @@ class Blockchain:
     def genesis_block(self):
         genesis = Block(
             str(int(time.time())), 64 * '0',
-            [Serializer.serialize_transaction(self.construct_miners_rewarding_transaction(""))]
+            [Serializer.serialize_transaction(self.construct_miners_rewarding_transaction())]
         )
         return self.mine(block=genesis)
 

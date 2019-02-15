@@ -22,8 +22,6 @@ def tx_list_to_txo_list(tx_list):
 
 
 def check_tx_validity(tx: Transaction, tx_list: list):
-    if (tx.version == 2):
-        return check_sw_tx_validity(tx, tx_list)
     for input in tx.inputs:
         tx_with_output_to_unlock = get_tx_by_txid(tx_list, input.txid)
         if not tx_with_output_to_unlock:
@@ -44,6 +42,3 @@ def check_tx_validity(tx: Transaction, tx_list: list):
             return False
     return True
 
-
-def check_sw_tx_validity(tx: Transaction, tx_list: list):
-    return True

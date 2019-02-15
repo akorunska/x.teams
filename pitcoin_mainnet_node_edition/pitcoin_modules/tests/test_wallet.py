@@ -86,19 +86,6 @@ class TestGetAddressFromPrivateKey(unittest.TestCase):
         self.assertEqual(address, result)
 
 
-class TestGetBech32Address(unittest.TestCase):
-    def test_basic_mainnet_bech32(self):
-        compressed_pk = b'0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798'
-        bech32 = get_bech32_address(compressed_pk, 'bc')
-        self.assertEqual("bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4", bech32)
-
-    def test_bech32_from_hashed_pubkey(self):
-        compressed_pk = b'0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798'
-        bech32 = get_bech32_address(compressed_pk, 'tb')
-        self.assertEqual("tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx", bech32)
-        self.assertEqual(bech32, get_bech32_address_from_hashed_pubkey("751e76e8199196d454941c45d1b3a323f1433bd6"))
-
-
 class TestSingMessage(unittest.TestCase):
     def test_sing_and_check(self):
         privkey = "c1421c809f270aa475f16adeaf3dab4fb9d28eaccbf2e1e35ff38cf99609c308"
