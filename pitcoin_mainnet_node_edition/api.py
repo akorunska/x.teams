@@ -141,18 +141,15 @@ class ChainBlock(Resource):
         if args['block_height'] is None:
             block = blocks.get_last_block()
             data = block.__dict__
-            code = 200
         elif 0 <= args['block_height'] < len(block_list):
             block = block_list[args['block_height']]
             data = block.__dict__
-            code = 200
         elif args['block_height'] :
             data = "no block on such height"
-            code = 400
 
         response = app.response_class(
             response=json.dumps({'block': data}),
-            status=code,
+            status=200,
             mimetype='application/json'
         )
         return response
