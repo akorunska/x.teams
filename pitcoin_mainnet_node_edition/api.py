@@ -10,7 +10,6 @@ from pitcoin_modules.storage_handlers.utxo_pool import UTXOStorage
 from pitcoin_modules.storage_handlers.blockchain_meta import BlockchainMetaStorage
 from pitcoin_modules.settings import *
 from pitcoin_modules.blockchain.address_balance import *
-import logging
 
 
 mempool = MemPoolStorage()
@@ -20,10 +19,6 @@ blockchain_meta = BlockchainMetaStorage()
 nodes = []
 
 app = Flask(__name__)
-
-# log = logging.getLogger('werkzeug')
-# log.disabled = True
-# app.logger.disabled = True
 
 # enable CORS
 CORS(app)
@@ -141,19 +136,19 @@ class ChainBlock(Resource):
         parser.add_argument('block_height', type=int)
         args = parser.parse_args()
 
-        list = blocks.get_all_blocks()
-        if not 0 <= args['block_height'] < len(list):
-            data = "no block on such height"
-            code = 400
-        elif args['block_height']:
-            block = list[args['block_height']]
-            data = block.__dict__
-            code = 200
-        else:
+        block_list = blocks.get_all_blocks()
+
+        if args['block_height'] is None:
             block = blocks.get_last_block()
             data = block.__dict__
             code = 200
-
+        elif 0 <= args['block_height'] < len(block_list):
+            block = block_list[args['block_height']]
+            data = block.__dict__
+            code = 200
+        elif args['block_height'] :
+            data = "no block on such height"
+            code = 400
 
         response = app.response_class(
             response=json.dumps({'block': data}),
