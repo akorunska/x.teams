@@ -5,7 +5,7 @@
 </template>
 
 <style>
-#app {
-  margin-top: 60px
-}
+/*#app {*/
+  /*margin-top: 60px*/
+/*}*/
 </style>

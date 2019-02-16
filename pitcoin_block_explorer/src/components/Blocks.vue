@@ -1,7 +1,66 @@
 <template>
-  <div>
-    <p>{{ msg }}</p>
+  <div class="container">
+
+    <div>
+      <form class="form-row">
+        <select class="col-2 custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+          <option v-for="param in search_params" v-on:click="updateSearchParam(param)"> {{ param }}</option>
+        </select>
+
+        <div class="col-9" v-show="search_param === 'Block Height' ">
+          <input type="number" class="form-control  my-1 mr-sm-2" placeholder="0" min=0 v-model="filter">
+        </div>
+
+        <div class="col-9" v-show="search_param === 'Block Hash' ">
+          <input type="text" class="form-control my-1 mr-sm-2" placeholder="" v-model="filter">
+        </div>
+
+        <button type="submit" class="btn btn-light my-1 mr-sm-2" v-on:click="updateBlockData">Search</button>
+      </form>
+     </div>
+
+    <div v-if="status === 200" class="card my-1 mr-sm-2 border-success">
+
+      <div class="card-body">
+        <h5 class="card-title">Block header</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{ block['hash_value'] }}</h6>
+
+        <table class="table">
+          <tbody>
+            <tr>
+              <td>timestamp</td>
+              <td> {{ block['timestamp'] }} </td>
+            </tr>
+            <tr>
+              <td>nonce</td>
+              <td> {{ block['nonce'] }} </td>
+            </tr>
+            <tr>
+              <td>merkle root</td>
+              <td> {{ block['merkle_root'] }} </td>
+            </tr>
+            <tr>
+              <td>target</td>
+              <td> {{ block['target'] }} </td>
+            </tr>
+            <tr>
+              <td>previous block</td>
+              <td> {{ block['previous_block_hash'] }} </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div v-else-if="status === 400" class="card my-1 mr-sm-2 border-danger">
+      <div class="card-body">
+        <h5 class="card-title"> {{ block }}</h5>
+      </div>
+    </div>
+
   </div>
+
 </template>
 
 <script>
@@ -11,24 +70,39 @@ export default {
   name: 'Blocks',
   data() {
     return {
-      msg: '',
+      search_params: ['Block Height', 'Block Hash'],
+      search_param: 'Block Height',
+      block: '',
+      status: 0,
+      filter: 0,
     };
   },
   methods: {
-    getMessage() {
-      const path = 'http://localhost:5000/chain';
-      axios.get(path)
-        .then((res) => {
-          this.msg = res.data;
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.error(error);
-        });
+    updateSearchParam(param) {
+      this.search_param = param;
+      console.log(param);
     },
-  },
-  created() {
-    this.getMessage();
+    async updateBlockData() {
+      let path = 'http://localhost:5000/block';
+      if (this.search_param === 'Block Height') {
+        path += '?block_height=' + this.filter
+      }
+      // if (this.search_param === 'Block Hash') {
+      //   path += '?block_hash=' + this.filter
+      // }
+
+      try {
+        let res = await axios.get(path);
+        this.status = res.status;
+        this.block = res.data['block'];
+        if (this.block === 'no block on such height') {
+          this.status = 400;
+        }
+      } catch (e) {
+        console.log(e)
+      }
+      console.log(this.status)
+    }
   },
 };
 </script>

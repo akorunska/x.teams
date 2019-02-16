@@ -1,36 +1,25 @@
 <template>
   <div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">Pitcoin Block Explorer</a>
+      <div class="navbar-brand">Pitcoin Block Explorer</div>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#" v-on:click="updateContent('home')"> Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" v-on:click="updateContent('blocks')">Blocks</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" v-on:click="updateContent('transactions')">Transactions</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" v-on:click="updateContent('utxo_pool')">UTXO Pool</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" v-on:click="updateContent('pending_pool')">Pending Pool</a>
-          </li>
+
+          <div v-for="tab in tabs">
+            <li v-if="tab === active_component" class="nav-item active">
+              <a class="nav-link" href="#" v-on:click="updateContent(tab)"> {{ tab }} <span class="sr-only">(current)</span></a>
+            </li>
+            <li v-else class="nav-item">
+              <a class="nav-link" href="#" v-on:click="updateContent(tab)"> {{ tab }} </a>
+            </li>
+          </div>
+
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
       </div>
     </nav>
 
-      <component
-        v-bind:is="content"
-      ></component>
+    <component v-bind:is="content"></component>
 
   </div>
 </template>
@@ -43,22 +32,22 @@ import Transactions from './Transactions'
     name: "Navbar",
     data() {
       return {
-        content: '',
+        tabs: ['Home', 'Blocks', 'Transactions', 'UTXO Pool', 'Pending Pool'],
+        active_component: 'Blocks',
+        content: this.updateContent(this.active_component),
       };
     },
     methods: {
       updateContent(data) {
-        if (data === 'home') {
+        this.active_component = data;
+        if (data === 'Home') {
           this.content = '';
-        } else if (data === 'blocks') {
+        } else if (data === 'Blocks') {
           this.content = Blocks;
-        } else if (data === 'transactions') {
+        } else if (data === 'Transactions') {
           this.content = Transactions;
         }
       },
-    },
-    created() {
-
     },
   }
 </script>
