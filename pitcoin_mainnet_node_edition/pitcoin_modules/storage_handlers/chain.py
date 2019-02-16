@@ -66,6 +66,13 @@ class BlocksStorage:
             return blocks_list
         return blocks_list[-n:]
 
+    def get_block_by_hash(self, hash):
+        blocks_list = self.get_all_blocks()
+        for block in blocks_list:
+            if block.hash_value == hash:
+                return block
+        return None
+
     def delete_all_blocks_from_mempool(self):
         blocks_list = []
         with open(self.storage_filepath, 'wb+') as fp:

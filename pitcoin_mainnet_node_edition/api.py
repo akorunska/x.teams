@@ -134,18 +134,26 @@ class ChainBlock(Resource):
     def get(self):
         parser = reqparse.RequestParser()
         parser.add_argument('block_height', type=int)
+        parser.add_argument('block_hash', type=str)
         args = parser.parse_args()
 
         block_list = blocks.get_all_blocks()
 
-        if args['block_height'] is None:
+        if not args['block_height'] is None:
+            if 0 <= args['block_height'] < len(block_list):
+                block = block_list[args['block_height']]
+                data = block.__dict__
+            elif args['block_height'] :
+                data = "no block on such height"
+        elif not args['block_hash'] is None:
+            block = blocks.get_block_by_hash(args['block_hash'])
+            if block is None:
+                data = "no block with such hash"
+            else:
+                data = block.__dict__
+        else:
             block = blocks.get_last_block()
             data = block.__dict__
-        elif 0 <= args['block_height'] < len(block_list):
-            block = block_list[args['block_height']]
-            data = block.__dict__
-        elif args['block_height'] :
-            data = "no block on such height"
 
         response = app.response_class(
             response=json.dumps({'block': data}),

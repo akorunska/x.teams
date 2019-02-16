@@ -87,9 +87,9 @@ export default {
       if (this.search_param === 'Block Height') {
         path += '?block_height=' + this.filter
       }
-      // if (this.search_param === 'Block Hash') {
-      //   path += '?block_hash=' + this.filter
-      // }
+      if (this.search_param === 'Block Hash') {
+        path += '?block_hash=' + this.filter
+      }
 
       try {
         let res = await axios.get(path);
@@ -97,6 +97,8 @@ export default {
         this.block = res.data['block'];
         if (this.block === 'no block on such height') {
           this.status = 400;
+        } else if (this.block === 'no block with such hash') {
+          this.status = 400
         }
       } catch (e) {
         console.log(e)
