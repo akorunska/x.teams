@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Blocks from '@/components/Blocks'
+import Navbar from '@/components/Navbar'
 
 Vue.use(Router)
 
@@ -8,8 +8,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Blocks',
-      component: Blocks
+      name: 'Navbar',
+      component: Navbar
     }
   ]
 })
