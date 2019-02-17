@@ -28,9 +28,9 @@
         <div class="card-body">
           <h5 class="card-title">Transaction</h5>
           <h6 class="card-subtitle mb-2 text-muted">{{ transaction['txid'] }}</h6>
-          <ul class="list-group list-group-flush">
 
-            <li class="list-group-item"> Header </li>
+          <h5 class="card-title">Header</h5>
+          <ul class="list-group list-group-flush">
              <li class="list-group-item">
               <table class="table">
                 <tbody>
@@ -45,9 +45,11 @@
                 </tbody>
               </table>
             </li>
-            <li class="list-group-item"></li>
+          </ul>
 
-            <li class="list-group-item"> Inputs </li>
+          <br>
+          <h5 class="card-title">Inputs</h5>
+          <ul class="list-group list-group-flush">
             <li  v-for="input in transaction['inputs']" class="list-group-item">
                <table class="table">
                 <tbody>
@@ -66,8 +68,11 @@
                 </tbody>
               </table>
             </li>
+          </ul>
 
-            <li class="list-group-item"> Outputs </li>
+          <br>
+          <h5 class="card-title">Outputs</h5>
+          <ul class="list-group list-group-flush">
             <li v-for="output in transaction['outputs']" class="list-group-item">
               <table class="table">
                 <tbody>

@@ -51,6 +51,15 @@
           </tbody>
         </table>
       </div>
+
+      <div class="card-body">
+        <h5 class="card-title">Transactions</h5>
+        <h6 class="card-subtitle mb-2 text-muted"> block contains {{ block['transactions'].length }} transactions</h6>
+          <ul class="list-group list-group-flush">
+
+            <li v-for="transaction in block['transactions']" class="list-group-item"> {{transaction}} </li>
+          </ul>
+      </div>
     </div>
 
     <div v-else-if="status === 400" class="card my-1 mr-sm-2 border-danger">
