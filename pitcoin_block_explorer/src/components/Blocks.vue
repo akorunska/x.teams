@@ -120,10 +120,11 @@ export default {
       }
     },
     async redirectToBlock(block_hash) {
-      if (block_hash != '0000000000000000000000000000000000000000000000000000000000000000')
-      this.search_param = 'Block Hash';
-      this.filter = block_hash;
-      await this.updateBlockData();
+      if (block_hash !== '0000000000000000000000000000000000000000000000000000000000000000') {
+        this.search_param = 'Block Hash';
+        this.filter = block_hash;
+        await this.updateBlockData();
+      }
     }
   },
 };

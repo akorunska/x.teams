@@ -55,7 +55,11 @@
                 <tbody>
                   <tr>
                     <td>txid</td>
-                    <td> {{ input['txid'] }} </td>
+                    <td>
+                      <a href="#" v-on:dblclick="redirectToTransaction(input['txid'])">
+                        {{ input['txid'] }}
+                      </a>
+                    </td>
                   </tr>
                   <tr>
                     <td>vout</td>
@@ -160,6 +164,13 @@ export default {
         }
       }
       console.log(this.transactions)
+    },
+    async redirectToTransaction(txid) {
+      if (txid !== '0000000000000000000000000000000000000000000000000000000000000000') {
+        this.search_param = 'Search by txid';
+        this.filter = txid;
+        await this.updateTransactionsData()
+      }
     }
   },
 };
