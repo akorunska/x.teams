@@ -1,13 +1,172 @@
 <template>
-    <H2>Transactions</H2>
+  <div class="container">
+
+    <div>
+      <form class="form-row">
+        <select class="col-2 custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+          <option v-for="param in search_params" v-on:click="updateSearchParam(param)"> {{ param }}</option>
+        </select>
+
+        <div class="col-9" v-show="search_param === 'Search by txid' ">
+          <input type="text" class="form-control  my-1 mr-sm-2" v-model="filter">
+        </div>
+
+        <div class="col-9" v-show="search_param === 'Get all' ">
+          <input type="text" class="form-control  my-1 mr-sm-2" disabled v-model="filter">
+        </div>
+
+        <div class="col-9" v-show="search_param === 'Deserialize Raw' ">
+          <textarea class="form-control my-1 mr-sm-2" v-model="filter"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-light my-1 mr-sm-2" v-on:click="updateTransactionsData">Search</button>
+      </form>
+     </div>
+
+    <div v-if="status === 200">
+      <div v-for="transaction in transactions" class="card my-1 mr-sm-2 border-success">
+        <div class="card-body">
+          <h5 class="card-title">Transaction</h5>
+          <h6 class="card-subtitle mb-2 text-muted">{{ transaction['txid'] }}</h6>
+          <ul class="list-group list-group-flush">
+
+            <li class="list-group-item"> Header </li>
+             <li class="list-group-item">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td>version</td>
+                    <td> {{ transaction['version'] }} </td>
+                  </tr>
+                  <tr>
+                    <td>locktime</td>
+                    <td> {{ transaction['locktime'] }} </td>
+                  </tr>
+                </tbody>
+              </table>
+            </li>
+            <li class="list-group-item"></li>
+
+            <li class="list-group-item"> Inputs </li>
+            <li  v-for="input in transaction['inputs']" class="list-group-item">
+               <table class="table">
+                <tbody>
+                  <tr>
+                    <td>txid</td>
+                    <td> {{ input['txid'] }} </td>
+                  </tr>
+                  <tr>
+                    <td>vout</td>
+                    <td> {{ input['vout'] }} </td>
+                  </tr>
+                  <tr>
+                    <td>scriptsig</td>
+                    <td> {{ input['scriptsig'] }} </td>
+                  </tr>
+                </tbody>
+              </table>
+            </li>
+
+            <li class="list-group-item"> Outputs </li>
+            <li v-for="output in transaction['outputs']" class="list-group-item">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td>value</td>
+                    <td> {{ output['value'] }} </td>
+                  </tr>
+                  <tr>
+                    <td>scriptpubkey</td>
+                    <td> {{ output['scriptpubkey'] }} </td>
+                  </tr>
+                </tbody>
+              </table>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+
+    <div v-else-if="status === 400" class="card my-1 mr-sm-2 border-danger">
+      <div class="card-body">
+        <h5 class="card-title"> Error </h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{ transactions }}</h6>
+      </div>
+    </div>
+
+  </div>
+
 </template>
 
+
 <script>
-    export default {
-        name: "Transactions"
+import axios from 'axios';
+import settings from '../settings'
+
+
+export default {
+  name: 'Transactions',
+  data() {
+    return {
+      search_params: ['Search by txid', 'Get all', 'Deserialize Raw'],
+      search_param: 'Search by txid',
+      transactions: [],
+      status: 0,
+      filter: "",
+    };
+  },
+  methods: {
+    updateSearchParam(param) {
+      this.search_param = param;
+      this.filter = ""
+    },
+    async updateTransactionsData() {
+      let path = settings.pitcoinNodeUrl + '/transaction';
+
+      if (this.search_param === 'Deserialize Raw') {
+        path += '/deserialize?data=' + this.filter;
+
+        try {
+          let res = await axios.get(path);
+          this.status = res.status;
+          this.transactions = [res.data];
+          console.log(this.transactions)
+        } catch (e) {
+          console.log(e)
+        }
+      }
+      else {
+        if (this.search_param === 'Search by txid')
+          path += '?txid=' + this.filter;
+
+        try {
+          let res = await axios.get(path);
+          console.log(res.data.length);
+          if (res.data.length === 0) {
+            this.status = 400;
+            this.transactions = "no transactions with such txid";
+          } else {
+            this.status = res.status;
+            this.transactions = res.data;
+          }
+        } catch (e) {
+          console.log(e)
+        }
+      }
+      console.log(this.transactions)
     }
+  },
+};
 </script>
 
-<style scoped>
 
+<style scoped>
+  table {
+    table-layout: fixed;
+  }
+
+  table tr td {
+    word-wrap: break-word;
+  }
 </style>

@@ -8,7 +8,7 @@
         </select>
 
         <div class="col-9" v-show="search_param === 'Block Height' ">
-          <input type="number" class="form-control  my-1 mr-sm-2" placeholder="0" min=0 v-model="filter">
+          <input type="number" class="form-control  my-1 mr-sm-2" placeholder="" min=0 v-model="filter">
         </div>
 
         <div class="col-9" v-show="search_param === 'Block Hash' ">
@@ -55,7 +55,8 @@
 
     <div v-else-if="status === 400" class="card my-1 mr-sm-2 border-danger">
       <div class="card-body">
-        <h5 class="card-title"> {{ block }}</h5>
+        <h5 class="card-title"> Error </h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{ block }}</h6>
       </div>
     </div>
 
@@ -82,7 +83,6 @@ export default {
   methods: {
     updateSearchParam(param) {
       this.search_param = param;
-      console.log(param);
     },
     async updateBlockData() {
       let path = settings.pitcoinNodeUrl + '/block';
