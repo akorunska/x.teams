@@ -65,6 +65,8 @@
 
 <script>
 import axios from 'axios';
+import settings from '../settings'
+
 
 export default {
   name: 'Blocks',
@@ -83,7 +85,7 @@ export default {
       console.log(param);
     },
     async updateBlockData() {
-      let path = 'http://localhost:5000/block';
+      let path = settings.pitcoinNodeUrl + '/block';
       if (this.search_param === 'Block Height') {
         path += '?block_height=' + this.filter
       }
@@ -103,7 +105,6 @@ export default {
       } catch (e) {
         console.log(e)
       }
-      console.log(this.status)
     }
   },
 };

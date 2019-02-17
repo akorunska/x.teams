@@ -27,6 +27,8 @@
 <script>
 import Blocks from './Blocks'
 import Transactions from './Transactions'
+import UTXOPool from './UTXOPool'
+import PendingPool from './PendingPool'
 
   export default {
     name: "Navbar",
@@ -46,6 +48,10 @@ import Transactions from './Transactions'
           this.content = Blocks;
         } else if (data === 'Transactions') {
           this.content = Transactions;
+        } else if (data === 'UTXO Pool') {
+          this.content = UTXOPool
+        } else if (data === 'Pending Pool') {
+          this.content = PendingPool
         }
       },
     },
