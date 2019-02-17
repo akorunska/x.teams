@@ -70,10 +70,13 @@ class TransactionPending(Resource):
     def get(self):
         parser = reqparse.RequestParser()
         parser.add_argument('amount', type=int)
+        parser.add_argument('txid', type=str)
         args = parser.parse_args()
 
         if args['amount'] == 3:
             list = mempool.get_three_first_transactions()
+        elif args['txid']:
+            list = mempool.get_transaction_by_txid(args['txid'])
         else:
             list = mempool.get_all_transactions()
         response = app.response_class(

@@ -25,25 +25,29 @@
 </template>
 
 <script>
-import Blocks from './Blocks'
-import Transactions from './Transactions'
-import UTXOPool from './UTXOPool'
-import PendingPool from './PendingPool'
+  import Blocks from './Blocks'
+  import Transactions from './Transactions'
+  import UTXOPool from './UTXOPool'
+  import PendingPool from './PendingPool'
+  import Home from './Home'
 
   export default {
     name: "Navbar",
+    created() {
+      this.updateContent(this.active_component)
+    },
     data() {
       return {
         tabs: ['Home', 'Blocks', 'Transactions', 'UTXO Pool', 'Pending Pool'],
-        active_component: 'Blocks',
-        content: this.updateContent(this.active_component),
+        active_component: 'Home',
+        content: "",
       };
     },
     methods: {
       updateContent(data) {
         this.active_component = data;
         if (data === 'Home') {
-          this.content = '';
+          this.content = Home;
         } else if (data === 'Blocks') {
           this.content = Blocks;
         } else if (data === 'Transactions') {

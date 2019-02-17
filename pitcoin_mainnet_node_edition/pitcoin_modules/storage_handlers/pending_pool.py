@@ -74,6 +74,13 @@ class MemPoolStorage:
             return True
         return False
 
+    def get_transaction_by_txid(self, txid):
+        tx_list = self.get_all_transactions()
+        for tx in tx_list:
+            if tx.txid == txid:
+                return [tx]
+        return []
+
     def get_three_first_transactions(self):
         tx_list = self.get_all_transactions()
 

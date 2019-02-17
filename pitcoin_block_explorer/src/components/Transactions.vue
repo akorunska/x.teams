@@ -128,7 +128,8 @@ export default {
   methods: {
     updateSearchParam(param) {
       this.search_param = param;
-      this.filter = ""
+      this.filter = "";
+      this.transactions = [];
     },
     async updateTransactionsData() {
       let path = settings.pitcoinNodeUrl + '/transaction';

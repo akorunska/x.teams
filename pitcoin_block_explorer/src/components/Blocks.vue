@@ -96,6 +96,7 @@ export default {
   methods: {
     updateSearchParam(param) {
       this.search_param = param;
+      this.block = ''
     },
     async updateBlockData() {
       let path = settings.pitcoinNodeUrl + '/block';
