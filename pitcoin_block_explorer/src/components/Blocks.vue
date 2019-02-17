@@ -45,7 +45,11 @@
             </tr>
             <tr>
               <td>previous block</td>
-              <td> {{ block['previous_block_hash'] }} </td>
+              <td>
+                <a href="#" v-on:dblclick="redirectToBlock(block['previous_block_hash'])">
+                  {{ block['previous_block_hash'] }}
+                </a>
+              </td>
             </tr>
 
           </tbody>
@@ -114,6 +118,12 @@ export default {
       } catch (e) {
         console.log(e)
       }
+    },
+    async redirectToBlock(block_hash) {
+      if (block_hash != '0000000000000000000000000000000000000000000000000000000000000000')
+      this.search_param = 'Block Hash';
+      this.filter = block_hash;
+      await this.updateBlockData();
     }
   },
 };
