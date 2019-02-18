@@ -175,3 +175,38 @@ class Deserializer:
 
         locktime = int(reverse_bytes(stx[cur:cur + 8]), 16)
         return Transaction(inputs, outputs, locktime)
+
+
+ # <br>
+ #          <ul  class="list-group list-group-flush">
+ #            <li class="list-group-item">
+ #              <table class="table">
+ #                <thead>
+ #                  <tr>
+ #                    <th>Senders</th>
+ #                  </tr>
+ #                </thead>
+ #                <tbody>
+ #                  <td>
+ #                    <tr v-for="sender in transaction['senders']">{{sender}}</tr>
+ #                  </td>
+ #                </tbody>
+ #              </table>
+ #            </li>
+ #          </ul>
+ #          <ul  class="list-group list-group-flush">
+ #            <li class="list-group-item">
+ #              <table class="table">
+ #                <thead>
+ #                  <tr>
+ #                    <th>Recipients</th>
+ #                  </tr>
+ #                </thead>
+ #                <tbody>
+ #                  <td>
+ #                    <tr v-for="recipient in transaction['recipients']">{{recipient}}</tr>
+ #                  </td>
+ #                </tbody>
+ #              </table>
+ #            </li>
+ #          </ul
