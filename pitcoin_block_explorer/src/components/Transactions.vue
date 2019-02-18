@@ -29,6 +29,44 @@
           <h5 class="card-title">Transaction</h5>
           <h6 class="card-subtitle mb-2 text-muted">{{ transaction['txid'] }}</h6>
 
+          <br>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Senders</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <td v-if="transaction['senders'].length > 0">
+                    <tr v-for="sender in transaction['senders']">{{sender}}</tr>
+                  </td>
+                  <td v-else>
+                    <h6 class="card-subtitle mb-2 text-muted">This is coinbase transaction</h6>
+                  </td>
+                </tbody>
+              </table>
+            </li>
+          </ul>
+          <ul  class="list-group list-group-flush">
+            <li class="list-group-item">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Recipients</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <td>
+                    <tr v-for="recipient in transaction['recipients']">{{recipient}}</tr>
+                  </td>
+                </tbody>
+              </table>
+            </li>
+          </ul>
+
+          <br>
           <h5 class="card-title">Header</h5>
           <ul class="list-group list-group-flush">
              <li class="list-group-item">
