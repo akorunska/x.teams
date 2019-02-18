@@ -47,7 +47,7 @@
             <tr>
               <td>previous block</td>
               <td>
-                <a href="#" v-on:dblclick="redirectToBlock(block['previous_block_hash'])">
+                <a href="#" v-on:click="redirectToBlock(block['previous_block_hash'])">
                   {{ block['previous_block_hash'] }}
                 </a>
               </td>

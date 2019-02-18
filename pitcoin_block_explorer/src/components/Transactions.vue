@@ -95,7 +95,7 @@
                   <tr>
                     <td>txid</td>
                     <td>
-                      <a href="#" v-on:dblclick="redirectToTransaction(input['txid'])">
+                      <a href="#" v-on:click="redirectToTransaction(input['txid'])">
                         {{ input['txid'] }}
                       </a>
                     </td>
@@ -192,7 +192,6 @@ export default {
 
         try {
           let res = await axios.get(path);
-          console.log(res.data.length);
           if (res.data.length === 0) {
             this.status = 400;
             this.transactions = "no transactions with such txid";
@@ -204,15 +203,15 @@ export default {
           console.log(e)
         }
       }
-      console.log(this.transactions)
     },
     async redirectToTransaction(txid) {
+      console.log("hello");
       if (txid !== '0000000000000000000000000000000000000000000000000000000000000000') {
         this.search_param = 'Search by txid';
         this.filter = txid;
         await this.updateTransactionsData()
       }
-    }
+    },
   },
 };
 </script>
