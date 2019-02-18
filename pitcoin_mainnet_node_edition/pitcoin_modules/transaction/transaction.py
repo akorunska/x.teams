@@ -17,7 +17,8 @@ class Transaction:
 
         self.senders = []
         for input in self.inputs:
-            self.senders.append(self.address_from_unlocking_script(input.scriptsig))
+            if input.txid != '0' * 64:
+                self.senders.append(self.address_from_unlocking_script(input.scriptsig))
         self.recipients = []
         for output in self.outputs:
             self.recipients.append(self.address_from_locking_script(output.scriptpubkey))
