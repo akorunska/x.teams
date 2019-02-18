@@ -30,6 +30,7 @@
   import UTXOPool from './UTXOPool'
   import PendingPool from './PendingPool'
   import Home from './Home'
+  import Balance from './Balance'
 
   export default {
     name: "Navbar",
@@ -38,7 +39,7 @@
     },
     data() {
       return {
-        tabs: ['Home', 'Blocks', 'Transactions', 'UTXO Pool', 'Pending Pool'],
+        tabs: ['Home', 'Blocks', 'Transactions', 'UTXO Pool', 'Balance', 'Pending Pool'],
         active_component: 'Home',
         content: "",
       };
@@ -53,9 +54,11 @@
         } else if (data === 'Transactions') {
           this.content = Transactions;
         } else if (data === 'UTXO Pool') {
-          this.content = UTXOPool
+          this.content = UTXOPool;
+        } else if (data === 'Balance') {
+          this.content = Balance;
         } else if (data === 'Pending Pool') {
-          this.content = PendingPool
+          this.content = PendingPool;
         }
       },
     },
