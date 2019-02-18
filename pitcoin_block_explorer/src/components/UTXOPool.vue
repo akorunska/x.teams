@@ -69,8 +69,8 @@ export default {
   name: 'UTXOPool',
   data() {
     return {
-      search_params: ['Search by address', 'Get all'],
-      search_param: 'Search by address',
+      search_params: ['Get all', 'Search by address'],
+      search_param: 'Get all',
       outputs: [],
       status: 0,
       filter: "",

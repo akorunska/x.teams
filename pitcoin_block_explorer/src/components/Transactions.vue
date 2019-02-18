@@ -157,8 +157,8 @@ export default {
   name: 'Transactions',
   data() {
     return {
-      search_params: ['Search by txid', 'Get all', 'Deserialize Raw'],
-      search_param: 'Search by txid',
+      search_params: ['Get all', 'Search by txid', 'Deserialize Raw'],
+      search_param: 'Get all',
       transactions: [],
       status: 0,
       filter: "",
