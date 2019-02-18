@@ -96,7 +96,6 @@ class WalletCLI(cmd.Cmd):
         wif_private_key = convert_hex_private_key_to_wif(hex_private_key)
         self.hande_wallet_credentials_generation(options, hex_private_key, wif_private_key.decode("utf-8"))
 
-
     def do_import(self, arg):
         'Import private key in WIF format and receive associated public key and address. \n' \
         'usage: <import path/to/file -c -a> \n' \
@@ -109,17 +108,6 @@ class WalletCLI(cmd.Cmd):
         # todo check if wif in the file is valid
         hex_private_key = convert_wif_to_hex_private_key(wif_private_key)
         self.hande_wallet_credentials_generation(options, hex_private_key.decode("utf-8"), wif_private_key)
-
-    def do_swimport(self, arg):
-        'Import private key in WIF format and receive associated public key and address. \n' \
-        'usage: <swimport path/to/file  -a> \n' \
-        '-a: Save created address to the file on the machine called address.'
-        options = OptionsHandler.handle_do_import_options(arg)
-        if not options['args_valid']:
-            return
-        wif_private_key = read_file_contents(options['filepath'])
-        hex_private_key = convert_wif_to_hex_private_key(wif_private_key)
-        self.hande_swallet_credentials_generation(options, hex_private_key.decode("utf-8"), wif_private_key)
 
     def do_remember_privkey(self, arg):
         'Command, that must be called before any send operation. ' \
@@ -194,5 +182,7 @@ if __name__ == '__main__':
     WalletCLI().cmdloop()
 
 # remember_privkey 936abdc0429eb4b38a045fcb8f531ff7cf3888c3a83797df5d033106c4ea6a20
-# swsend 1C8RSTSSY34XHwShUdk18SZmm7wqc1sLqD 30
-# tb1qx5de2erumcw2w4kgzry6wcjewy86q248m78yqj
+# 0450e829ca678c60031a11b990fea865e03ba35d0579aa62750b918b98c4b935d803ecc57a4bb2fc2ab1193a87fca5386d71516aca89df267fc907bcb3b84d396a
+
+# 0433ecacecc0b1a775db2526d5c278ec351e2d874744fafa31746eb10d8af3dcb46b18ac7575a830d3e1db07777499b474c4bb2f3894186bd861239ce399bd520c
+# 1L7p5taqHMJsg8zZ3WkWgSBPcvaDXGNMVN

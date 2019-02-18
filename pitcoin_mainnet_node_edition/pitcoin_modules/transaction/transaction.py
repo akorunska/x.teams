@@ -15,6 +15,23 @@ class Transaction:
         self.witness = []
         self.txid = self.get_hash()
 
+        self.senders = []
+        for input in self.inputs:
+            self.senders.append(self.address_from_unlocking_script(input.scriptsig))
+        self.recipients = []
+        for output in self.outputs:
+            self.recipients.append(self.address_from_locking_script(output.scriptpubkey))
+
+    @staticmethod
+    def address_from_locking_script(script: str):
+        pubkey_hashed = script[6:len(script) - 4]
+        return get_address_from_hashed_public_key(pubkey_hashed)
+
+    @staticmethod
+    def address_from_unlocking_script(script: str):
+        pubkey = script[len(script) - 128:]
+        return get_address_from_public_key("04" + pubkey)
+
     def get_hash(self):
         tx_data = Serializer.serialize_transaction(self)
         return sha256_str_to_str(sha256_str_to_str(tx_data))
@@ -29,6 +46,8 @@ class Transaction:
             "outputs": [output.__dict__ for output in self.outputs],
             "locktime": self.locktime,
             "txid": self.txid,
+            "senders": self.senders,
+            "recipients": self.recipients
         }
         for i, output in zip(range(1, len(data['outputs']) + 1), data['outputs']):
             output['txid'] = self.txid

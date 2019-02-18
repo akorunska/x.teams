@@ -31,3 +31,5 @@ All you have to do is modify the port value inside the dev block:
 
 ```
 
+Modify node port in src/settings.js and in pitcoin_modules/settings.py (for pitcoin node).
+
