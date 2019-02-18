@@ -7,11 +7,11 @@
           <option v-for="param in search_params" v-on:click="updateSearchParam(param)"> {{ param }}</option>
         </select>
 
-        <div class="col-9" v-show="search_param === 'Search by address'">
+        <div class="col-8" v-show="search_param === 'Search by address'">
           <input type="text" class="form-control  my-1 mr-sm-2" v-model="filter">
         </div>
 
-        <div class="col-9" v-show="search_param === 'Get all' ">
+        <div class="col-8" v-show="search_param === 'Get all' ">
           <input type="text" class="form-control  my-1 mr-sm-2" disabled v-model="filter">
         </div>
 
@@ -80,6 +80,7 @@ export default {
       this.search_param = param;
       this.filter = "";
       this.outputs = [];
+      this.status = 0;
     },
     async updateOutputsData() {
       let path = settings.pitcoinNodeUrl + '/utxo';

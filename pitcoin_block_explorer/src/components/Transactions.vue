@@ -7,15 +7,15 @@
           <option v-for="param in search_params" v-on:click="updateSearchParam(param)"> {{ param }}</option>
         </select>
 
-        <div class="col-9" v-show="search_param === 'Search by txid' ">
+        <div class="col-8" v-show="search_param === 'Search by txid' ">
           <input type="text" class="form-control  my-1 mr-sm-2" v-model="filter">
         </div>
 
-        <div class="col-9" v-show="search_param === 'Get all' ">
+        <div class="col-8" v-show="search_param === 'Get all' ">
           <input type="text" class="form-control  my-1 mr-sm-2" disabled v-model="filter">
         </div>
 
-        <div class="col-9" v-show="search_param === 'Deserialize Raw' ">
+        <div class="col-8" v-show="search_param === 'Deserialize Raw' ">
           <textarea class="form-control my-1 mr-sm-2" v-model="filter"></textarea>
         </div>
 
@@ -130,6 +130,7 @@ export default {
       this.search_param = param;
       this.filter = "";
       this.transactions = [];
+      this.status = 0;
     },
     async updateTransactionsData() {
       let path = settings.pitcoinNodeUrl + '/transaction';

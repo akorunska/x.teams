@@ -7,11 +7,11 @@
           <option v-for="param in search_params" v-on:click="updateSearchParam(param)"> {{ param }}</option>
         </select>
 
-        <div class="col-9" v-show="search_param === 'Block Height' ">
+        <div class="col-8" v-show="search_param === 'Block Height' ">
           <input type="number" class="form-control  my-1 mr-sm-2" placeholder="" min=0 v-model="filter">
         </div>
 
-        <div class="col-9" v-show="search_param === 'Block Hash' ">
+        <div class="col-8" v-show="search_param === 'Block Hash' ">
           <input type="text" class="form-control my-1 mr-sm-2" placeholder="" v-model="filter">
         </div>
 
@@ -96,7 +96,8 @@ export default {
   methods: {
     updateSearchParam(param) {
       this.search_param = param;
-      this.block = ''
+      this.block = '';
+      this.status = 0;
     },
     async updateBlockData() {
       let path = settings.pitcoinNodeUrl + '/block';
