@@ -1,13 +1,14 @@
 import "./ERC20.sol";
-import "./Ownable.sol";
+import "./Managed.sol";
 
 pragma solidity ^0.5.0;
 
 
-contract LockedTransferringERC20 is ERC20, Ownable {
+contract LockedTransferringERC20 is ERC20, Managed {
     bool transferringEnabled = false;
 
-    function enableTokenTransfer () public onlyOwner {
+    // can only be called once
+    function enableTokenTransfer() public onlyOwner {
         transferringEnabled = true;
     }
 
