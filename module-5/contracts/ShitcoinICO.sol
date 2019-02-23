@@ -6,35 +6,37 @@ pragma solidity ^0.5.0;
 
 contract ShitcoinICO is Shitcoin {
     enum Phase { None, PrivateSale, PreSale, PreSaleEnded, ICO, PostICO, Over }
-    Phase public phase = Phase.None;
+    Phase public phase;
 
     uint public ICOStartTime;
 
-    constructor (address _tokenAddress) public {
+
+    constructor() public {
+        // phase = Phase.None;
     }
 
-    function startPrivateSale() public onlyAdmin {
+    function startPrivateSale() public onlyAdmin onlyActive {
         require(phase == Phase.None, "Private Sale mode can not be initiated now.");
         phase = Phase.PrivateSale;
     }
 
-    function startPreSale() public onlyAdmin {
+    function startPreSale() public onlyAdmin onlyActive {
         require(phase == Phase.PrivateSale, "Pre Sale can only be started right after Private Sale");
         phase = Phase.PreSale;
     }
 
-    function endPreSale() public onlyAdmin {
+    function endPreSale() public onlyAdmin onlyActive {
         require(phase == Phase.PreSale, "Pre sale was not started");
         phase = Phase.PreSaleEnded;
     }
 
-    function startICO() public onlyAdmin {
+    function startICO() public onlyAdmin onlyActive {
         require(phase == Phase.PreSaleEnded, "Pre Sale was not ended");
         phase = Phase.ICO;
         ICOStartTime = block.timestamp;
     }
 
-    function endICO() public onlyAdmin {
+    function endICO() public onlyAdmin onlyActive {
         require(phase == Phase.ICO, "ICO is not active");
         phase = Phase.Over;
     }
@@ -49,14 +51,13 @@ contract ShitcoinICO is Shitcoin {
         } else if (now <= ICOStartTime + 9 minutes) {
             return 3;
         }
-        phase = Phase.PostICO;
+        // phase = Phase.PostICO;
         return 4;
     }
 
-    function enableTokenTransfer() public onlyOwner {
+    function enableTokenTransfer() public onlyActive onlyOwner {
         require(phase == Phase.Over, "Token transferring can only be enabled after ICO is over");
         super.enableTokenTransfer();
     }
-
 
 }
