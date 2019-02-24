@@ -5,6 +5,7 @@ import "./LockedTransferringERC20.sol";
 contract Shitcoin is LockedTransferringERC20 {
     mapping (address => uint) investedEther;
     address payable public fundKeeper;
+    address[] public investors;
 
     constructor (address _fundKeeper) public {
         fundKeeper = address(uint160(_fundKeeper));
@@ -16,6 +17,9 @@ contract Shitcoin is LockedTransferringERC20 {
         require (tokenAmount != 0);
 
         _mint(investor, tokenAmount);
+        if (investedEther[investor] == 0) {
+            investors.push(investor);
+        }
         investedEther[investor] += weiAmount;
         fundKeeper.transfer(weiAmount);
 
