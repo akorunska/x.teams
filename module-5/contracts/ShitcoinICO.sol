@@ -36,18 +36,18 @@ contract ShitcoinICO is Shitcoin {
     uint public ICOPrice = (20 * weiInEther) / (centsInUSD * USDPerEth);
 
 
-    // address payable public teamAddress;
-    // uint public tokensReservedByTeam = 30000000;
-    // uint public tokensClaimedByTeam;
-    // address payable public seedInvestorAddress;
-    // uint public tokensReservedBySeedInvestor = 20000000;
-    // uint public tokensClaimedBySeedInvestor;
-    // address payable public advisorAddress;
-    // uint public tokensReservedByAdvisor = 50000000;
-    // uint public tokensClaimedByAdvisor;
-    // address payable public founderAddress;
-    // uint public tokensReservedByFounder = 50000000;
-    // uint public tokensClaimedByFounder;
+    address payable public teamAddress;
+    uint public tokensReservedByTeam = 30000000;
+    uint public tokensClaimedByTeam;
+    address payable public seedInvestorAddress;
+    uint public tokensReservedBySeedInvestor = 20000000;
+    uint public tokensClaimedBySeedInvestor;
+    address payable public advisorAddress;
+    uint public tokensReservedByAdvisor = 50000000;
+    uint public tokensClaimedByAdvisor;
+    address payable public founderAddress;
+    uint public tokensReservedByFounder = 50000000;
+    uint public tokensClaimedByFounder;
     // address payable public reservedAddress;
     // uint public tokensReserved = 50000000;
     // uint public tokensClaimedFromReserved;
@@ -82,6 +82,7 @@ contract ShitcoinICO is Shitcoin {
         require(phase == Phase.ICO);
         phase = Phase.Over;
         privateSaleOngoing = false;
+        _mint(owner(), 300000000 - totalSupply());
         ICOEndTime = block.timestamp;
     }
 
@@ -210,51 +211,78 @@ contract ShitcoinICO is Shitcoin {
 
 
 
-    // function setTeamAddress(address adr) public onlyAdmin onlyActive {
-    //     require(adr != address(0));
-    //     teamAddress = address(uint160(adr));
-    // }
 
-    // function allocateTokensForTeam() public onlyAdmin onlyActive {
-    //     require(phase == Phase.Over);
-    //     require(tokensReservedByTeam != tokensClaimedByTeam);
+    function setTeamAddress(address adr) public onlyAdmin onlyActive {
+        require(adr != address(0));
+        teamAddress = address(uint160(adr));
+    }
 
-    //     if (tokensClaimedByTeam < 20 * tokensReservedByTeam / 100) {
-    //         _mint(teamAddress,  (20 * tokensReservedByTeam / 100));
-    //         tokensClaimedByTeam += 20 * tokensReservedByTeam / 100;
-    //     }
-    //     if (now >= ICOEndTime + 6 minutes && tokensClaimedByTeam < 50 * tokensReservedByTeam / 100 ) {
-    //         _mint(teamAddress,  (30 * tokensReservedByTeam / 100));
-    //         tokensClaimedByTeam += 20 * tokensReservedByTeam / 100;
-    //     }
-    //     if (now >= ICOEndTime + 12 minutes && tokensClaimedByTeam < tokensReservedByTeam) {
-    //         _mint(teamAddress, (50 * tokensReservedByTeam / 100));
-    //          tokensClaimedByTeam += 50 * tokensReservedByTeam / 100;
-    //     }
-    // }
+    function allocateTokensForTeam() public onlyAdmin onlyActive {
+        require(phase == Phase.Over);
+        require(tokensReservedByTeam != tokensClaimedByTeam);
 
-    // function setFounderAddress(address adr) public onlyAdmin onlyActive {
-    //     require(adr != address(0));
-    //     founderAddress = address(uint160(adr));
-    // }
+        if (tokensClaimedByTeam < 20 * tokensReservedByTeam / 100) {
+            _mint(teamAddress,  (20 * tokensReservedByTeam / 100));
+            tokensClaimedByTeam += 20 * tokensReservedByTeam / 100;
+        }
+        if (now >= ICOEndTime + 6 minutes && tokensClaimedByTeam < 50 * tokensReservedByTeam / 100 ) {
+            _mint(teamAddress,  (30 * tokensReservedByTeam / 100));
+            tokensClaimedByTeam += 20 * tokensReservedByTeam / 100;
+        }
+        if (now >= ICOEndTime + 12 minutes && tokensClaimedByTeam < tokensReservedByTeam) {
+            _mint(teamAddress, (50 * tokensReservedByTeam / 100));
+            tokensClaimedByTeam += 50 * tokensReservedByTeam / 100;
+        }
+    }
 
-    // function allocateTokensForFounder() public onlyAdmin onlyActive {
-    //     require(phase == Phase.Over);
-    //     require(tokensReservedByFounder != tokensClaimedByFounder);
+    function setFounderAddress(address adr) public onlyAdmin onlyActive {
+        require(adr != address(0));
+        founderAddress = address(uint160(adr));
+    }
 
-    //     if (tokensClaimedByFounder < 20 * tokensReservedByFounder / 100) {
-    //         _mint(founderAddress,  (20 * tokensReservedByFounder / 100));
-    //         tokensClaimedByFounder += 20 * tokensReservedByFounder / 100;
-    //     }
-    //     if (now >= ICOEndTime + 6 minutes && tokensClaimedByFounder < 50 * tokensReservedByFounder / 100 ) {
-    //         _mint(founderAddress,  (30 * tokensReservedByFounder / 100));
-    //         tokensClaimedByFounder += 20 * tokensReservedByFounder / 100;
-    //     }
-    //     if (now >= ICOEndTime + 12 minutes && tokensClaimedByFounder < tokensReservedByFounder) {
-    //         _mint(founderAddress, (50 * tokensReservedByFounder / 100));
-    //          tokensClaimedByFounder += 50 * tokensReservedByFounder / 100;
-    //     }
-    // }
+    function allocateTokensForFounder() public onlyAdmin onlyActive {
+        require(phase == Phase.Over);
+        require(tokensReservedByFounder != tokensClaimedByFounder);
+
+        if (tokensClaimedByFounder < 20 * tokensReservedByFounder / 100) {
+            _mint(founderAddress,  (20 * tokensReservedByFounder / 100));
+            tokensClaimedByFounder += 20 * tokensReservedByFounder / 100;
+        }
+        if (now >= ICOEndTime + 6 minutes && tokensClaimedByFounder < 50 * tokensReservedByFounder / 100 ) {
+            _mint(founderAddress,  (30 * tokensReservedByFounder / 100));
+            tokensClaimedByFounder += 20 * tokensReservedByFounder / 100;
+        }
+        if (now >= ICOEndTime + 12 minutes && tokensClaimedByFounder < tokensReservedByFounder) {
+            _mint(founderAddress, (50 * tokensReservedByFounder / 100));
+            tokensClaimedByFounder += 50 * tokensReservedByFounder / 100;
+        }
+    }
+
+    function setAdvisorAddress(address adr) public onlyAdmin onlyActive {
+        require(adr != address(0));
+        advisorAddress = address(uint160(adr));
+    }
+
+    function allocateTokensForAdvisor() public onlyAdmin onlyActive {
+        require(phase == Phase.Over);
+        require(tokensReservedByAdvisor != tokensClaimedByAdvisor);
+
+        _mint(advisorAddress, tokensReservedByAdvisor);
+        tokensClaimedByAdvisor = tokensReservedByAdvisor;
+    }
+
+    function setSeedInvestorAddress(address adr) public onlyAdmin onlyActive {
+        require(adr != address(0));
+        seedInvestorAddress = address(uint160(adr));
+    }
+
+    function allocateTokensForSeedInvestor() public onlyAdmin onlyActive {
+        require(phase == Phase.Over);
+        require(tokensReservedBySeedInvestor != tokensClaimedBySeedInvestor);
+
+        _mint(seedInvestorAddress, tokensReservedBySeedInvestor);
+        tokensClaimedBySeedInvestor = tokensReservedBySeedInvestor;
+    }
 
     // function setReservedAddress(address adr) public onlyAdmin onlyActive {
     //     require(adr != address(0));
@@ -267,31 +295,5 @@ contract ShitcoinICO is Shitcoin {
 
     //     _mint(reservedAddress, tokensReserved);
     //     tokensClaimedFromReserved = tokensReserved;
-    // }
-
-    // function setAdvisorAddress(address adr) public onlyAdmin onlyActive {
-    //     require(adr != address(0));
-    //     advisorAddress = address(uint160(adr));
-    // }
-
-    // function allocateTokensForAdvisor() public onlyAdmin onlyActive {
-    //     require(phase == Phase.Over);
-    //     require(tokensReservedByAdvisor != tokensClaimedByAdvisor);
-
-    //     _mint(advisorAddress, tokensReservedByAdvisor);
-    //     tokensClaimedByAdvisor = tokensReservedByAdvisor;
-    // }
-
-    // function setSeedInvestorAddress(address adr) public onlyAdmin onlyActive {
-    //     require(adr != address(0));
-    //     seedInvestorAddress = address(uint160(adr));
-    // }
-
-    // function allocateTokensForSeedInvestor() public onlyAdmin onlyActive {
-    //     require(phase == Phase.Over);
-    //     require(tokensReservedBySeedInvestor != tokensClaimedBySeedInvestor);
-
-    //     _mint(seedInvestorAddress, tokensReservedBySeedInvestor);
-    //     tokensClaimedBySeedInvestor = tokensReservedBySeedInvestor;
     // }
 }
