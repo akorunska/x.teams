@@ -5,17 +5,17 @@ import "./Ownable.sol";
 contract Managed is Ownable {
     bool public isActive = false;
     mapping (address => bool) public admins;
-    address portal;
+    address public portal;
     mapping (address => bool) public whitelist;
     mapping (address => bool) public privatelist;
 
     modifier onlyActive() {
-        require(isActive == true, "Contract is not active right now.");
+        require(isActive == true);
         _;
     }
 
     modifier onlyInactive() {
-        require(isActive == false, "Contract is already active.");
+        require(isActive == false);
         _;
     }
 
@@ -57,7 +57,7 @@ contract Managed is Ownable {
     // Admin related logic
 
     function addAdmin(address newAdminAddress) public onlyOwner onlyActive {
-        require(admins[newAdminAddress] == false, "This address is admin already.");
+        require(admins[newAdminAddress] == false);
         admins[newAdminAddress] = true;
     }
 
@@ -66,7 +66,7 @@ contract Managed is Ownable {
     }
 
     function removeAdmin(address adminAddressToRemove) public onlyOwner onlyActive {
-        require(admins[adminAddressToRemove] == true, "This address does not belong to the admin");
+        require(admins[adminAddressToRemove] == true);
         admins[adminAddressToRemove] = false;
     }
 
@@ -81,7 +81,7 @@ contract Managed is Ownable {
     // Whitelist logic
 
     function addToWhiteList(address newWhitelistedAddress) public onlyPortal onlyActive {
-        require(whitelist[newWhitelistedAddress] == false, "This address is whitelisted already.");
+        require(whitelist[newWhitelistedAddress] == false);
         whitelist[newWhitelistedAddress] = true;
     }
 
@@ -90,7 +90,7 @@ contract Managed is Ownable {
     }
 
     function removeFromWhiteList(address whitelistAddressToRemove) public onlyPortal onlyActive {
-        require(whitelist[whitelistAddressToRemove] == true, "This address is not on the whitelist");
+        require(whitelist[whitelistAddressToRemove] == true);
         whitelist[whitelistAddressToRemove] = false;
     }
 
@@ -98,7 +98,7 @@ contract Managed is Ownable {
     // Private investor list logic
 
     function addPrivateInvestor(address investor) public onlyPortal onlyActive {
-        require(privatelist[investor] == false, "This address is private investor already.");
+        require(privatelist[investor] == false);
         privatelist[investor] = true;
     }
 
@@ -107,7 +107,7 @@ contract Managed is Ownable {
     }
 
     function removePrivateInversor(address investor) public onlyPortal onlyActive {
-        require(privatelist[investor] == true, "This address does not belong to the private investor");
+        require(privatelist[investor] == true);
         privatelist[investor] = false;
     }
 

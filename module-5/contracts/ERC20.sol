@@ -1,6 +1,5 @@
 pragma solidity ^0.5.0;
 
-import "./IERC20.sol";
 import "./SafeMath.sol";
 
 /**
@@ -15,8 +14,12 @@ import "./SafeMath.sol";
  * all accounts just by listening to said events. Note that this isn't required by the specification, and other
  * compliant implementations may not do it.
  */
-contract ERC20 is IERC20 {
+contract ERC20 {
     using SafeMath for uint256;
+
+    event Transfer(address indexed from, address indexed to, uint256 value);
+
+    event Approval(address indexed owner, address indexed spender, uint256 value);
 
     mapping (address => uint256) private _balances;
 
