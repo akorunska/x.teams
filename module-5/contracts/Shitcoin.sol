@@ -31,8 +31,12 @@ contract Shitcoin is LockedTransferringERC20 {
     }
 
     function revokeToken(address investor) public payable onlyAdmin onlyActive {
+        require(!isWhiteListed(investor));
+        require(msg.value >= investedEther[investor]);
+        
         _burn(investor, balanceOf(investor));
-
+        investedEther[investor] = 0;
+        
         address payable investorToPay =  address(uint160(investor));
         investorToPay.transfer(msg.value);
     }

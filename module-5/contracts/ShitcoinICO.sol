@@ -39,15 +39,15 @@ contract ShitcoinICO is Shitcoin {
     address payable public teamAddress;
     uint public tokensReservedByTeam = 30000000;
     uint public tokensClaimedByTeam;
-    address payable public seedInvestorAddress;
-    uint public tokensReservedBySeedInvestor = 20000000;
-    uint public tokensClaimedBySeedInvestor;
     address payable public advisorAddress;
     uint public tokensReservedByAdvisor = 50000000;
     uint public tokensClaimedByAdvisor;
     address payable public founderAddress;
     uint public tokensReservedByFounder = 50000000;
     uint public tokensClaimedByFounder;
+    // address payable public seedInvestorAddress;
+    // uint public tokensReservedBySeedInvestor = 20000000;
+    // uint public tokensClaimedBySeedInvestor;
     // address payable public reservedAddress;
     // uint public tokensReserved = 50000000;
     // uint public tokensClaimedFromReserved;
@@ -207,6 +207,11 @@ contract ShitcoinICO is Shitcoin {
 
         _invest(invesorAddress, amount);
     }
+    
+    function revokeToken(address investor) public payable onlyAdmin onlyActive {
+        require(now >= ICOEndTime + 1 minutes);
+        super.revokeToken(investor);
+    }
 
 
 
@@ -271,18 +276,18 @@ contract ShitcoinICO is Shitcoin {
         tokensClaimedByAdvisor = tokensReservedByAdvisor;
     }
 
-    function setSeedInvestorAddress(address adr) public onlyAdmin onlyActive {
-        require(adr != address(0));
-        seedInvestorAddress = address(uint160(adr));
-    }
+    // function setSeedInvestorAddress(address adr) public onlyAdmin onlyActive {
+    //     require(adr != address(0));
+    //     seedInvestorAddress = address(uint160(adr));
+    // }
 
-    function allocateTokensForSeedInvestor() public onlyAdmin onlyActive {
-        require(phase == Phase.Over);
-        require(tokensReservedBySeedInvestor != tokensClaimedBySeedInvestor);
+    // function allocateTokensForSeedInvestor() public onlyAdmin onlyActive {
+    //     require(phase == Phase.Over);
+    //     require(tokensReservedBySeedInvestor != tokensClaimedBySeedInvestor);
 
-        _mint(seedInvestorAddress, tokensReservedBySeedInvestor);
-        tokensClaimedBySeedInvestor = tokensReservedBySeedInvestor;
-    }
+    //     _mint(seedInvestorAddress, tokensReservedBySeedInvestor);
+    //     tokensClaimedBySeedInvestor = tokensReservedBySeedInvestor;
+    // }
 
     // function setReservedAddress(address adr) public onlyAdmin onlyActive {
     //     require(adr != address(0));
