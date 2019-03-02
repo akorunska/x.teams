@@ -18,6 +18,7 @@ Complete all levels of Ethernaut game - https://ethernaut.zeppelin.solutions
 4  | Telephone            | 0xfdf1bc2fee23c9e1d6d9b2504bc96c1097846228 |
 5  | Token                | 0x2fb23b96adb7ef2a95bd2cef5093a6dd5763be98 |
 6  | Delegation           | 0x06ed6c5fa6738e87e460b5bce8202c44e6a50ba3 |
+7  | Force                | 0x1137c1a1eeb22e507b21822827142ed4fd67d711 |
 
 
 Address used to complete all levels is `0xa3E1aB154F40d984E56fF07d1EEa46a50BD8ee36`.
