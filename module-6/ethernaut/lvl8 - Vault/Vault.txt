@@ -1,0 +1,3 @@
+web3.eth.getStorageAt(contract.address, 1, console.info);
+web3.toAscii("0x412076657279207374726f6e67207365637265742070617373776f7264203a29");
+contract.unlock("A very strong secret password :)");
