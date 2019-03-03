@@ -1,0 +1,2 @@
+web3.eth.getStorageAt(contract.address, 3, console.info);
+contract.unlock(0x58d2e200f889a3719c714d5bba77addd385e611fbb5cfa95c1dc93ad3fb674b8);
