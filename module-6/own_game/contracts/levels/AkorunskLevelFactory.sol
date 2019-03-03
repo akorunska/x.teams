@@ -1,18 +1,18 @@
 pragma solidity ^0.4.18;
 
 import './base/Level.sol';
-import './Instance.sol';
+import './AkorunskLevel.sol';
 
-contract InstanceFactory is Level {
+contract AkorunskLevelFactory is Level {
 
     function createInstance(address _player) public payable returns (address) {
         _player;
-        return new Instance('ethernaut0');
+        AkorunskLevel instance = new AkorunskLevel();
+        return instance;
     }
 
     function validateInstance(address _instance, address _player) public returns (bool) {
-        _player;
-        Instance instance = Instance(_instance);
-        return instance.getCleared();
+        AkorunskLevel instance = AkorunskLevel(_instance);
+        return instance.owner() == _player;
     }
 }
