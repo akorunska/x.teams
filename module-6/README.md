@@ -21,7 +21,7 @@ Complete all levels of Ethernaut game - https://ethernaut.zeppelin.solutions
 7  | Force                | 0x1137c1a1eeb22e507b21822827142ed4fd67d711 |
 8  | Vault                | 0xc6c1481341e6961d59d3f45a85fea388b550fa8d |
 9  | King                 | 0x0a0374a1d74bf12750c265beee89c840bfcd6639 |
-10 | Re-entrancy          |  |
+10 | Re-entrancy          | 0xfb99093c6035e2728f86dc5482217c5d006c7ca2 |
 11 | Elevator             | 0x33382b9f8eab070385fa1a3d6e3ebfa4f731eb46 |
 12 | Privacy              | 0xbf6650cf40fa7050a940779172398aa101e43617 |
 13 | Gatekeeper One       | 0x178b711efd00c21bd04862ed0f31d6421c0930bd |
