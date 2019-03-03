@@ -24,6 +24,8 @@ Complete all levels of Ethernaut game - https://ethernaut.zeppelin.solutions
 10 | Re-entrancy          |  |
 11 | Elevator             | 0x33382b9f8eab070385fa1a3d6e3ebfa4f731eb46 |
 12 | Privacy              | 0xbf6650cf40fa7050a940779172398aa101e43617 |
+13 | Gatekeeper One       | 0x178b711efd00c21bd04862ed0f31d6421c0930bd |
+14 | Gatekeeper Two       | 0x4c56d0dc144acbf435876d199fba7979574eac41 |
 
 
 Address used to complete all levels is `0xa3E1aB154F40d984E56fF07d1EEa46a50BD8ee36`.
