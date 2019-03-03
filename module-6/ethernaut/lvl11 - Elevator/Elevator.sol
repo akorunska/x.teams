@@ -2,7 +2,6 @@ import "./Building.sol";
 
 pragma solidity ^0.4.18;
 
-
 contract Elevator {
   bool public top;
   uint public floor;

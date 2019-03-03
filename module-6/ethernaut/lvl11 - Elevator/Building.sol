@@ -3,7 +3,7 @@ import "./Elevator.sol";
 pragma solidity ^0.4.18;
 
 contract Building {
-    Elevator public el = Elevator(0xdb9cd4f70622510f87a737f4813f643f59e7ff0c);
+    Elevator public el = Elevator(0x33382b9f8eab070385fa1a3d6e3ebfa4f731eb46);
     bool public switchFlipped =  false;
 
     function hack() public {
