@@ -22,7 +22,7 @@ Complete all levels of Ethernaut game - https://ethernaut.zeppelin.solutions
 8  | Vault                | 0xc6c1481341e6961d59d3f45a85fea388b550fa8d |
 9  | King                 | 0x0a0374a1d74bf12750c265beee89c840bfcd6639 |
 10 | Re-entrancy          |  |
-11 | Elevator             | 0x751f67190f44487eb0d0117365430d5e2d4b1a87 |
+11 | Elevator             | 0xdb9cd4f70622510f87a737f4813f643f59e7ff0c |
 
 
 Address used to complete all levels is `0xa3E1aB154F40d984E56fF07d1EEa46a50BD8ee36`.
