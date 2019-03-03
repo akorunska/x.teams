@@ -32,6 +32,7 @@ Complete all levels of Ethernaut game - https://ethernaut.zeppelin.solutions
 18 | Recovery             | 0x609c147b54f59fe606e2b0a37d5700e8ea4a7318 |
 19 | Magic Number         | 0x62ff0d10597e42844a7f54b422bb2718171a9748 |
 20 | Alien Codex          | 0x108c93901887e7b0acd5bb3b60dd5e76a04d2f77 |
+21 | Denial               | 0x601c7951500f83ed1da63ab031b435d4e551683a |
 
 
 Address used to complete all levels is `0xa3E1aB154F40d984E56fF07d1EEa46a50BD8ee36`.
