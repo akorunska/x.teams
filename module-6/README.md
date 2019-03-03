@@ -29,6 +29,8 @@ Complete all levels of Ethernaut game - https://ethernaut.zeppelin.solutions
 15 | NaughtCoin           | 0x87fc69300086ccc615132c5e506746007b22f2be |
 16 | Preservation         | 0x4d1ab5a9cd797705d4552f9d67421558110d6c19 |
 17 | Locked               | 0x81390c89fd009ce7f9b55328731ee822284fe2c2 |
+18 | Recovery             | 0x609c147b54f59fe606e2b0a37d5700e8ea4a7318 |
+19 | Magic Number         | 0x62ff0d10597e42844a7f54b422bb2718171a9748 |
 
 
 Address used to complete all levels is `0xa3E1aB154F40d984E56fF07d1EEa46a50BD8ee36`.

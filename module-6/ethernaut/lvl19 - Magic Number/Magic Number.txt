@@ -1,0 +1,4 @@
+> var account = "0xa3E1aB154F40d984E56fF07d1EEa46a50BD8ee36“;
+> var bytecode = "0x600a600c600039600a6000f3602a60805260206080f3";
+> web3.eth.sendTransaction({ from: account, data: bytecode }, function(err,res){console.log(res)});
+>  await contract.setSolver("contract address”);
