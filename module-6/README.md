@@ -26,6 +26,8 @@ Complete all levels of Ethernaut game - https://ethernaut.zeppelin.solutions
 12 | Privacy              | 0xbf6650cf40fa7050a940779172398aa101e43617 |
 13 | Gatekeeper One       | 0x178b711efd00c21bd04862ed0f31d6421c0930bd |
 14 | Gatekeeper Two       | 0x4c56d0dc144acbf435876d199fba7979574eac41 |
+15 | NaughtCoin           | 0x87fc69300086ccc615132c5e506746007b22f2be |
+16 | Preservation         | 0x87fc69300086ccc615132c5e506746007b22f2be |
 
 
 Address used to complete all levels is `0xa3E1aB154F40d984E56fF07d1EEa46a50BD8ee36`.
