@@ -20,6 +20,9 @@ Complete all levels of Ethernaut game - https://ethernaut.zeppelin.solutions
 6  | Delegation           | 0x06ed6c5fa6738e87e460b5bce8202c44e6a50ba3 |
 7  | Force                | 0x1137c1a1eeb22e507b21822827142ed4fd67d711 |
 8  | Vault                | 0xc6c1481341e6961d59d3f45a85fea388b550fa8d |
+9  | King                 | 0x0a0374a1d74bf12750c265beee89c840bfcd6639 |
+10 | Re-entrancy          |  |
+11 | Elevator             | 0x751f67190f44487eb0d0117365430d5e2d4b1a87 |
 
 
 Address used to complete all levels is `0xa3E1aB154F40d984E56fF07d1EEa46a50BD8ee36`.
