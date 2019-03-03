@@ -37,3 +37,30 @@ Complete all levels of Ethernaut game - https://ethernaut.zeppelin.solutions
 
 
 Address used to complete all levels is `0xa3E1aB154F40d984E56fF07d1EEa46a50BD8ee36`.
+
+
+## Hard
+
+1. Enter own_game/ and install dependensies:
+    ```
+    npm install
+    
+    ```
+
+2. Start local network.
+    ```
+    ganache-cli --deterministic
+    
+    ```
+
+3. Copy one of the private keys and import it to the Metamask. (Remember to switch to localhost net)
+
+4. Compile and deploy the contracts.
+   ```
+   npx truffle compile
+   npm run deploy:contracts
+   ```
+5. Start the server and enjoy playing!
+    ```
+    npm start
+    ```
