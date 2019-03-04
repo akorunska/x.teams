@@ -55,12 +55,17 @@ Address used to complete all levels is `0xa3E1aB154F40d984E56fF07d1EEa46a50BD8ee
 
 3. Copy one of the private keys and import it to the Metamask. (Remember to switch to localhost net)
 
-4. Compile and deploy the contracts.
+4. Export env variable for things to go smoothly:
+    ```
+    export NODE_ENV=development
+    ```
+
+5. Compile and deploy the contracts.
    ```
    npx truffle compile
    npm run deploy:contracts
    ```
-5. Start the server and enjoy playing!
+6. Start the server and enjoy playing!
     ```
     npm start
     ```
