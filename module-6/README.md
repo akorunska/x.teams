@@ -9,8 +9,8 @@ The aim of this week is to deal with smart contracts security.
 Complete all levels of Ethernaut game - https://ethernaut.zeppelin.solutions
 
 
-#  | Level name           | Level instance address                     |
----| ---------------------|--------------------------------------------|
+Num | Level name           | Level instance address                     |
+----| ---------------------|--------------------------------------------|
 0  | Hello Ethernaut      |                                            |
 1  | Fallback             | 0x7e21ec06d6b2a24e79c6a88903d033354086c9d6 |
 2  | Fallout              | 0x4d2d4d90b1c03ea5d0db73bb9432cfc9c3eb0973 |
