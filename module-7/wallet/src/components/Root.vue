@@ -22,6 +22,7 @@
                   {{ parseFloat(accountBalance).toFixed(4) }} ETH
                 </div>
                 <select class="btn border-secondary">
+                  <option hidden> </option>
                   <option v-for="account in $store.state.accounts" v-on:click="setAccountAsActive(account.index)"> {{ account.address }}</option>
                 </select>
                 <button class="btn btn-outline-info" v-on:click="getNewAccount"> + </button>
@@ -41,9 +42,11 @@
 <script>
   import { mapGetters } from 'vuex';
   import Web3 from 'web3';
-  import Home from './Home'
-  import Balances from './Balances'
-  import Transactions from './Transactions'
+  import Home from './Home';
+  import Balances from './Balances';
+  import Transactions from './Transactions';
+  import Tokens from './Tokens';
+  import Multisigs from './Multisigs';
 
   export default {
     name: "Navbar",
@@ -77,6 +80,10 @@
           this.content = Balances;
         } else if (data === 'Send Ether') {
           this.content = Transactions;
+        } else if (data === 'Tokens') {
+          this.content = Tokens;
+        } else if (data === 'Multisigs') {
+          this.content = Multisigs;
         }
       },
       setAccountAsActive(index) {
