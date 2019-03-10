@@ -70,7 +70,7 @@
     },
     methods: {
       async setupWeb3() {
-        this.web3js = new Web3(web3.currentProvider);
+        this.web3js = new Web3(new Web3.providers.WebsocketProvider("wss://ropsten.infura.io/ws"));
       },
       updateContent(data) {
         this.active_component = data;
