@@ -1,10 +1,19 @@
 <template>
   <div>
     <div class="container">
+      <br>
       <div id="app">
 
         <div v-if="$store.state.loggedIn === true">
-          <div> {{ $store.state.mnemonic }}</div>
+          Welcome to Best Ethereum Wallet.
+          <ul>
+            <li>
+              Use dropdown menu to set an account as active.
+            </li>
+            <li>
+              Once you're done, click logout button.
+            </li>
+          </ul>
         </div>
 
         <div v-else-if="initiatedMnemonicGeneration === true">
