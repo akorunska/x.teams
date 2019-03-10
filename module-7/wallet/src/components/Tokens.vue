@@ -18,7 +18,7 @@
       <div v-if="contractInfo">
         <div class="card my-1 mr-sm-2 border-info">
           <div class="card-body">
-            <h5 class="card-title"> ERC20 Coin at {{ contractAddress }}</h5>
+            <h5 class="card-title"> ERC20 Token info</h5>
             <ul class="list-group list-group-flush">
               <li class="list-group-item">
                 <table class="table">
@@ -26,6 +26,22 @@
                   <tr  v-for="(item, key, index) in contractInfo">
                     <td> {{ key }}</td>
                     <td> {{ item }} </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </li>
+              <li class="list-group-item">
+
+                <table class="table">
+                  <tbody>
+                  <tr>
+                    <td>
+                      <form class="form-inline">
+                        <input id="tokenOwnerAddress" type="text" class="form-inline  my-1 mr-sm-2" placeholder="token owner address" v-model="tokenOwnerAddress">
+                        <button type="submit" class="btn btn-outline-info form-inline my-1 mr-sm-2" v-on:click="getTokenOwnerBalance(contractInfo.address)">Get balance</button>
+                      </form>
+                    </td>
+                    <td> {{ tokenOwnerBalance }} </td>
                   </tr>
                   </tbody>
                 </table>
@@ -59,8 +75,10 @@
     data() {
       return {
         web3js: '',
-        contractAddress: '',
+        contractAddress: '0xd1dd3fd17c7ad4857dfd4a3cbcef477993c4ad4b',
         contractInfo: undefined,
+        tokenOwnerAddress: '',
+        tokenOwnerBalance: '0',
       };
     },
     methods: {
@@ -71,19 +89,25 @@
         const contract = new this.web3js.eth.Contract(abi, this.contractAddress);
 
         this.contractInfo = {
+          address: this.contractAddress,
           name: await contract.methods.name.call(),
           symbol:  await contract.methods.symbol.call(),
           totalSupply: await contract.methods.totalSupply.call(),
         };
 
         console.log(this.contractInfo)
+      },
+      async getTokenOwnerBalance(contractAddress) {
+        console.log(contractAddress);
+        const contract = new this.web3js.eth.Contract(abi, contractAddress);
+
+        this.tokenOwnerBalance = await contract.methods.balanceOf(this.tokenOwnerAddress).call();
       }
     }
   }
 </script>
 
 <style scoped>
-
 </style>
 
 <!-- Naught coin for testing purposes -->
