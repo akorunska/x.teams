@@ -50,8 +50,6 @@
     created() {
       this.updateContent(this.active_component);
       this.setupWeb3();
-
-      // this.updateAccountBalance()
     },
     computed: {
       ...mapGetters([
@@ -60,7 +58,7 @@
     },
     data() {
       return {
-        tabs: ['Home', 'Balances', 'Transactions', 'Tokens', 'Multisigs', ],
+        tabs: ['Home', 'Balances', 'Send Ether', 'Tokens', 'Multisigs', ],
         active_component: 'Home',
         content: "",
         web3js: '',
@@ -77,7 +75,7 @@
           this.content = Home;
         } else if (data === 'Balances') {
           this.content = Balances;
-        } else if (data === 'Transactions') {
+        } else if (data === 'Send Ether') {
           this.content = Transactions;
         }
       },
@@ -99,6 +97,7 @@
         } catch (e) {
           console.log(e);
         }
+        setTimeout(this.recountAccountBalance, 5000);
       }
 
     },

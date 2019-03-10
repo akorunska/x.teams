@@ -5,10 +5,10 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    mnemonic: 'address clock hammer exhibit eight feature injury nose flash matter ridge scan',
+    mnemonic: '',
     accounts: [],
-    activeAccountIndex: 1,
-    loggedIn: true,
+    activeAccountIndex: 0,
+    loggedIn: false,
   },
   mutations: {
     importMnemonic(state, { mnemonic }) {
