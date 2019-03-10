@@ -5,9 +5,10 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    mnemonic: '',
+    mnemonic: 'address clock hammer exhibit eight feature injury nose flash matter ridge scan',
     accounts: [],
-    loggedIn: false
+    activeAccountIndex: 1,
+    loggedIn: true,
   },
   mutations: {
     importMnemonic(state, { mnemonic }) {
@@ -19,36 +20,58 @@ export default new Vuex.Store({
       let hdwallet = hdkey.fromMasterSeed(bip39.mnemonicToSeed(mnemonic));
       let wallet_hdpath = "m/44'/60'/0'/0/";
 
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 3; i++) {
         let wallet = hdwallet.derivePath(wallet_hdpath + i).getWallet();
         let address = '0x' + wallet.getAddress().toString("hex");
         let privateKey = wallet.getPrivateKey().toString("hex");
-        state.accounts.push({address: address, privateKey: privateKey});
+        state.accounts.push(
+          {
+            address: address,
+            privateKey: privateKey,
+            index: i,
+          });
       }
+      state.accounts.activeAccountIndex = 0;
+    },
+    generateNewAccount(state) {
+      let i = state.accounts.length;
 
+      let bip39 = require("bip39");
+      let hdkey = require('ethereumjs-wallet/hdkey');
+      let hdwallet = hdkey.fromMasterSeed(bip39.mnemonicToSeed(state.mnemonic));
+      let wallet_hdpath = "m/44'/60'/0'/0/";
+      let wallet = hdwallet.derivePath(wallet_hdpath + i).getWallet();
+      let address = '0x' + wallet.getAddress().toString("hex");
+      let privateKey = wallet.getPrivateKey().toString("hex");
+      state.accounts.push(
+        {
+          address: address,
+          privateKey: privateKey,
+          index: i,
+        });
+      state.activeAccountIndex = i;
+    },
+    changeActiveAccount(state, { index }) {
+      if (0 <= index < state.accounts.length) {
+        state.activeAccountIndex = index;
+      }
     },
     logOut(state) {
       state.loggedIn = false;
       state.mnemonic = '';
+      state.account = [];
+      state.activeAccountIndex = -1;
     }
-  }
+  },
+  getters: {
+    activeAccount: state => {
+      if (state.accounts.length !== 0) {
+        return state.accounts[state.activeAccountIndex];
+      }
+      return undefined;
+    },
+  },
 });
 
 
-// function generateAddressesFromSeed(seed, count) {
-//   let bip39 = require("bip39");
-//   let hdkey = require('ethereumjs-wallet/hdkey');
-//   let hdwallet = hdkey.fromMasterSeed(bip39.mnemonicToSeed(seed));
-//   let wallet_hdpath = "m/44'/60'/0'/0/";
-//
-//   let accounts = [];
-//   for (let i = 0; i < 10; i++) {
-//
-//     let wallet = hdwallet.derivePath(wallet_hdpath + i).getWallet();
-//     let address = '0x' + wallet.getAddress().toString("hex");
-//     let privateKey = wallet.getPrivateKey().toString("hex");
-//     accounts.push({address: address, privateKey: privateKey});
-//   }
-//
-//   return accounts;
-// }
+// address clock hammer exhibit eight feature injury nose flash matter ridge scan

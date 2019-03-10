@@ -16,7 +16,7 @@
     </div>
 
     <div v-if="status === 200">
-      <div class="card my-1 mr-sm-2 border-success">
+      <div class="card my-1 mr-sm-2 border-info">
         <div class="card-body">
           <div v-if="filter !== ''">
             <h4 class="card-title">{{filter}}</h4>
@@ -38,6 +38,12 @@
         </div>
       </div>
     </div>
+
+    <!--<div v-if="$store.state.loggedIn">-->
+        <!--<div v-for="account in $store.state.accounts">-->
+          <!--{{account}}-->
+        <!--</div>-->
+    <!--</div>-->
 
   </div>
 

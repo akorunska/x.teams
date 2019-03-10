@@ -18,7 +18,7 @@
 
         <div v-else-if="initiatedMnemonicGeneration === true">
           <div> Please be sure to write down and/or save this words and keep them somewhere secure. </div>
-          <div class="card my-1 mr-sm-2 border-success">
+          <div class="card my-1 mr-sm-2 border-info">
             <div class="card-body">
               <div>{{mnemonicProposed}}</div>
             </div>
