@@ -46,6 +46,23 @@
                   </tbody>
                 </table>
               </li>
+
+              <li class="list-group-item">
+
+                <table class="table">
+                  <tbody>
+                  <tr>
+                    <td>
+                      <form class="form-inline">
+                        <input type="text" class="form-inline  my-1 mr-sm-2" placeholder="address to send tokens to" v-model="recipient">
+                        <input type="number" class="form-inline  my-1 mr-sm-2" min="0" v-model="tokensToSend">
+                        <button type="submit" class="btn btn-outline-info form-inline my-1 mr-sm-2" v-on:click="sendTokensToAddress(contractInfo.address)">Send tokens</button>
+                      </form>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </li>
             </ul>
 
           </div>
@@ -64,6 +81,7 @@
 </template>
 
 <script>
+  const Tx = require('ethereumjs-tx');
   import Web3 from 'web3';
   let abi = require('human-standard-token-abi');
 
@@ -79,6 +97,11 @@
         contractInfo: undefined,
         tokenOwnerAddress: '',
         tokenOwnerBalance: '0',
+        recipient: '',
+        tokensToSend: 0,
+        txInitiated: false,
+        txResult: undefined,
+        txError: undefined,
       };
     },
     methods: {
@@ -102,6 +125,43 @@
         const contract = new this.web3js.eth.Contract(abi, contractAddress);
 
         this.tokenOwnerBalance = await contract.methods.balanceOf(this.tokenOwnerAddress).call();
+      },
+      async sendTokensToAddress(contractAddress) {
+        const contract = new this.web3js.eth.Contract(abi, contractAddress);
+        let privateKey = this.$store.state.accounts[this.$store.state.activeAccountIndex].privateKey;
+        let address = this.$store.state.accounts[this.$store.state.activeAccountIndex].address;
+
+
+        console.log(contract);
+        const functionAbi = contract.methods.transfer(this.recipient, this.tokensToSend).encodeABI();
+
+        let rawTx = {
+          nonce: this.web3js.utils.toHex(await this.web3js.eth.getTransactionCount(address)),
+          gasPrice: this.web3js.utils.toHex(2000000000),
+          gasLimit: this.web3js.utils.toHex(1000000),
+          to: contractAddress,
+          data: functionAbi,
+          chainId: 3,
+        };
+
+        const tx = new Tx(rawTx);
+        console.log(tx);
+
+        let p = new Buffer(privateKey, 'hex');
+        tx.sign(p);
+        let serializedTx = "0x" + tx.serialize().toString('hex');
+        console.log(serializedTx);
+
+        this.txInitiated = true;
+        try {
+          let result = await this.web3js.eth.sendSignedTransaction(serializedTx);
+          this.txInitiated = false;
+          this.txResult = result;
+        } catch (e) {
+          this.txInitiated = false;
+          this.txError = e;
+        }
+        console.log("sent tx");
       }
     }
   }
