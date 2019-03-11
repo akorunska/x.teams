@@ -54,11 +54,6 @@
       this.updateContent(this.active_component);
       this.setupWeb3();
     },
-    computed: {
-      ...mapGetters([
-        'activeAccount',
-      ]),
-    },
     data() {
       return {
         tabs: ['Home', 'Balances', 'Send Ether', 'Tokens', 'Multisigs', ],

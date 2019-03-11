@@ -9,7 +9,7 @@ The aim of this week is to create own wallet DApp.
 * Clone the repo
 * Run npm from 'wallet' folder:
 ```
-npm install --save
+npm install
 ```
 * Run the server:
 ```
