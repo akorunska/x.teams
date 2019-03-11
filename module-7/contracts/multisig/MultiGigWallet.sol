@@ -19,10 +19,6 @@ contract MultiSigWallet {
     /*
      *  Modifiers
      */
-    modifier onlyWallet() {
-        require(msg.sender == address(this));
-        _;
-    }
 
     modifier ownerDoesNotExist(address owner) {
         require(!isOwner[owner]);
@@ -86,16 +82,6 @@ contract MultiSigWallet {
         required = _required;
     }
 
-    function addOwner(address owner)
-    public
-    onlyWallet
-    ownerDoesNotExist(owner)
-    notNull(owner)
-    validRequirement(owners.length + 1, required)
-    {
-        isOwner[owner] = true;
-        owners.push(owner);
-    }
 
     function submitTransaction(address destination, uint value)
     public
