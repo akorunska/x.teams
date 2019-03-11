@@ -11,7 +11,7 @@
           <input type="text" class="form-control  my-1 mr-sm-2" v-model="filter">
         </div>
 
-        <button type="submit" class="btn btn-light my-1 mr-sm-2" v-on:click="getBalance">Get balance</button>
+        <button type="submit" class="btn  btn-outline-info  my-1 mr-sm-2" v-on:click="getBalance">Get balance</button>
       </form>
     </div>
 
