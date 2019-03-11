@@ -3,7 +3,7 @@
     <br>
 
     <div v-if="$store.state.loggedIn">
-      <div v-if="contract === ''">
+      <div v-if="!contractInfo">
         <form class="form-group">
           <div>
             <label for="addressInput"> Multisig wallet address: </label>
@@ -36,6 +36,47 @@
             </ul>
           </div>
         </div>
+
+        <div class="card my-1 mr-sm-2 border-info">
+          <div class="card-body">
+            <h5 class="card-title"> Transactions </h5>
+            <form>
+              Get transaction info:
+              <input type="number" class="form-control  my-1 mr-sm-2" v-model="txid">
+              <button type="submit" class="btn btn-outline-info my-1 mr-sm-2" v-on:click="getTxInfo">Get Transaction Info</button>
+            </form>
+
+            <table class="table" v-if="txInfo">
+              <tbody>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                    <tr  v-for="(item, key, index) in txInfo">
+                      <td> {{ key }}</td>
+                      <td> {{ item }} </td>
+                    </tr>
+                  </li>
+                </ul>
+              </tbody>
+            </table>
+
+            <br>
+            <form>
+              Create new transaction:
+              <input type="number" class="form-control  my-1 mr-sm-2" v-model="valueToSend">
+              <input type="text" class="form-control  my-1 mr-sm-2" v-model="addressToSend">
+              <button type="submit" class="btn btn-outline-info my-1 mr-sm-2" v-on:click="sendNewTx">Send new proposal</button>
+            </form>
+
+            <br>
+            <form>
+              Confirm transaction:
+              <input type="number" class="form-control  my-1 mr-sm-2" v-model="txidToConfirm">
+              <button type="submit" class="btn btn-outline-info my-1 mr-sm-2" v-on:click="confirmTx">Confirm transaction</button>
+            </form>
+          </div>
+        </div>
+
+
 
       </div>
     </div>
@@ -71,6 +112,11 @@
         addressOfCreatedMultigsig: "",
         ownerAddresses: '',
         signaturesRequired: 0,
+        txid: 0,
+        txInfo: undefined,
+        valueToSend: 0,
+        addressToSend: '',
+        txidToConfirm: 0,
       };
     },
     methods: {
@@ -120,12 +166,82 @@
           console.log(e);
         }
         console.log("sent tx");
-
       },
-      async reloadOwners() {
-        this.contractInfo.owners = await this.contract.methods.getOwners.call();
+      async getTxInfo() {
+        let result = await this.contract.methods.transactions(this.txid).call();
+        this.txInfo = {
+          recipient: result.destination,
+          wei_amount: result.value,
+          is_confirmed: result.executed,
+        }
+      },
+      async sendNewTx() {
+        let privateKey = this.$store.state.accounts[this.$store.state.activeAccountIndex].privateKey;
+        let address = this.$store.state.accounts[this.$store.state.activeAccountIndex].address;
+
+        const functionAbi = this.contract.methods.submitTransaction(this.addressToSend, this.valueToSend).encodeABI();
+
+        let rawTx = {
+          nonce: this.web3js.utils.toHex(await this.web3js.eth.getTransactionCount(address)),
+          gasPrice: this.web3js.utils.toHex(1000000000),
+          gasLimit: this.web3js.utils.toHex(1300000),
+          to: this.contractInfo.address,
+          data: functionAbi,
+          chainId: 3,
+        };
+
+        const tx = new Tx(rawTx);
+
+        let p = new Buffer(privateKey, 'hex');
+        tx.sign(p);
+
+        console.log(tx);
+        let serializedTx = "0x" + tx.serialize().toString('hex');
+
+
+        console.log(serializedTx);
+        try {
+          let responce = await this.web3js.eth.sendSignedTransaction(serializedTx);
+          console.log(responce);
+        } catch (e) {
+          console.log(e);
+        }
+        console.log("sent tx");
+      },
+      async confirmTx() {
+        let privateKey = this.$store.state.accounts[this.$store.state.activeAccountIndex].privateKey;
+        let address = this.$store.state.accounts[this.$store.state.activeAccountIndex].address;
+
+        const functionAbi = this.contract.methods.confirmTransaction(this.txidToConfirm).encodeABI();
+
+        let rawTx = {
+          nonce: this.web3js.utils.toHex(await this.web3js.eth.getTransactionCount(address)),
+          gasPrice: this.web3js.utils.toHex(1000000000),
+          gasLimit: this.web3js.utils.toHex(1300000),
+          to: this.contractInfo.address,
+          data: functionAbi,
+          chainId: 3,
+        };
+
+        const tx = new Tx(rawTx);
+
+        let p = new Buffer(privateKey, 'hex');
+        tx.sign(p);
+
+        console.log(tx);
+        let serializedTx = "0x" + tx.serialize().toString('hex');
+
+
+        console.log(serializedTx);
+        try {
+          let responce = await this.web3js.eth.sendSignedTransaction(serializedTx);
+          console.log(responce);
+        } catch (e) {
+          console.log(e);
+        }
+        console.log("sent tx");
       }
-    }
+    },
   }
 </script>
 
