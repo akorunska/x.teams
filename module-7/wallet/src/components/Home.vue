@@ -5,15 +5,33 @@
       <div id="app">
 
         <div v-if="$store.state.loggedIn === true">
-          Welcome to Best Ethereum Wallet.
-          <ul>
-            <li>
-              Use dropdown menu to set an account as active.
-            </li>
-            <li>
-              Once you're done, click logout button.
-            </li>
-          </ul>
+
+          <div class="card my-1 mr-sm-2 border-info">
+            <div class="card-body">
+              <h5 class="card-title">  Welcome to Best Ethereum Wallet.</h5>
+
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  Use dropdown menu to set an account as active. Click plus sign to generate more accounts.
+                </li>
+                <li class="list-group-item">
+                  Use 'Balances' tab to quickly check the testnet balance of any eth account you want.
+                </li>
+                <li class="list-group-item">
+                  Navigate to 'Send Ether' tab if you want to transfer ether. Transaction details will not be shown immediately but balances will be updated shortly.
+                </li>
+                <li class="list-group-item">
+                  Use 'Tokens' tab for interaction with ERC20 tokens.
+                </li>
+                <li class="list-group-item">
+                  Be sure to check out multisig wallets from 'Multisig' tab.
+                </li>
+                <li class="list-group-item">
+                  Once you're done, click logout button.
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
 
         <div v-else-if="initiatedMnemonicGeneration === true">
