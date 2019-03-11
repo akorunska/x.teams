@@ -46,7 +46,7 @@
         contractAddress:'',
         contract: '',
         contractInfo: undefined,
-        factoryContractAddress: '0xa3ed5d8d56ba4c4a15300feb4ec92d0efd3a7f43',
+        factoryContractAddress: '0x47509984eff8c424c652424d6326e48466a674b8',
         factory: undefined,
         addressOfCreatedMultigsig: "",
       };
@@ -104,3 +104,6 @@
 <style scoped>
 
 </style>
+
+
+<!--0x1771A544E3D38489d25455043D940FBb74145fdE-->
