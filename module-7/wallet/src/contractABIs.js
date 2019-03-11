@@ -108,20 +108,6 @@ module.exports = {
       "type": "function"
     },
     {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "owner",
-          "type": "address"
-        }
-      ],
-      "name": "addOwner",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
       "constant": true,
       "inputs": [
         {
@@ -329,18 +315,58 @@ module.exports = {
   ],
   factoryContractAbi: [
     {
-      "constant": true,
+      "anonymous": false,
       "inputs": [
         {
-          "name": "",
+          "indexed": false,
+          "name": "sender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "instantiation",
           "type": "address"
         }
       ],
-      "name": "isInstantiation",
+      "name": "ContractInstantiation",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_owners",
+          "type": "address[]"
+        },
+        {
+          "name": "_required",
+          "type": "uint256"
+        }
+      ],
+      "name": "create",
+      "outputs": [
+        {
+          "name": "wallet",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "creator",
+          "type": "address"
+        }
+      ],
+      "name": "getInstantiationCount",
       "outputs": [
         {
           "name": "",
-          "type": "bool"
+          "type": "uint256"
         }
       ],
       "payable": false,
@@ -374,60 +400,20 @@ module.exports = {
       "constant": true,
       "inputs": [
         {
-          "name": "creator",
+          "name": "",
           "type": "address"
         }
       ],
-      "name": "getInstantiationCount",
+      "name": "isInstantiation",
       "outputs": [
         {
           "name": "",
-          "type": "uint256"
+          "type": "bool"
         }
       ],
       "payable": false,
       "stateMutability": "view",
       "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_owners",
-          "type": "address[]"
-        },
-        {
-          "name": "_required",
-          "type": "uint256"
-        }
-      ],
-      "name": "create",
-      "outputs": [
-        {
-          "name": "wallet",
-          "type": "address"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "name": "sender",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "instantiation",
-          "type": "address"
-        }
-      ],
-      "name": "ContractInstantiation",
-      "type": "event"
     }
   ]
 };
