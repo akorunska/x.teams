@@ -23,8 +23,11 @@
                 </div>
                 <select class="btn border-secondary">
                   <option hidden> </option>
-                  <option v-for="account in $store.state.accounts" v-on:click="setAccountAsActive(account.index)"> {{ account.address }}</option>
+                  <option v-for="account in $store.state.accounts" v-on:click="setAccountAsActive(account.index)">
+                    {{ account.address }}
+                  </option>
                 </select>
+                <button class="btn btn-outline-info" v-on:click="copy"> ➔ </button>
                 <button class="btn btn-outline-info" v-on:click="getNewAccount"> + </button>
               </div>
             <button class="btn btn-outline-info" v-on:click="logOut"> Log out </button>
@@ -61,6 +64,7 @@
         content: "",
         web3js: '',
         accountBalance: 0,
+        activeAccountAddress: '',
       };
     },
     methods: {
@@ -84,6 +88,7 @@
       setAccountAsActive(index) {
         this.$store.commit('changeActiveAccount', {'index': index});
         this.recountAccountBalance();
+        this.activeAccountAddress = this.$store.state.accounts[this.$store.state.activeAccountIndex].address;
       },
       getNewAccount() {
         this.$store.commit('generateNewAccount');
@@ -100,6 +105,10 @@
           console.log(e);
         }
         setTimeout(this.recountAccountBalance, 5000);
+      },
+      copy() {
+        console.log("here");
+        this.$clipboard(this.activeAccountAddress);
       }
 
     },

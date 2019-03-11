@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Clipboard from 'v-clipboard'
 
 Vue.use(Vuex);
+Vue.use(Clipboard);
 
 export default new Vuex.Store({
   state: {
