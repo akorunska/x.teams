@@ -24,8 +24,11 @@ $ cleos get info
 ```
 
 ### generate pair of keys using eosjs
+generate_keypair.js can be found in eos_onboarding/task_01
 ```
-
+$ node generate_keypair.js 
+5JNFM5TmWj1Lzn8Recg5NuCryEBtQnrEYed5Q2WK2qkUBL6dVnc
+EOS763scBTBemUCCfkNKK4PmwV4c1R7ErkVzXscxMM4NkDFYBwHC3
 ```
 
 ### 
