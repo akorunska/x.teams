@@ -179,10 +179,19 @@ producers:
 
 ```
 
+### formula for calculating the vote decay for the account 
+
+![vote decay formula](pictures/vote_decay_formula.png)
+
 ### 
 
 ```
 
 ```
 
+### 
+
+```
+
+```
 
