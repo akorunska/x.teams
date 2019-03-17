@@ -173,7 +173,7 @@ producers:
 ```
 
 ### calculate how much EOS gets per day top 3 BP
-
+45806.0874 EOS
 
 ```
 
@@ -183,15 +183,54 @@ producers:
 
 ![vote decay formula](pictures/vote_decay_formula.png)
 
-### 
+### create another permission for your own one
+
+```
+$ cleos set account permission bob aliceperm EOS7TZK89n3ZtTxyeXxhQLvnohS55Cik3Vf97QYorn2HThpgK8wzH -p bob@owner
+executed transaction: eb5938ef570d9557255ac906eca84faeaabe4ca5841389fafb6b885c49fce8ef  160 bytes  2878 us
+#         eosio <= eosio::updateauth            {"account":"bob","permission":"aliceperm","parent":"active","auth":{"threshold":1,"keys":[{"key":"EO...
+warning: transaction executed locally, but may not be confirmed by the network yet         ] 
+
+$ cleos get account bob
+created: 2019-03-16T17:33:33.000
+permissions: 
+     owner     1:    1 EOS7TZK89n3ZtTxyeXxhQLvnohS55Cik3Vf97QYorn2HThpgK8wzH
+        active     1:    1 EOS7TZK89n3ZtTxyeXxhQLvnohS55Cik3Vf97QYorn2HThpgK8wzH
+           aliceperm     1:    1 EOS7TZK89n3ZtTxyeXxhQLvnohS55Cik3Vf97QYorn2HThpgK8wzH
+memory: 
+     quota:       unlimited  used:      2.99 KiB  
+
+net bandwidth: 
+     used:               unlimited
+     available:          unlimited
+     limit:              unlimited
+
+cpu bandwidth:
+     used:               unlimited
+     available:          unlimited
+     limit:              unlimited
+```
+
+### create Block Producer
+
+```
+$ cleos -u "http://jungle.eosmetal.io:18888" system regproducer akorunska115 EOS6cga28XXFQRHdqehFfW8fnwjZw8kyHWU92ZaaD5YtSbBTGuZkp http://produser.site 20 
+   executed transaction: eba6b856e45dc7cdbe6ed097dffbad4f28ad39deddb4d2eca6fb77292fb22309  160 bytes  314 us
+   #         eosio <= eosio::regproducer           {"producer":"akorunska115","producer_key":"EOS6cga28XXFQRHdqehFfW8fnwjZw8kyHWU92ZaaD5YtSbBTGuZkp","u...
+   warning: transaction executed locally, but may not be confirmed by the network yet         ] 
+```
+
+![akorunska block producer](pictures/akorunska115_producer.png)
+
+### API to find the action (get_action) in which the transaction with the voice that you made in the task above
+
+```
+$ curl --request POST --url https://junglehistory.cryptolions.io:443/v1/history/get_transaction --header 'Cache-Control: no-cache' --header 'Content-Type: application/json' --data '{"id": "eba6b856e45dc7cdbe6ed097dffbad4f28ad39deddb4d2eca6fb77292fb22309"}'
+```
+
+### find the top 10 largest proxies, find the weight of the voice in the top 10 proxies and the weight of the voice in all accounts that vote through a proxy
+
 
 ```
 
 ```
-
-### 
-
-```
-
-```
-
