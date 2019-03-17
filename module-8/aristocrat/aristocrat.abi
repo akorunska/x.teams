@@ -1,0 +1,32 @@
+{
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Mon Mar 18 01:10:12 2019",
+    "version": "eosio::abi/1.1",
+    "structs": [
+        {
+            "name": "drink",
+            "base": "",
+            "fields": [
+                {
+                    "name": "guess",
+                    "type": "string"
+                },
+                {
+                    "name": "randomness",
+                    "type": "string"
+                }
+            ]
+        }
+    ],
+    "types": [],
+    "actions": [
+        {
+            "name": "drink",
+            "type": "drink",
+            "ricardian_contract": ""
+        }
+    ],
+    "tables": [],
+    "ricardian_clauses": [],
+    "variants": [],
+    "abi_extensions": []
+}

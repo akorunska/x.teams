@@ -247,3 +247,12 @@ starteos.io
 weight of voice in top-10 proxies: 82367249923207.4
 
 in all proxies: 353227445601581
+
+## Compiling and running aristocrat
+```
+ eosio-cpp -o aristocrat.wasm aristocrat.cpp --abigen
+ cleos create account eosio aristocrat EOS7TZK89n3ZtTxyeXxhQLvnohS55Cik3Vf97QYorn2HThpgK8wzH -p eosio@active
+ cleos set contract aristocrat /home/augustus-tertius/code/x.teams/module-8/aristocrat -p aristocrat@active
+ cleos push action aristocrat drink '["white", "kjhsdf"]' -p bob@active
+```
+![game output](pictures/game_results.png)
