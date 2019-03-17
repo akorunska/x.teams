@@ -41,7 +41,7 @@ $ cleos system listproducers
 
 https://monitor.jungletestnet.io/
 
-![akorunska115 jungel balance](pictures/jungle_balance_akorunska115.png)
+![akorunska115 jungle balance](pictures/jungle_balance_akorunska115.png)
 
 ### find the top 21 (eos system table)
 First 21 are top ones :)
@@ -173,11 +173,10 @@ producers:
 ```
 
 ### calculate how much EOS gets per day top 3 BP
+![top producers](pictures/top_producers.png)
+
 45806.0874 EOS
 
-```
-
-```
 
 ### formula for calculating the vote decay for the account 
 
