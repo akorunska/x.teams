@@ -101,13 +101,79 @@ dealination2  EOS5QRQmR6qZcr6RMLNLawb2qzEPmTEPdAr5wFXu9Z6q7Cxj3jP6U     http://n
 
 ```
 
-### 
+### vote for a pair of BP
+
+```
+$ cleos -u "http://jungle.eosmetal.io:18888" get account akorunska115
+created: 2019-03-17T10:39:19.500
+permissions: 
+     owner     1:    1 EOS5ervsyrpF7FNCKwacvdXgkTZXNEvyiFf7iFA2gwx7gKhQU1HN6
+        active     1:    1 EOS6cga28XXFQRHdqehFfW8fnwjZw8kyHWU92ZaaD5YtSbBTGuZkp
+memory: 
+     quota:     5.344 KiB    used:     3.365 KiB  
+
+net bandwidth: 
+     staked:          1.0000 EOS           (total stake delegated from account to self)
+     delegated:       0.0000 EOS           (total staked delegated to account from others)
+     used:                 0 bytes
+     available:        133.3 KiB  
+     limit:            133.3 KiB  
+
+cpu bandwidth:
+     staked:          1.0000 EOS           (total stake delegated from account to self)
+     delegated:       0.0000 EOS           (total staked delegated to account from others)
+     used:                 0 us   
+     available:        48.81 ms   
+     limit:            48.81 ms   
+
+EOS balances: 
+     liquid:          100.0000 EOS
+     staked:            2.0000 EOS
+     unstaking:         0.0000 EOS
+     total:           102.0000 EOS
+
+producers:     <not voted>
+
+$ cleos -u "http://jungle.eosmetal.io:18888" system voteproducer prods akorunska115 alohaeostest atticlabjbpn
+executed transaction: 1f34fa52399bcd0d6cb369f1b18c5e2424f609fbbd38a6436efc42dba8bbeac2  128 bytes  411 us
+#         eosio <= eosio::voteproducer          {"voter":"akorunska115","proxy":"","producers":["alohaeostest","atticlabjbpn"]}
+warning: transaction executed locally, but may not be confirmed by the network yet         ] 
+
+$ cleos -u "http://jungle.eosmetal.io:18888" get account akorunska115
+created: 2019-03-17T10:39:19.500
+permissions: 
+     owner     1:    1 EOS5ervsyrpF7FNCKwacvdXgkTZXNEvyiFf7iFA2gwx7gKhQU1HN6
+        active     1:    1 EOS6cga28XXFQRHdqehFfW8fnwjZw8kyHWU92ZaaD5YtSbBTGuZkp
+memory: 
+     quota:     5.344 KiB    used:     3.381 KiB  
+
+net bandwidth: 
+     staked:          1.0000 EOS           (total stake delegated from account to self)
+     delegated:       0.0000 EOS           (total staked delegated to account from others)
+     used:               129 bytes
+     available:        133.2 KiB  
+     limit:            133.3 KiB  
+
+cpu bandwidth:
+     staked:          1.0000 EOS           (total stake delegated from account to self)
+     delegated:       0.0000 EOS           (total staked delegated to account from others)
+     used:               347 us   
+     available:        48.46 ms   
+     limit:            48.81 ms   
+
+EOS balances: 
+     liquid:          100.0000 EOS
+     staked:            2.0000 EOS
+     unstaking:         0.0000 EOS
+     total:           102.0000 EOS
+
+producers:
+     alohaeostest    atticlabjbpn 
 
 ```
 
-```
+### calculate how much EOS gets per day top 3 BP
 
-### 
 
 ```
 
