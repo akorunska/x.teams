@@ -182,6 +182,8 @@ producers:
 
 ![vote decay formula](pictures/vote_decay_formula.png)
 
+Decay itself is calculated as (( last vote weight / vote weight at present moment) * 100 %).
+
 ### create another permission for your own one
 
 ```
