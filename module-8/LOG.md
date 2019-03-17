@@ -229,7 +229,19 @@ $ curl --request POST --url https://junglehistory.cryptolions.io:443/v1/history/
 
 ### find the top 10 largest proxies, find the weight of the voice in the top 10 proxies and the weight of the voice in all accounts that vote through a proxy
 
-
+https://www.alohaeos.com/vote/proxy?sort=rank&sortDir=asc#reg
 ```
-
+madeofstarks
+infstonespxy
+investingwad
+brockpierce1
+lukeeosproxy
+colintcrypto
+chintaiproxy
+cannonproxy1
+eostitanvote
+starteos.io
 ```
+weight of voice in top-10 proxies: 82367249923207.4
+
+in all proxies: 353227445601581
