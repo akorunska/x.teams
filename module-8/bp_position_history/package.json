@@ -1,0 +1,15 @@
+{
+  "name": "bp_position_history",
+  "version": "1.0.0",
+  "description": "",
+  "main": "history.js",
+  "dependencies": {
+    "eosjs-api": "^7.0.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
