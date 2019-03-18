@@ -1,4 +1,4 @@
-# Satoshi Way: module 5
+# Post-Satoshi Era: module 5
 
 The aim of this week is to build the ICO that matches specification given in the task.
 
